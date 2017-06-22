@@ -62,12 +62,12 @@ class Sys_module_task extends Root_Controller
         /**/
 
     }
+    //testing purpose
 
     private function system_add()
     {
         if(isset($this->permissions['action1'])&&($this->permissions['action1']==1))
         {
-
             $data['title']="Create New Module/Task";
             $data["item"] = Array(
                 'id' => 0,
@@ -82,6 +82,8 @@ class Sys_module_task extends Root_Controller
             $ajax['system_page_url']=site_url($this->controller_url."/index/add");
             //$data['crops'] = System_helper::get_ordered_crops();
             $data['modules']=$this->get_modules_tasks('Module');
+            print_r($data['modules']);
+            exit;
             $ajax['status']=true;
             $ajax['system_content'][]=array('id'=>'#system_content','html'=>$this->load->view($this->controller_url.'/add_edit',$data,true));
             if($this->message)
