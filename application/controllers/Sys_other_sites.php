@@ -20,6 +20,10 @@ class Sys_other_sites extends Root_Controller
         {
             $this->system_list($id);
         }
+        elseif($action=="get_items")
+        {
+            $this->system_get_items();
+        }
         elseif($action=="add")
         {
             $this->system_add();
@@ -66,6 +70,12 @@ class Sys_other_sites extends Root_Controller
             $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
             $this->json_return($ajax);
         }
+
+    }
+    private function system_get_items()
+    {
+        $items=Query_helper::get_info($this->config->item('table_system_other_sites'),array('id','short_name','site_url','status','ordering'),array('status !="'.$this->config->item('system_status_delete').'"'));
+        $this->json_return($items);
 
     }
 
@@ -284,11 +294,4 @@ class Sys_other_sites extends Root_Controller
         }
         return true;
     }
-    public function get_items()
-    {
-        $items=Query_helper::get_info($this->config->item('table_system_other_sites'),array('id','short_name','site_url','status','ordering'),array('status !="'.$this->config->item('system_status_delete').'"'));
-        $this->json_return($items);
-
-    }
-
 }
