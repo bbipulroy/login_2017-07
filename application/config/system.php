@@ -11,4 +11,4 @@ $config['system_db_login']='arm_login';
 $config['system_status_active']='Active';
 $config['system_status_inactive']='In-Active';
 $config['system_status_delete']='Deleted';
-$config['system_image_base_url']='http://localhost/login/';
+$config['system_image_base_url']='http://localhost/login_2017_07/';
