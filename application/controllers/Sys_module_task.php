@@ -62,8 +62,6 @@ class Sys_module_task extends Root_Controller
         /**/
 
     }
-    //testing purpose
-
     private function system_add()
     {
         if(isset($this->permissions['action1'])&&($this->permissions['action1']==1))
