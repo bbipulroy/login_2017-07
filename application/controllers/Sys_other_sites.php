@@ -176,7 +176,6 @@ class Sys_other_sites extends Root_Controller
     }
     private function system_delete()
     {
-        #print_r($_POST);exit();
         if(isset($this->permissions['action3'])&&($this->permissions['action3']==1))
         {
             $id = $this->input->post("id");
