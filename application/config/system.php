@@ -4,7 +4,7 @@ $config['external_controllers']=array('home');//user can use them without login
 $config['system_max_actions']=7;
 
 //dbs
-$config['system_db_login']='arm_login';
+//$config['system_db_login']='arm_login';
 
 
 
