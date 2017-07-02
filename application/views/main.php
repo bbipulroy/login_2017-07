@@ -81,8 +81,6 @@ foreach($results as $result)
             var SELCET_ONE_ITEM = "<?php echo $CI->lang->line('SELECT_ONE_ITEM'); ?>";
             var DELETE_CONFIRM = "<?php echo $CI->lang->line('DELETE_CONFIRM'); ?>";
             var resized_image_files=[];
-            var system_crops=JSON.parse('<?php echo json_encode($system_crops);?>');
-            var system_types=JSON.parse('<?php echo json_encode($system_types);?>');
             var system_divisions=JSON.parse('<?php echo json_encode($system_divisions);?>');
             var system_zones=JSON.parse('<?php echo json_encode($system_zones);?>');
             var system_territories=JSON.parse('<?php echo json_encode($system_territories);?>');
@@ -122,6 +120,6 @@ foreach($results as $result)
             <div id="popup_content" style="overflow: auto;">
             </div>
         </div>
-        <script type="text/javascript" src="<?php echo base_url('js/system_common.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url('js/system_common.js?version='.time()); ?>"></script>
     </body>
 </html>
