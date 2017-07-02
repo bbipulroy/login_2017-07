@@ -213,7 +213,6 @@ class Setup_offices extends Root_Controller
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('office[name]',$this->lang->line('LABEL_NAME'),'required');
-
         if($this->form_validation->run() == FALSE)
         {
             $this->message=validation_errors();
