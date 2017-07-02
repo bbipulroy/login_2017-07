@@ -113,5 +113,12 @@ $lang['LABEL_RE_PASSWORD'] = 'Re-type Password';
 $lang['MSG_NO_FILE_UPLOADED'] = 'No file uploaded';
 $lang['LABEL_OTHER_SITES'] = 'Other Sites';
 
-
+//location setup
+//Create zone
+$lang['LABEL_DIVISION_NAME'] = 'Division';
+$lang['LABEL_ZONE_NAME'] = 'Zone';
+$lang['LABEL_TERRITORY_NAME'] = 'Territory';
+$lang['LABEL_DISTRICT_NAME'] = 'District';
+$lang['LABEL_UPAZILLA_NAME'] = 'Upazila';
+$lang['LABEL_UNION_NAME'] = 'Union';
 
