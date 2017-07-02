@@ -147,7 +147,7 @@ class Setup_offices extends Root_Controller
             {
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
-                $this->jsonReturn($ajax);
+                $this->json_return($ajax);
                 die();
             }
         }
@@ -157,7 +157,7 @@ class Setup_offices extends Root_Controller
             {
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
-                $this->jsonReturn($ajax);
+                $this->json_return($ajax);
                 die();
 
             }
@@ -166,7 +166,7 @@ class Setup_offices extends Root_Controller
         {
             $ajax['status']=false;
             $ajax['system_message']=$this->message;
-            $this->jsonReturn($ajax);
+            $this->json_return($ajax);
         }
         else
         {
@@ -205,7 +205,7 @@ class Setup_offices extends Root_Controller
             {
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
-                $this->jsonReturn($ajax);
+                $this->json_return($ajax);
             }
         }
     }
