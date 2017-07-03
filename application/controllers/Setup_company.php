@@ -71,15 +71,7 @@ class Setup_company extends Root_Controller
     }
     private function system_get_items()
     {
-        $user=User_helper::get_user();
-        if($user->user_group==1)
-        {
-            $items=Query_helper::get_info($this->config->item('table_setup_company'),array('id','short_name','full_name','remarks','status','ordering'),array('status!="'.$this->config->item('system_status_delete').'"'),0,0,array('ordering ASC'));
-        }
-        else
-        {
-            $items=Query_helper::get_info($this->config->item('table_setup_company'),array('id','short_name','full_name','remarks','status','ordering'),array('id!=1','status!="'.$this->config->item('system_status_delete').'"'),0,0,array('ordering ASC'));
-        }
+        $items=Query_helper::get_info($this->config->item('table_setup_company'),array('id','short_name','full_name','remarks','status','ordering'),array('status !="'.$this->config->item('system_status_delete').'"'));
         $this->json_return($items);
     }
 
