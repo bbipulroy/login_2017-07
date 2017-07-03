@@ -36,7 +36,6 @@ class Setup_company extends Root_Controller
         {
             $this->system_details($id);
         }
-
         elseif($action=="save")
         {
             $this->system_save();
@@ -117,7 +116,7 @@ class Setup_company extends Root_Controller
                 $site_id=$id;
             }
 
-            $data['company']=Query_helper::get_info($this->config->item('table_login_setup_company'),'*',array('id ='.$site_id),1);
+            $data['company']=Query_helper::get_info($this->config->item('table_setup_company'),'*',array('id ='.$site_id),1);
             $data['title']="Edit Company (".$data['company']['short_name'].')';
             $ajax['status']=true;
             $ajax['system_content'][]=array('id'=>'#system_content','html'=>$this->load->view($this->controller_url.'/add_edit',$data,true));
@@ -175,16 +174,13 @@ class Setup_company extends Root_Controller
             {
                 $data['user_updated'] = $user->user_id;
                 $data['date_updated'] = time();
-
-                Query_helper::update($this->config->item('table_login_setup_company'),$data,array("id = ".$id));
-
+                Query_helper::update($this->config->item('table_setup_company'),$data,array("id = ".$id));
             }
             else
             {
-
                 $data['user_created'] = $user->user_id;
                 $data['date_created'] = time();
-                Query_helper::add($this->config->item('table_login_setup_company'),$data);
+                Query_helper::add($this->config->item('table_setup_company'),$data);
             }
             $this->db->trans_complete();   //DB Transaction Handle END
             if ($this->db->trans_status() === TRUE)
