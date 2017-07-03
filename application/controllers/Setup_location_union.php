@@ -121,6 +121,7 @@ class Setup_location_union extends Root_Controller
             $this->json_return($ajax);
         }
     }
+
     private function system_edit($id)
     {
         if(isset($this->permissions['action2'])&&($this->permissions['action2']==1))
@@ -170,7 +171,6 @@ class Setup_location_union extends Root_Controller
         }
     }
 
-
     private function system_save()
     {
         $id = $this->input->post("id");
@@ -193,7 +193,6 @@ class Setup_location_union extends Root_Controller
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->json_return($ajax);
                 die();
-
             }
         }
         if(!$this->check_validation())
@@ -240,6 +239,7 @@ class Setup_location_union extends Root_Controller
             }
         }
     }
+
     private function check_validation()
     {
         $this->load->library('form_validation');

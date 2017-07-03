@@ -61,33 +61,24 @@ class Setup_location_zone extends Root_Controller
             $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
             $this->json_return($ajax);
         }
-
     }
 
     private function system_get_items()
     {
-        //$user = User_helper::get_user();
-
         $this->db->from($this->config->item('table_setup_location_zones').' zone');
         $this->db->select('zone.id,zone.name,zone.status,zone.ordering');
         $this->db->select('division.name division_name');
         $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = zone.division_id','INNER');
         $this->db->order_by('zone.ordering','ASC');
         $this->db->where('zone.status !=',$this->config->item('system_status_delete'));
-
-
         $items=$this->db->get()->result_array();
-
-
         $this->json_return($items);
-
     }
 
     private function system_add()
     {
         if(isset($this->permissions['action1'])&&($this->permissions['action1']==1))
         {
-
             $data['title']="Create New Zone";
             $data["zone"] = Array(
                 'id' => 0,
@@ -114,6 +105,7 @@ class Setup_location_zone extends Root_Controller
             $this->json_return($ajax);
         }
     }
+
     private function system_edit($id)
     {
         if(isset($this->permissions['action2'])&&($this->permissions['action2']==1))
@@ -147,7 +139,6 @@ class Setup_location_zone extends Root_Controller
         }
     }
 
-
     private function system_save()
     {
         $id = $this->input->post("id");
@@ -170,7 +161,6 @@ class Setup_location_zone extends Root_Controller
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->json_return($ajax);
                 die();
-
             }
         }
         if(!$this->check_validation())
@@ -187,13 +177,10 @@ class Setup_location_zone extends Root_Controller
             {
                 $data['user_updated'] = $user->user_id;
                 $data['date_updated'] = time();
-
                 Query_helper::update($this->config->item('table_setup_location_zones'),$data,array("id = ".$id));
-
             }
             else
             {
-
                 $data['user_created'] = $user->user_id;
                 $data['date_created'] = time();
                 Query_helper::add($this->config->item('table_setup_location_zones'),$data);
@@ -220,12 +207,12 @@ class Setup_location_zone extends Root_Controller
             }
         }
     }
+
     private function check_validation()
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('zone[name]',$this->lang->line('LABEL_NAME'),'required');
         $this->form_validation->set_rules('zone[division_id]',$this->lang->line('LABEL_DIVISION_NAME'),'required');
-
         if($this->form_validation->run() == FALSE)
         {
             $this->message=validation_errors();

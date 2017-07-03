@@ -61,7 +61,6 @@ class Setup_location_upazilla extends Root_Controller
             $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
             $this->json_return($ajax);
         }
-
     }
 
     private function system_get_items()
@@ -86,7 +85,6 @@ class Setup_location_upazilla extends Root_Controller
     {
         if(isset($this->permissions['action1'])&&($this->permissions['action1']==1))
         {
-
             $data['title']="Create New Upazilla";
             $data["upazilla"] = Array(
                 'id' => 0,
@@ -119,6 +117,7 @@ class Setup_location_upazilla extends Root_Controller
             $this->json_return($ajax);
         }
     }
+
     private function system_edit($id)
     {
         if(isset($this->permissions['action2'])&&($this->permissions['action2']==1))
@@ -165,7 +164,6 @@ class Setup_location_upazilla extends Root_Controller
         }
     }
 
-
     private function system_save()
     {
         $id = $this->input->post("id");
@@ -188,7 +186,6 @@ class Setup_location_upazilla extends Root_Controller
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->json_return($ajax);
                 die();
-
             }
         }
         if(!$this->check_validation())
@@ -205,13 +202,10 @@ class Setup_location_upazilla extends Root_Controller
             {
                 $data['user_updated'] = $user->user_id;
                 $data['date_updated'] = time();
-
                 Query_helper::update($this->config->item('table_setup_location_upazillas'),$data,array("id = ".$id));
-
             }
             else
             {
-
                 $data['user_created'] = $user->user_id;
                 $data['date_created'] = time();
                 Query_helper::add($this->config->item('table_setup_location_upazillas'),$data);
@@ -238,12 +232,12 @@ class Setup_location_upazilla extends Root_Controller
             }
         }
     }
+
     private function check_validation()
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('upazilla[name]',$this->lang->line('LABEL_NAME'),'required');
         $this->form_validation->set_rules('upazilla[district_id]',$this->lang->line('LABEL_DISTRICT_NAME'),'required');
-
         if($this->form_validation->run() == FALSE)
         {
             $this->message=validation_errors();

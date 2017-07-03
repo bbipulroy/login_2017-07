@@ -66,8 +66,6 @@ class Setup_location_district extends Root_Controller
 
     private function system_get_items()
     {
-        //$user = User_helper::get_user();
-
         $this->db->from($this->config->item('table_setup_location_districts').' d');
         $this->db->select('d.id,d.name,d.status,d.ordering');
         $this->db->select('t.name territory_name');
@@ -76,7 +74,6 @@ class Setup_location_district extends Root_Controller
         $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
         $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
         $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = zone.division_id','INNER');
-
         $this->db->order_by('d.ordering','ASC');
         $this->db->where('d.status !=',$this->config->item('system_status_delete'));
         $items=$this->db->get()->result_array();
@@ -87,7 +84,6 @@ class Setup_location_district extends Root_Controller
     {
         if(isset($this->permissions['action1'])&&($this->permissions['action1']==1))
         {
-
             $data['title']="Create New District";
             $data["district"] = Array(
                 'id' => 0,
@@ -118,6 +114,7 @@ class Setup_location_district extends Root_Controller
             $this->json_return($ajax);
         }
     }
+
     private function system_edit($id)
     {
         if(isset($this->permissions['action2'])&&($this->permissions['action2']==1))
@@ -161,7 +158,6 @@ class Setup_location_district extends Root_Controller
         }
     }
 
-
     private function system_save()
     {
         $id = $this->input->post("id");
@@ -203,11 +199,9 @@ class Setup_location_district extends Root_Controller
                 $data['date_updated'] = time();
 
                 Query_helper::update($this->config->item('table_setup_location_districts'),$data,array("id = ".$id));
-
             }
             else
             {
-
                 $data['user_created'] = $user->user_id;
                 $data['date_created'] = time();
                 Query_helper::add($this->config->item('table_setup_location_districts'),$data);
@@ -234,12 +228,12 @@ class Setup_location_district extends Root_Controller
             }
         }
     }
+
     private function check_validation()
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('district[name]',$this->lang->line('LABEL_NAME'),'required');
         $this->form_validation->set_rules('district[territory_id]',$this->lang->line('LABEL_TERRITORY_NAME'),'required');
-
         if($this->form_validation->run() == FALSE)
         {
             $this->message=validation_errors();

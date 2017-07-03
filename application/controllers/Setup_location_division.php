@@ -98,6 +98,7 @@ class Setup_location_division extends Root_Controller
             $this->json_return($ajax);
         }
     }
+
     private function system_edit($id)
     {
         if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
@@ -129,7 +130,6 @@ class Setup_location_division extends Root_Controller
             $this->json_return($ajax);
         }
     }
-
 
     private function system_save()
     {
@@ -170,13 +170,10 @@ class Setup_location_division extends Root_Controller
             {
                 $data['user_updated'] = $user->user_id;
                 $data['date_updated'] = time();
-
                 Query_helper::update($this->config->item('table_setup_location_divisions'),$data,array("id = ".$id));
-
             }
             else
             {
-
                 $data['user_created'] = $user->user_id;
                 $data['date_created'] = time();
                 Query_helper::add($this->config->item('table_setup_location_divisions'),$data);
@@ -207,7 +204,6 @@ class Setup_location_division extends Root_Controller
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('division[name]',$this->lang->line('LABEL_NAME'),'required');
-
         if($this->form_validation->run() == FALSE)
         {
             $this->message=validation_errors();
