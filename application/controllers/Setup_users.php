@@ -270,7 +270,7 @@ class Setup_users extends Root_Controller
 
                 $this->db->where('user_id',$id);
                 $this->db->set('revision', 'revision+1', FALSE);
-                $this->db->update($this->config->item('table_login_setup_users_company'));
+                $this->db->update($this->config->item('table_setup_users_company'));
                 $companies=$this->input->post('company');
                 foreach($companies as $company)
                 {
@@ -280,7 +280,7 @@ class Setup_users extends Root_Controller
                     $data_company['user_created'] = $user->user_id;
                     $data_company['date_created'] = $time;
                     $data_company['revision'] = 1;
-                    Query_helper::add($this->config->item('table_login_setup_users_company'),$data_company);
+                    Query_helper::add($this->config->item('table_setup_users_company'),$data_company);
                 }
 
                 $dir=(FCPATH).'images/profiles/'.$id;
