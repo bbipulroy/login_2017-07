@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 $CI=& get_instance();
 $action_buttons=array();
 $action_buttons[]=array(
@@ -56,6 +55,5 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
             </div>
         </div>
     </div>
-
     <div class="clearfix"></div>
 </form>

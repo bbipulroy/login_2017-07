@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 $CI=& get_instance();
 $action_buttons=array();
 if(isset($CI->permissions['action1']) && ($CI->permissions['action1']==1))
