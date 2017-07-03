@@ -17,3 +17,4 @@ $config['table_setup_location_territories'] = 'arm_login_2017_07.login_territori
 $config['table_setup_location_districts'] = 'arm_login_2017_07.login_districts';
 $config['table_setup_location_upazillas'] = 'arm_login_2017_07.login_upazillas';
 $config['table_setup_location_unions'] = 'arm_login_2017_07.login_unions';
+$config['table_system_assigned_area'] = 'arm_login_2017_07.login_setup_user_area';
