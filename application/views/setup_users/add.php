@@ -182,18 +182,13 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 <script type="text/javascript">
     jQuery(document).ready(function()
     {
-		$(document).off('input','#user_name');
-        $(document).off('change','#designation');
+		$(document).off('change','#designation');
         $(document).off('change','#division_id');
         $(document).off('change','#zone_id');
         $(document).off('change','#territory_id');
         $(document).off('change','#district_id');
         $(document).off('change','#upazilla_id');
         $(document).off('change','#union_id');
-		$(document).on('input','#user_name',function()
-		{
-			$('#password').val($(this).val());
-		});
         
         $('#division_id').html(get_dropdown_with_select(system_divisions));
         $(document).on("change","#division_id",function()
