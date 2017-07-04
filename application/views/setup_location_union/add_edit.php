@@ -149,6 +149,10 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 
     jQuery(document).ready(function()
     {
+        $(document).off('change','#division_id');
+        $(document).off('change','#zone_id');
+        $(document).off('change','#territory_id');
+        $(document).off('change','#district_id');
         $(document).on("change","#division_id",function()
         {
             $("#zone_id").val("");

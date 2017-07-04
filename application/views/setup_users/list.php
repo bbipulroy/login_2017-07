@@ -30,7 +30,7 @@ if(isset($CI->permissions['action3']) && ($CI->permissions['action3']==1))
         'type'=>'button',
         'label'=>'Change username',
         'class'=>'button_jqx_action',
-        'data-action-link'=>site_url($CI->controller_url.'/index/edit')
+        'data-action-link'=>site_url($CI->controller_url.'/index/edit_username')
     );
 }
 if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
@@ -39,7 +39,7 @@ if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
         'type'=>'button',
         'label'=>'Change password',
         'class'=>'button_jqx_action',
-        'data-action-link'=>site_url($CI->controller_url.'/index/edit')
+        'data-action-link'=>site_url($CI->controller_url.'/index/edit_password')
     );
 }
 if(isset($CI->permissions['action3']) && ($CI->permissions['action3']==1))
@@ -48,7 +48,7 @@ if(isset($CI->permissions['action3']) && ($CI->permissions['action3']==1))
         'type'=>'button',
         'label'=>'Change status',
         'class'=>'button_jqx_action',
-        'data-action-link'=>site_url($CI->controller_url.'/index/edit')
+        'data-action-link'=>site_url($CI->controller_url.'/index/edit_status')
     );
 }
 if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
