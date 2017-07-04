@@ -720,16 +720,15 @@ class Setup_users extends Root_Controller
         {
             $time=time();
             $this->db->trans_start();  //DB Transaction Handle START
-
-            $this->db->where('user_id',$id);
-            $this->db->set('revision', 'revision+1', FALSE);
-            $this->db->update($this->config->item('table_setup_users_company'));
             $companies=$this->input->post('companies');
             if(count($companies)==0)
             {
                 $ajax['system_message']='At least one company needed';
                 $this->json_return($ajax);
             }
+            $this->db->where('user_id',$id);
+            $this->db->set('revision', 'revision+1', FALSE);
+            $this->db->update($this->config->item('table_setup_users_company'));
             if(is_array($companies))
             {
                 foreach($companies as $company)
