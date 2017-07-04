@@ -181,7 +181,7 @@ class Setup_users extends Root_Controller
     }
     private function system_edit($id)
     {
-        if(isset($this->permissions['edit'])&&($this->permissions['edit']==1))
+        if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
         {
             if(($this->input->post('id')))
             {
@@ -191,19 +191,33 @@ class Setup_users extends Root_Controller
             {
                 $user_id=$id;
             }
+            $user=User_helper::get_user();
 
-            $data['user']=Query_helper::get_info($this->config->item('table_setup_user'),array('id','employee_id','user_name'),array('id ='.$user_id),1);
-            $data['user_info']=Query_helper::get_info($this->config->item('table_setup_user_info'),'*',array('user_id ='.$user_id,'revision =1'),1);
+            $data['user']=Query_helper::get_info($this->config->item('table_login_setup_user'),array('id','employee_id','user_name','status'),array('id ='.$user_id),1);
+            if(!$data['user'])
+            {
+                $ajax['status']=false;
+                $ajax['system_message']='Wrong input. You use illegal way.';
+                $this->json_return($ajax);
+            }
+            $data['user_info']=Query_helper::get_info($this->config->item('table_login_setup_user_info'),'*',array('user_id ='.$user_id,'revision =1'),1);
             $data['title']="Edit User (".$data['user_info']['name'].')';
 
             $data['offices']=Query_helper::get_info($this->config->item('table_setup_offices'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['designations']=Query_helper::get_info($this->config->item('table_setup_designation'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['departments']=Query_helper::get_info($this->config->item('table_setup_department'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['user_types']=Query_helper::get_info($this->config->item('table_setup_user_type'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['user_groups']=Query_helper::get_info($this->config->item('table_system_user_group'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"','id !=1'));
+            $data['user_types']=Query_helper::get_info($this->config->item('table_login_setup_user_type'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            if($user->user_group==1)
+            {
+                $data['user_groups']=Query_helper::get_info($this->config->item('table_system_user_group'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            }
+            else
+            {
+                $data['user_groups']=Query_helper::get_info($this->config->item('table_system_user_group'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"','id !=1'));
+            }
 
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_users_info/add_edit",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url.'/edit',$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
@@ -310,7 +324,7 @@ class Setup_users extends Root_Controller
     }
     private function system_details($id)
     {
-        if(isset($this->permissions['view'])&&($this->permissions['view']==1))
+        if(isset($this->permissions['action0']) && ($this->permissions['action0']==1))
         {
             if(($this->input->post('id')))
             {
@@ -321,18 +335,110 @@ class Setup_users extends Root_Controller
                 $user_id=$id;
             }
 
-            $data['user']=Query_helper::get_info($this->config->item('table_setup_user'),array('id','employee_id','user_name','date_created'),array('id ='.$user_id),1);
-            $data['user_info']=Query_helper::get_info($this->config->item('table_setup_user_info'),'*',array('user_id ='.$user_id,'revision =1'),1);
+            $this->db->select('user.employee_id,user.user_name,user.status,user.date_created user_date_created');
+            $this->db->select('user_info.*');
+            $this->db->select('office.name office_name');
+            $this->db->select('designation.name designation_name');
+            $this->db->select('department.name department_name');
+            $this->db->select('u_type.name type_name');
+            $this->db->select('u_group.name group_name');
+            $this->db->from($this->config->item('table_login_setup_user').' user');
+            $this->db->join($this->config->item('table_login_setup_user_info').' user_info','user_info.user_id=user.id');
+            $this->db->join($this->config->item('table_setup_offices').' office','office.id=user_info.office_id','left');
+            $this->db->join($this->config->item('table_setup_department').' department','department.id=user_info.department_id','left');
+            $this->db->join($this->config->item('table_setup_designation').' designation','designation.id=user_info.designation','left');
+            $this->db->join($this->config->item('table_login_setup_user_type').' u_type','u_type.id=user_info.user_type_id','left');
+            $this->db->join($this->config->item('table_system_user_group').' u_group','u_group.id=user_info.user_group','left');
+            $this->db->where('user.id',$user_id);
+            $this->db->where('user_info.revision',1);
+            $data['user_info']=$this->db->get()->row_array();
+
+            if(!$data['user_info'])
+            {
+                $ajax['status']=false;
+                $ajax['system_message']='Wrong input. You use illegal way.';
+                $this->json_return($ajax);
+            }
+
             $data['title']="Details of User (".$data['user_info']['name'].')';
 
-            $data['offices']=Query_helper::get_info($this->config->item('table_setup_offices'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['designations']=Query_helper::get_info($this->config->item('table_setup_designation'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['departments']=Query_helper::get_info($this->config->item('table_setup_department'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['user_types']=Query_helper::get_info($this->config->item('table_setup_user_type'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['user_groups']=Query_helper::get_info($this->config->item('table_system_user_group'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"','id !=1'));
+            $data['companies']=Query_helper::get_info($this->config->item('table_setup_company'),'*',array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering'));
+            $assigned_companies=Query_helper::get_info($this->config->item('table_setup_users_company'),array('company_id'),array('user_id ='.$user_id,'revision =1'));
+            $data['assigned_companies']=array();
+            foreach($assigned_companies as $row)
+            {
+                $data['assigned_companies'][]=$row['company_id'];
+            }
+
+            $this->db->from($this->config->item('table_system_assigned_area').' aa');
+            $this->db->select('aa.*');
+            $this->db->select('union.name union_name');
+            $this->db->select('u.name upazilla_name');
+            $this->db->select('d.name district_name');
+            $this->db->select('t.name territory_name');
+            $this->db->select('zone.name zone_name');
+            $this->db->select('division.name division_name');
+            $this->db->join($this->config->item('table_setup_location_unions').' union','union.id = aa.union_id','LEFT');
+            $this->db->join($this->config->item('table_setup_location_upazillas').' u','u.id = aa.upazilla_id','LEFT');
+            $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = aa.district_id','LEFT');
+            $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = aa.territory_id','LEFT');
+            $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = aa.zone_id','LEFT');
+            $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = aa.division_id','LEFT');
+            $this->db->where('aa.revision',1);
+            $this->db->where('aa.user_id',$user_id);
+            $data['assigned_area']=$this->db->get()->row_array();
+            if($data['assigned_area'])
+            {
+                $this->db->from($this->config->item('table_system_assigned_area').' aa');
+                if($data['assigned_area']['division_id']>0)
+                {
+                    $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = aa.division_id','INNER');
+                }
+                if($data['assigned_area']['zone_id']>0)
+                {
+                    $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.division_id = division.id','INNER');
+                    $this->db->where('zone.id',$data['assigned_area']['zone_id']);
+                }
+                if($data['assigned_area']['territory_id']>0)
+                {
+                    $this->db->join($this->config->item('table_setup_location_territories').' t','t.zone_id = zone.id','INNER');
+                    $this->db->where('t.id',$data['assigned_area']['territory_id']);
+                }
+                if($data['assigned_area']['district_id']>0)
+                {
+                    $this->db->join($this->config->item('table_setup_location_districts').' d','d.territory_id = t.id','INNER');
+                    $this->db->where('d.id',$data['assigned_area']['district_id']);
+                }
+                if($data['assigned_area']['upazilla_id']>0)
+                {
+                    $this->db->join($this->config->item('table_setup_location_upazillas').' u','u.district_id = d.id','INNER');
+                    $this->db->where('u.id',$data['assigned_area']['upazilla_id']);
+                }
+                if($data['assigned_area']['union_id']>0)
+                {
+                    $this->db->join($this->config->item('table_setup_location_unions').' union','union.upazilla_id = u.id','INNER');
+                    $this->db->where('union.id',$data['assigned_area']['union_id']);
+                }
+                $this->db->where('aa.revision',1);
+                $this->db->where('aa.user_id',$user_id);
+                $info=$this->db->get()->row_array();
+                if(!$info)
+                {
+                    $data['message']="Relation between assigned area is not correct.Please re-assign this user.";
+                }
+            }
+            else
+            {
+                $data['assigned_area']['division_name']=false;
+                $data['assigned_area']['zone_name']=false;
+                $data['assigned_area']['territory_name']=false;
+                $data['assigned_area']['district_name']=false;
+                $data['assigned_area']['upazilla_name']=false;
+                $data['assigned_area']['union_name']=false;
+            }
 
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_users_info/details",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url.'/details',$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
@@ -438,6 +544,12 @@ class Setup_users extends Root_Controller
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->json_return($ajax);
             }
+            if(!$this->check_validation_for_edit())
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->message;
+                $this->json_return($ajax);
+            }
         }
         else
         {
@@ -513,6 +625,35 @@ class Setup_users extends Root_Controller
         $data_user_info['user_created'] = $user->user_id;
         $data_user_info['date_created'] = $time;
         $data_user_info['revision'] = 1;
+
+        if(isset($data_user_info['date_birth']))
+        {
+           $data_user_info['date_birth']=System_helper::get_time($data_user_info['date_birth']);
+        }
+        if(isset($data_user_info['date_join']))
+        {
+           $data_user_info['date_join']=System_helper::get_time($data_user_info['date_join']);
+        }
+        if($id>0)
+        {
+            $dir=(FCPATH).'images/profiles/'.$id;
+            if(!is_dir($dir))
+            {
+                mkdir($dir, 0777);
+            }
+            $uploaded_image = System_helper::upload_file('images/profiles/'.$id);
+            if(array_key_exists('image_profile',$uploaded_image))
+            {
+                if(!$uploaded_image['image_profile']['status'])
+                {
+                    $ajax['status']=false;
+                    $ajax['system_message']=$uploaded_image['image_profile']['message'];
+                    $this->json_return($ajax);
+                }
+                $data_user_info['picture_profile']=base_url('images/profiles/'.$id.'/'.$uploaded_image['image_profile']['info']['file_name']);
+            }
+        }
+
         Query_helper::add($this->config->item('table_login_setup_user_info'),$data_user_info);
         $this->db->trans_complete();   //DB Transaction Handle END
         if ($this->db->trans_status() === TRUE)
@@ -958,29 +1099,13 @@ class Setup_users extends Root_Controller
         }
         return true;
     }
-    private function check_validation()
+    private function check_validation_for_edit()
     {
         $id = $this->input->post("id");
         $this->load->library('form_validation');
+        $this->form_validation->set_rules('user_info[designation]',$this->lang->line('LABEL_DESIGNATION_NAME'),'required');
         $this->form_validation->set_rules('user_info[name]',$this->lang->line('LABEL_NAME'),'required');
         $this->form_validation->set_rules('user_info[email]',$this->lang->line('LABEL_EMAIL'),'required');
-        if($id==0)
-        {
-            $this->form_validation->set_rules('user[user_name]',$this->lang->line('LABEL_USERNAME'),'required');
-            $user_user=$this->input->post("user");
-            if(sizeof(explode(' ',$user_user['user_name']))>1)
-            {
-                $this->message="Invalid User name.<br>User name should be one word.<br>Please avoid space.";
-                return false;
-            }
-            $exists=Query_helper::get_info($this->config->item('table_setup_user'),array('user_name'),array('user_name ="'.$user_user['user_name'].'"'),1);
-            if($exists)
-            {
-                $this->message="User Name already Exists";
-                return false;
-            }
-
-        }
 
         if($this->form_validation->run() == FALSE)
         {
