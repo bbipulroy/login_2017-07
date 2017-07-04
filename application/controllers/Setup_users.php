@@ -48,6 +48,10 @@ class Setup_users extends Root_Controller
         {
             $this->system_details($id);
         }
+        elseif($action=="assign_sites")
+        {
+            $this->system_assign_sites();
+        }
         elseif($action=='save')
         {
             $this->system_save();
@@ -63,6 +67,10 @@ class Setup_users extends Root_Controller
         elseif($action=="save_status")
         {
             $this->system_save_status();
+        }
+        elseif($action=="save_assign_sites")
+        {
+            $this->system_save_assign_sites();
         }
         else
         {
@@ -324,6 +332,45 @@ class Setup_users extends Root_Controller
         }
     }
 
+    private function system_assign_sites()
+    {
+        if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
+        {
+            if(($this->input->post('id')))
+            {
+                $user_id=$this->input->post('id');
+            }
+            else
+            {
+                $user_id=$id;
+            }
+            $data['user']=Query_helper::get_info($this->config->item('table_login_setup_user'),array('id','employee_id','user_name'),array('id ='.$user_id),1);
+            $data['user_info']=Query_helper::get_info($this->config->item('table_login_setup_user_info'),'*',array('user_id ='.$user_id,'revision =1'),1);
+            $data['title']="Assign Sites for ".$data['user_info']['name'];
+            $data['sites']=Query_helper::get_info($this->config->item('table_system_other_sites'),'*',array('status ="'.$this->config->item('system_status_active').'"'));
+            $results=Query_helper::get_info($this->config->item('table_login_setup_users_other_sites'),'*',array('user_id ='.$user_id,'revision =1'));
+            $data['assigned_sites']=array();
+            foreach($results as $result)
+            {
+                $data['assigned_sites'][]=$result['site_id'];
+            }
+            $ajax['status']=true;
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/assign_sites",$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit/'.$user_id);
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
+
     private function system_save()
     {
         $id = $this->input->post('id');
@@ -374,7 +421,6 @@ class Setup_users extends Root_Controller
             else
             {
                 $id=$user_id;
-
                 $data_area=$this->input->post('area');
                 $data_area['user_id']=$id;
                 $data_area['user_created'] = $user->user_id;
@@ -551,10 +597,65 @@ class Setup_users extends Root_Controller
             }
         }
     }
+
+    private function system_save_assign_sites()
+    {
+        $id = $this->input->post("id");
+        $user = User_helper::get_user();
+        if(!(isset($this->permissions['action2']) && ($this->permissions['action2']==1)))
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+            die();
+        }
+        if(!$this->check_validation_for_assigned_sites())
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->message;
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $time=time();
+            $this->db->trans_start();  //DB Transaction Handle START
+
+            $this->db->where('user_id',$id);
+            $this->db->set('revision', 'revision+1', FALSE);
+            $this->db->update($this->config->item('table_login_setup_users_other_sites'));
+            $sites=$this->input->post('sites');
+            if(is_array($sites))
+            {
+                foreach($sites as $site)
+                {
+                    $data=array();
+                    $data['user_id']=$id;
+                    $data['site_id']=$site;
+                    $data['user_created'] = $user->user_id;
+                    $data['date_created'] = $time;
+                    $data['revision'] = 1;
+                    Query_helper::add($this->config->item('table_login_setup_users_other_sites'),$data);
+                }
+            }
+            $this->db->trans_complete();   //DB Transaction Handle END
+            if ($this->db->trans_status() === TRUE)
+            {
+                $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
+                $this->system_list();
+            }
+            else
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
+                $this->json_return($ajax);
+            }
+        }
+    }
+
+
     private function check_validation_for_add()
     {
         $this->load->library('form_validation');
-
         $this->form_validation->set_rules('user[employee_id]',$this->lang->line('LABEL_EMPLOYEE_ID'),'required');
         $this->form_validation->set_rules('user[user_name]',$this->lang->line('LABEL_USERNAME'),'required');
         $this->form_validation->set_rules('user[password]',$this->lang->line('LABEL_PASSWORD'),'required');
@@ -679,6 +780,10 @@ class Setup_users extends Root_Controller
             $this->message=validation_errors();
             return false;
         }
+        return true;
+    }
+    private function check_validation_for_assigned_sites()
+    {
         return true;
     }
 }
