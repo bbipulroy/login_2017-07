@@ -83,6 +83,7 @@ $lang['LABEL_SITE_REPLACE_TEXT'] = 'Url Replace text';
 //users
 $lang['LABEL_EMPLOYEE_ID'] = 'Employee id';
 $lang['LABEL_USERNAME'] = 'User name';
+$lang['LABEL_RE_USERNAME'] = 'Re-type User name';
 $lang['LABEL_OFFICE_NAME'] = 'Office';
 $lang['LABEL_DESIGNATION_NAME'] = 'Designation';
 $lang['LABEL_DEPARTMENT_NAME'] = 'Department';
