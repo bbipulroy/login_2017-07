@@ -57,14 +57,14 @@ if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
         'type'=>'button',
         'label'=>'Assign sites',
         'class'=>'button_jqx_action',
-        'data-action-link'=>site_url($CI->controller_url.'/index/edit')
+        'data-action-link'=>site_url($CI->controller_url.'/index/assign_sites')
     );
 }
 if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
 {
     $action_buttons[]=array(
         'type'=>'button',
-        'label'=>'Assign company',
+        'label'=>'Change company',
         'class'=>'button_jqx_action',
         'data-action-link'=>site_url($CI->controller_url.'/index/edit')
     );
@@ -73,7 +73,7 @@ if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
 {
     $action_buttons[]=array(
         'type'=>'button',
-        'label'=>'Assign area',
+        'label'=>'Change area',
         'class'=>'button_jqx_action',
         'data-action-link'=>site_url($CI->controller_url.'/index/edit')
     );
