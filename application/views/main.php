@@ -74,11 +74,11 @@ foreach($results as $result)
         <script type="text/javascript" src="<?php echo base_url('js/jqx/jqxwindow.js'); ?>"></script>
 
         <!--    for jqx grid end-->
-        
+
         <script type="text/javascript">
             var base_url = "<?php echo base_url(); ?>";
             var display_date_format = "dd-M-yy";
-            var SELCET_ONE_ITEM = "<?php echo $CI->lang->line('SELECT_ONE_ITEM'); ?>";
+            var SELECT_ONE_ITEM = "<?php echo $CI->lang->line('SELECT_ONE_ITEM'); ?>";
             var DELETE_CONFIRM = "<?php echo $CI->lang->line('DELETE_CONFIRM'); ?>";
             var resized_image_files=[];
             var system_divisions=JSON.parse('<?php echo json_encode($system_divisions);?>');
