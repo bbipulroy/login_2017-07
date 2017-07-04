@@ -32,6 +32,18 @@ class Setup_users extends Root_Controller
         {
             $this->system_edit($id);
         }
+        elseif($action=="edit_username")
+        {
+            $this->system_edit_username($id);
+        }
+        elseif($action=="edit_password")
+        {
+            $this->system_edit_password($id);
+        }
+        elseif($action=="edit_status")
+        {
+            $this->system_edit_status($id);
+        }
         elseif($action=='details')
         {
             $this->system_details($id);
@@ -39,6 +51,18 @@ class Setup_users extends Root_Controller
         elseif($action=='save')
         {
             $this->system_save();
+        }
+        elseif($action=="save_password")
+        {
+            $this->system_save_password();
+        }
+        elseif($action=="save_username")
+        {
+            $this->system_save_username();
+        }
+        elseif($action=="save_status")
+        {
+            $this->system_save_status();
         }
         else
         {
@@ -161,13 +185,103 @@ class Setup_users extends Root_Controller
                 $ajax['system_message']=$this->message;
             }
             $ajax['system_page_url']=site_url($this->controller_url.'/index/edit/'.$user_id);
-            $this->jsonReturn($ajax);
+            $this->json_return($ajax);
         }
         else
         {
             $ajax['status']=false;
             $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
-            $this->jsonReturn($ajax);
+            $this->json_return($ajax);
+        }
+    }
+    private function system_edit_password($id)
+    {
+        if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
+        {
+            if(($this->input->post('id')))
+            {
+                $user_id=$this->input->post('id');
+            }
+            else
+            {
+                $user_id=$id;
+            }
+            $data['user_info']=Query_helper::get_info($this->config->item('table_login_setup_user_info'),'*',array('user_id ='.$user_id,'revision =1'),1);
+            $data['title']="Reset Password of (".$data['user_info']['name'].')';
+            $ajax['status']=true;
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/edit_password",$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit_password/'.$user_id);
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
+    private function system_edit_username($id)
+    {
+        if(isset($this->permissions['action3']) && ($this->permissions['action3']==1))
+        {
+            if(($this->input->post('id')))
+            {
+                $user_id=$this->input->post('id');
+            }
+            else
+            {
+                $user_id=$id;
+            }
+            $data['user_info']=Query_helper::get_info($this->config->item('table_login_setup_user_info'),'*',array('user_id ='.$user_id,'revision =1'),1);
+            $data['title']="Reset Username of (".$data['user_info']['name'].')';
+            $ajax['status']=true;
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/edit_username",$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit_username/'.$user_id);
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
+    private function system_edit_status($id)
+    {
+        if(isset($this->permissions['action3']) && ($this->permissions['action3']==1))
+        {
+            if(($this->input->post('id')))
+            {
+                $user_id=$this->input->post('id');
+            }
+            else
+            {
+                $user_id=$id;
+            }
+            $data['user']=Query_helper::get_info($this->config->item('table_login_setup_user'),array('status'),array('id ='.$user_id),1);
+            $data['user_info']=Query_helper::get_info($this->config->item('table_login_setup_user_info'),'*',array('user_id ='.$user_id,'revision =1'),1);
+            $data['title']=$data['user_info']['name'];
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/edit_status",$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit_status/'.$user_id);
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
         }
     }
     private function system_details($id)
@@ -200,13 +314,13 @@ class Setup_users extends Root_Controller
                 $ajax['system_message']=$this->message;
             }
             $ajax['system_page_url']=site_url($this->controller_url.'/index/details/'.$user_id);
-            $this->jsonReturn($ajax);
+            $this->json_return($ajax);
         }
         else
         {
             $ajax['status']=false;
             $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
-            $this->jsonReturn($ajax);
+            $this->json_return($ajax);
         }
     }
 
@@ -320,6 +434,123 @@ class Setup_users extends Root_Controller
             $this->json_return($ajax);
         }
     }
+    private function system_save_password()
+    {
+        $id = $this->input->post("id");
+        $user = User_helper::get_user();
+        if(!(isset($this->permissions['action2']) && ($this->permissions['action2']==1)))
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+            die();
+        }
+        if(!$this->check_validation_password())
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->message;
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $this->db->trans_start();  //DB Transaction Handle START
+            $data['password']=md5($this->input->post('new_password'));
+            $data['user_updated'] = $user->user_id;
+            $data['date_updated'] = time();
+            Query_helper::update($this->config->item('table_login_setup_user'),$data,array("id = ".$id));
+
+            $this->db->trans_complete();   //DB Transaction Handle END
+            if ($this->db->trans_status() === TRUE)
+            {
+                $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
+                $this->system_list();
+            }
+            else
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
+                $this->json_return($ajax);
+            }
+        }
+    }
+    private function system_save_username()
+    {
+        $id = $this->input->post("id");
+        $user = User_helper::get_user();
+        if(!(isset($this->permissions['action3']) && ($this->permissions['action3']==1)))
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+            die();
+        }
+        if(!$this->check_validation_username())
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->message;
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $this->db->trans_start();  //DB Transaction Handle START
+            $data['user_name']=$this->input->post('new_username');
+            $data['user_updated'] = $user->user_id;
+            $data['date_updated'] = time();
+            Query_helper::update($this->config->item('table_login_setup_user'),$data,array("id = ".$id));
+
+            $this->db->trans_complete();   //DB Transaction Handle END
+            if ($this->db->trans_status() === TRUE)
+            {
+                $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
+                $this->system_list();
+            }
+            else
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
+                $this->json_return($ajax);
+            }
+        }
+    }
+    private function system_save_status()
+    {
+        $id = $this->input->post("id");
+        $user = User_helper::get_user();
+        if(!(isset($this->permissions['action3']) && ($this->permissions['action3']==1)))
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+            die();
+        }
+        if(!$this->check_validation_status())
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->message;
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $this->db->trans_start();  //DB Transaction Handle START
+            $data['status']=$this->input->post('status');
+            $data['user_updated'] = $user->user_id;
+            $data['date_updated'] = time();
+            Query_helper::update($this->config->item('table_login_setup_user'),$data,array("id = ".$id));
+
+            $this->db->trans_complete();   //DB Transaction Handle END
+            if ($this->db->trans_status() === TRUE)
+            {
+                $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
+                $this->system_list();
+            }
+            else
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
+                $this->json_return($ajax);
+            }
+        }
+    }
     private function check_validation_for_add()
     {
         $this->load->library('form_validation');
@@ -398,6 +629,51 @@ class Setup_users extends Root_Controller
 
         }
 
+        if($this->form_validation->run() == FALSE)
+        {
+            $this->message=validation_errors();
+            return false;
+        }
+        return true;
+    }
+    private function check_validation_password()
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('new_password',$this->lang->line('LABEL_PASSWORD'),'required');
+        $this->form_validation->set_rules('re_password',$this->lang->line('LABEL_RE_PASSWORD'),'required');
+        if($this->form_validation->run() == FALSE)
+        {
+            $this->message=validation_errors();
+            return false;
+        }
+        if($this->input->post('new_password')!=$this->input->post('re_password'))
+        {
+            $this->message="Password did not Match";
+            return false;
+        }
+        return true;
+    }
+    private function check_validation_username()
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('new_username',$this->lang->line('LABEL_USERNAME'),'required');
+        $this->form_validation->set_rules('re_username',$this->lang->line('LABEL_RE_USERNAME'),'required');
+        if($this->form_validation->run() == FALSE)
+        {
+            $this->message=validation_errors();
+            return false;
+        }
+        if($this->input->post('new_username')!=$this->input->post('re_username'))
+        {
+            $this->message="Username did not Match";
+            return false;
+        }
+        return true;
+    }
+    private function check_validation_status()
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('status',$this->lang->line('STATUS'),'required');
         if($this->form_validation->run() == FALSE)
         {
             $this->message=validation_errors();
