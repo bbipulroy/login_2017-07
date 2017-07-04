@@ -75,7 +75,7 @@ if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
         'type'=>'button',
         'label'=>'Change area',
         'class'=>'button_jqx_action',
-        'data-action-link'=>site_url($CI->controller_url.'/index/edit')
+        'data-action-link'=>site_url($CI->controller_url.'/index/edit_area')
     );
 }
 if(isset($CI->permissions['action4']) && ($CI->permissions['action4']==1))
