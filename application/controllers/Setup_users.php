@@ -50,11 +50,11 @@ class Setup_users extends Root_Controller
         }
         elseif($action=="assign_sites")
         {
-            $this->system_assign_sites();
+            $this->system_assign_sites($id);
         }
         elseif($action=="change_company")
         {
-            $this->system_change_company();
+            $this->system_change_company($id);
         }
         elseif($action=='save')
         {
@@ -340,7 +340,7 @@ class Setup_users extends Root_Controller
         }
     }
 
-    private function system_assign_sites()
+    private function system_assign_sites($id)
     {
         if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
         {
@@ -379,7 +379,7 @@ class Setup_users extends Root_Controller
         }
     }
 
-    private function system_change_company()
+    private function system_change_company($id)
     {
         if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
         {
