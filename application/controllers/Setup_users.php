@@ -52,6 +52,10 @@ class Setup_users extends Root_Controller
         {
             $this->system_assign_sites();
         }
+        elseif($action=="change_company")
+        {
+            $this->system_change_company();
+        }
         elseif($action=='save')
         {
             $this->system_save();
@@ -71,6 +75,10 @@ class Setup_users extends Root_Controller
         elseif($action=="save_assign_sites")
         {
             $this->system_save_assign_sites();
+        }
+        elseif($action=="save_assign_company")
+        {
+            $this->system_save_assign_company();
         }
         else
         {
@@ -371,6 +379,45 @@ class Setup_users extends Root_Controller
         }
     }
 
+    private function system_change_company()
+    {
+        if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
+        {
+            if(($this->input->post('id')))
+            {
+                $user_id=$this->input->post('id');
+            }
+            else
+            {
+                $user_id=$id;
+            }
+            $data['user']=Query_helper::get_info($this->config->item('table_login_setup_user'),array('id','employee_id','user_name'),array('id ='.$user_id),1);
+            $data['user_info']=Query_helper::get_info($this->config->item('table_login_setup_user_info'),'*',array('user_id ='.$user_id,'revision =1'),1);
+            $data['title']="Assign Company for ".$data['user_info']['name'];
+            $data['companies']=Query_helper::get_info($this->config->item('table_setup_company'),'*',array('status ="'.$this->config->item('system_status_active').'"'));
+            $results=Query_helper::get_info($this->config->item('table_setup_users_company'),'*',array('user_id ='.$user_id,'revision =1'));
+            $data['assigned_company']=array();
+            foreach($results as $result)
+            {
+                $data['assigned_company'][]=$result['company_id'];
+            }
+            $ajax['status']=true;
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/change_company",$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit/'.$user_id);
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
+
     private function system_save()
     {
         $id = $this->input->post('id');
@@ -652,6 +699,64 @@ class Setup_users extends Root_Controller
         }
     }
 
+    private function system_save_assign_company()
+    {
+        $id = $this->input->post("id");
+        $user = User_helper::get_user();
+        if(!(isset($this->permissions['action2']) && ($this->permissions['action2']==1)))
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+            die();
+        }
+        if(!$this->check_validation_for_assigned_company())
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->message;
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $time=time();
+            $this->db->trans_start();  //DB Transaction Handle START
+
+            $this->db->where('user_id',$id);
+            $this->db->set('revision', 'revision+1', FALSE);
+            $this->db->update($this->config->item('table_setup_users_company'));
+            $companies=$this->input->post('companies');
+            if(count($companies)==0)
+            {
+                $ajax['system_message']='At least one company needed';
+                $this->json_return($ajax);
+            }
+            if(is_array($companies))
+            {
+                foreach($companies as $company)
+                {
+                    $data=array();
+                    $data['user_id']=$id;
+                    $data['company_id']=$company;
+                    $data['user_created'] = $user->user_id;
+                    $data['date_created'] = $time;
+                    $data['revision'] = 1;
+                    Query_helper::add($this->config->item('table_setup_users_company'),$data);
+                }
+            }
+            $this->db->trans_complete();   //DB Transaction Handle END
+            if ($this->db->trans_status() === TRUE)
+            {
+                $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
+                $this->system_list();
+            }
+            else
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
+                $this->json_return($ajax);
+            }
+        }
+    }
 
     private function check_validation_for_add()
     {
@@ -783,6 +888,10 @@ class Setup_users extends Root_Controller
         return true;
     }
     private function check_validation_for_assigned_sites()
+    {
+        return true;
+    }
+    private function check_validation_for_assigned_company()
     {
         return true;
     }
