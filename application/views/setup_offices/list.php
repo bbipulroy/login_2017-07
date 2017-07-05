@@ -19,6 +19,25 @@ if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
         'data-action-link'=>site_url($CI->controller_url.'/index/edit')
     );
 }
+if(isset($CI->permissions['action4']) && ($CI->permissions['action4']==1))
+{
+    $action_buttons[]=array(
+        'type'=>'button',
+        'label'=>$CI->lang->line("ACTION_PRINT"),
+        'class'=>'button_action_download',
+        'data-title'=>"Print",
+        'data-print'=>true
+    );
+}
+if(isset($CI->permissions['action5']) && ($CI->permissions['action5']==1))
+{
+    $action_buttons[]=array(
+        'type'=>'button',
+        'label'=>$CI->lang->line("ACTION_DOWNLOAD"),
+        'class'=>'button_action_download',
+        'data-title'=>"Download"
+    );
+}
 $action_buttons[]=array(
     'label'=>$CI->lang->line("ACTION_REFRESH"),
     'href'=>site_url($CI->controller_url.'/index/list')
