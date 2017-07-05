@@ -921,7 +921,10 @@ class Setup_users extends Root_Controller
         {
             $time=time();
             $this->db->trans_start();  //DB Transaction Handle START
-
+            $revision_history_data=array();
+            $revision_history_data['date_updated']=$time;
+            $revision_history_data['user_updated']=$user->user_id;
+            Query_helper::update($this->config->item('table_login_setup_users_other_sites'),$revision_history_data,array('revision=1','user_id='.$id));
             $this->db->where('user_id',$id);
             $this->db->set('revision', 'revision+1', FALSE);
             $this->db->update($this->config->item('table_login_setup_users_other_sites'));
@@ -1032,6 +1035,10 @@ class Setup_users extends Root_Controller
                 $ajax['system_message']='At least one company needed';
                 $this->json_return($ajax);
             }
+            $revision_history_data=array();
+            $revision_history_data['date_updated']=$time;
+            $revision_history_data['user_updated']=$user->user_id;
+            Query_helper::update($this->config->item('table_setup_users_company'),$revision_history_data,array('revision=1','user_id='.$id));
             $this->db->where('user_id',$id);
             $this->db->set('revision', 'revision+1', FALSE);
             $this->db->update($this->config->item('table_setup_users_company'));
