@@ -275,7 +275,9 @@ class Setup_users extends Root_Controller
                 $user_id=$id;
             }
             $data['user_info']=Query_helper::get_info($this->config->item('table_login_setup_user_info'),'*',array('user_id ='.$user_id,'revision =1'),1);
+            $data['user']=Query_helper::get_info($this->config->item('table_login_setup_user'),'*',array('id ='.$user_id),1);
             $data['title']="Reset Username of (".$data['user_info']['name'].')';
+            $data['user_name']=$data['user']['user_name'];
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/edit_username",$data,true));
             if($this->message)
@@ -1159,6 +1161,16 @@ class Setup_users extends Root_Controller
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('new_username',$this->lang->line('LABEL_USERNAME'),'required');
+
+        if($this->input->post('new_username'))
+        {
+            $duplicate_username_check=Query_helper::get_info($this->config->item('table_login_setup_user'),array('user_name'),array('user_name ="'.$this->input->post('new_username').'"'),1);
+            if($duplicate_username_check)
+            {
+                $ajax['system_message']='This username is already exists';
+                $this->json_return($ajax);
+            }
+        }
         if($this->form_validation->run() == FALSE)
         {
             $this->message=validation_errors();
