@@ -437,6 +437,14 @@ class Setup_users extends Root_Controller
                 $data['assigned_area']['union_name']=false;
             }
 
+            $data['sites']=Query_helper::get_info($this->config->item('table_system_other_sites'),'*',array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering'));
+            $results=Query_helper::get_info($this->config->item('table_login_setup_users_other_sites'),'*',array('revision =1','user_id='.$user_id));
+            $data['assigned_sites']=array();
+            foreach($results as $result)
+            {
+                $data['assigned_sites'][]=$result['site_id'];
+            }
+
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url.'/details',$data,true));
             if($this->message)
