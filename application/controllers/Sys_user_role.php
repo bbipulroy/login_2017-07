@@ -179,6 +179,11 @@ class Sys_user_role extends Root_Controller
 
         $this->db->trans_start(); //DB Transaction Handle START
 
+        $revision_history_data=array();
+        $revision_history_data['date_updated']=$time;
+        $revision_history_data['user_updated']=$user->user_id;
+        Query_helper::update($this->config->item('table_system_user_group_role'),$revision_history_data,array('revision=1','user_group_id='.$item_id));
+
         $this->db->where('user_group_id',$item_id);
         $this->db->set('revision','revision+1',false);
         $this->db->update($this->config->item('table_system_user_group_role'));
