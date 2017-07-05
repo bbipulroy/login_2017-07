@@ -92,6 +92,11 @@ class Profile_picture extends Root_Controller
                     $data_user_info['revision'] = 1;
                     $data_user_info['picture_profile']=base_url("images/profiles/".$user_id.'/'.$uploaded_image['image_profile']['info']['file_name']);
 
+                    $revision_history_data=array();
+                    $revision_history_data['date_updated']=$time;
+                    $revision_history_data['user_updated']=$user->user_id;
+                    Query_helper::update($this->config->item('table_login_setup_user_info'),$revision_history_data,array('revision=1','user_id='.$user_id));
+
                     $this->db->trans_start();  //DB Transaction Handle START
                     $this->db->where('user_id',$user_id);
                     $this->db->set('revision', 'revision+1', FALSE);

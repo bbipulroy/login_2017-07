@@ -603,9 +603,9 @@ class Setup_users extends Root_Controller
                 $data_area['revision'] = 1;
                 Query_helper::add($this->config->item('table_system_assigned_area'),$data_area);
 
-                $this->db->where('user_id',$id);
+                /*$this->db->where('user_id',$id);
                 $this->db->set('revision', 'revision+1', FALSE);
-                $this->db->update($this->config->item('table_setup_users_company'));
+                $this->db->update($this->config->item('table_setup_users_company'));*/
                 $companies=$this->input->post('company');
                 foreach($companies as $company)
                 {
@@ -625,9 +625,16 @@ class Setup_users extends Root_Controller
                 }
             }
         }
+
+        $revision_history_data=array();
+        $revision_history_data['date_updated']=$time;
+        $revision_history_data['user_updated']=$user->user_id;
+        Query_helper::update($this->config->item('table_login_setup_user_info'),$revision_history_data,array('revision=1','user_id='.$id));
+
         $this->db->where('user_id',$id);
         $this->db->set('revision', 'revision+1', FALSE);
         $this->db->update($this->config->item('table_login_setup_user_info'));
+
         $data_user_info=$this->input->post('user_info');
         $data_user_info['user_id']=$id;
         $data_user_info['user_created'] = $user->user_id;
