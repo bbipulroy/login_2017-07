@@ -975,6 +975,11 @@ class Setup_users extends Root_Controller
             $time=time();
             $this->db->trans_start();  //DB Transaction Handle START
 
+            $revision_history_data=array();
+            $revision_history_data['date_updated']=$time;
+            $revision_history_data['user_updated']=$user->user_id;
+            Query_helper::update($this->config->item('table_system_assigned_area'),$revision_history_data,array('revision=1','user_id='.$id));
+
             $this->db->where('user_id',$id);
             $this->db->set('revision', 'revision+1', FALSE);
             $this->db->update($this->config->item('table_system_assigned_area'));
