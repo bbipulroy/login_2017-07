@@ -818,7 +818,7 @@ class Setup_users extends Root_Controller
             {
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
-                $this->jsonReturn($ajax);
+                $this->json_return($ajax);
                 die();
             }
             $data['title']="Assign (".$data['user_info']['name'].') to an Area';
@@ -1143,15 +1143,9 @@ class Setup_users extends Root_Controller
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('new_username',$this->lang->line('LABEL_USERNAME'),'required');
-        $this->form_validation->set_rules('re_username',$this->lang->line('LABEL_RE_USERNAME'),'required');
         if($this->form_validation->run() == FALSE)
         {
             $this->message=validation_errors();
-            return false;
-        }
-        if($this->input->post('new_username')!=$this->input->post('re_username'))
-        {
-            $this->message="Username did not Match";
             return false;
         }
         return true;
