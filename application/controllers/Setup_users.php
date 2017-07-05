@@ -603,9 +603,6 @@ class Setup_users extends Root_Controller
                 $data_area['revision'] = 1;
                 Query_helper::add($this->config->item('table_system_assigned_area'),$data_area);
 
-                /*$this->db->where('user_id',$id);
-                $this->db->set('revision', 'revision+1', FALSE);
-                $this->db->update($this->config->item('table_setup_users_company'));*/
                 $companies=$this->input->post('company');
                 foreach($companies as $company)
                 {
