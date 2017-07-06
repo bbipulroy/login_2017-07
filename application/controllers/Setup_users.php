@@ -492,7 +492,7 @@ class Setup_users extends Root_Controller
             {
                 $ajax['system_message']=$this->message;
             }
-            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit/'.$user_id);
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/assign_sites/'.$user_id);
             $this->json_return($ajax);
         }
         else
@@ -531,7 +531,7 @@ class Setup_users extends Root_Controller
             {
                 $ajax['system_message']=$this->message;
             }
-            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit/'.$user_id);
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/change_company/'.$user_id);
             $this->json_return($ajax);
         }
         else
