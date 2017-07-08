@@ -544,6 +544,7 @@ class Setup_users extends Root_Controller
 
     private function system_save()
     {
+        print_r($this->input->post('area'));exit;
         $id = $this->input->post('id');
         $user = User_helper::get_user();
         if($id>0)
@@ -1159,12 +1160,13 @@ class Setup_users extends Root_Controller
     }
     private function check_validation_username()
     {
+        $id = $this->input->post("id");
         $this->load->library('form_validation');
         $this->form_validation->set_rules('new_username',$this->lang->line('LABEL_USERNAME'),'required');
 
         if($this->input->post('new_username'))
         {
-            $duplicate_username_check=Query_helper::get_info($this->config->item('table_login_setup_user'),array('user_name'),array('user_name ="'.$this->input->post('new_username').'"'),1);
+            $duplicate_username_check=Query_helper::get_info($this->config->item('table_login_setup_user'),array('user_name'),array('id!='.$id,'user_name ="'.$this->input->post('new_username').'"'),1);
             if($duplicate_username_check)
             {
                 $ajax['system_message']='This username is already exists';
