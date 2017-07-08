@@ -5,7 +5,18 @@ if(!isset($selected_value))
 }
 ?>
 
-<option value=""><?php echo $this->lang->line('SELECT');?></option>
+<option value="">
+    <?php
+    if(isset($select_label))
+    {
+        echo $select_label;
+    }
+    else
+    {
+        echo $this->lang->line('SELECT');
+    }
+    ?>
+</option>
 <?php
 
 
