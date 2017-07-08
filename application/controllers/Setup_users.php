@@ -146,6 +146,17 @@ class Setup_users extends Root_Controller
         }
 
         $items=$this->db->get()->result_array();
+        foreach($items as &$item)
+        {
+            if($item['group_name']==null)
+            {
+                $item['group_name']='Not Assigned';
+            }
+            if($item['blood_group']=='')
+            {
+                $item['blood_group']='Not Assigned';
+            }
+        }
 
         //$items=Query_helper::get_info($this->config->item('table_setup_user'),array('id','name','status','ordering'),array('status !="'.$this->config->item('system_status_delete').'"'));
         $this->json_return($items);
@@ -165,11 +176,17 @@ class Setup_users extends Root_Controller
             );
             $data['user_info'] = array(
                 'name' => '',
+                'email' => '',
+                'office_id' => '',
+                'department_id' => '',
+                'date_join' => System_helper::display_date(time()),
                 'designation' => '',
                 'ordering' => 999
             );
             $data['designations']=Query_helper::get_info($this->config->item('table_setup_designation'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['companies']=Query_helper::get_info($this->config->item('table_setup_company'),'*',array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['offices']=Query_helper::get_info($this->config->item('table_setup_offices'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['departments']=Query_helper::get_info($this->config->item('table_setup_department'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $ajax['system_page_url']=site_url($this->controller_url.'/index/add');
 
             $ajax['status']=true;
@@ -1164,6 +1181,9 @@ class Setup_users extends Root_Controller
         $this->form_validation->set_rules('user[user_name]',$this->lang->line('LABEL_USERNAME'),'required');
         $this->form_validation->set_rules('user[password]',$this->lang->line('LABEL_PASSWORD'),'required');
         $this->form_validation->set_rules('user_info[name]',$this->lang->line('LABEL_NAME'),'required');
+        $this->form_validation->set_rules('user_info[email]',$this->lang->line('LABEL_EMAIL'),'required|valid_email');
+        $this->form_validation->set_rules('user_info[office_id]',$this->lang->line('LABEL_OFFICE_NAME'),'required|is_natural_no_zero');
+        $this->form_validation->set_rules('user_info[department_id]',$this->lang->line('LABEL_DEPARTMENT_NAME'),'required|is_natural_no_zero');
         $this->form_validation->set_rules('user_info[designation]',$this->lang->line('LABEL_DESIGNATION_NAME'),'required|is_natural_no_zero');
 
         $data_area=$this->input->post('area');
@@ -1202,21 +1222,34 @@ class Setup_users extends Root_Controller
         }
 
         $data_user=$this->input->post('user');
+        if(!preg_match('/^[a-z0-9][a-z0-9_]*[a-z0-9]$/',$data_user['user_name']))
+        {
+            $ajax['system_message']='Username create rules violation';
+            $this->json_return($ajax);
+        }
         $duplicate_username_check=Query_helper::get_info($this->config->item('table_login_setup_user'),array('user_name'),array('user_name ="'.$data_user['user_name'].'"'),1);
         if($duplicate_username_check)
         {
-            $ajax['system_message']='This username is already exists';
+            $ajax['system_message']='This Username is already exists';
             $this->json_return($ajax);
         }
-        return true;
+        $duplicate_employee_id_check=Query_helper::get_info($this->config->item('table_login_setup_user'),array('employee_id'),array('employee_id ="'.$data_user['employee_id'].'"'),1);
+        if($duplicate_employee_id_check)
+        {
+            $ajax['system_message']='This Employee ID is already exists';
+            $this->json_return($ajax);
+        }
+        return false;
     }
     private function check_validation_for_edit()
     {
         $id = $this->input->post("id");
         $this->load->library('form_validation');
+        $this->form_validation->set_rules('user_info[office_id]',$this->lang->line('LABEL_OFFICE_NAME'),'required');
+        $this->form_validation->set_rules('user_info[department_id]',$this->lang->line('LABEL_DEPARTMENT_NAME'),'required');
         $this->form_validation->set_rules('user_info[designation]',$this->lang->line('LABEL_DESIGNATION_NAME'),'required');
         $this->form_validation->set_rules('user_info[name]',$this->lang->line('LABEL_NAME'),'required');
-        $this->form_validation->set_rules('user_info[email]',$this->lang->line('LABEL_EMAIL'),'required');
+        $this->form_validation->set_rules('user_info[email]',$this->lang->line('LABEL_EMAIL'),'required|valid_email');
 
         if($this->form_validation->run() == FALSE)
         {

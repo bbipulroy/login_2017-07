@@ -6,6 +6,13 @@ $action_buttons[]=array(
     'label'=>$CI->lang->line("ACTION_BACK"),
     'href'=>site_url($CI->controller_url)
 );
+if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
+{
+    $action_buttons[]=array(
+        'label'=>$CI->lang->line("ACTION_EDIT"),
+        'href'=>site_url($CI->controller_url.'/index/edit/'.$user_info['user_id'])
+    );
+}
 $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 ?>
 
@@ -309,6 +316,14 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                     </div>
                     <div class="col-sm-4 col-xs-8">
                         <label class="control-label"><?php echo $user_info['nid'];?></label>
+                    </div>
+                </div>
+                <div class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TIN');?></label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <label class="control-label"><?php echo $user_info['tin'];?></label>
                     </div>
                 </div>
             </div>

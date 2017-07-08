@@ -75,7 +75,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 
                         <div class="row show-grid">
                             <div class="col-xs-4">
-                                <label for="office_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_OFFICE_NAME');?></label>
+                                <label for="office_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_OFFICE_NAME');?><span style="color:#FF0000">*</span></label>
                             </div>
                             <div class="col-sm-4 col-xs-8">
                                 <select id="office_id" name="user_info[office_id]" class="form-control">
@@ -92,7 +92,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                         </div>
                         <div class="row show-grid">
                             <div class="col-xs-4">
-                                <label for="department_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DEPARTMENT_NAME');?></label>
+                                <label for="department_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DEPARTMENT_NAME');?><span style="color:#FF0000">*</span></label>
                             </div>
                             <div class="col-sm-4 col-xs-8">
                                 <select id="department_id" name="user_info[department_id]" class="form-control">
@@ -248,6 +248,14 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                             </div>
                             <div class="col-sm-4 col-xs-8">
                                 <input type="text" name="user_info[nid]" id="nid" class="form-control" value="<?php echo $user_info['nid'];?>"/>
+                            </div>
+                        </div>
+                        <div class="row show-grid">
+                            <div class="col-xs-4">
+                                <label for="tin" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TIN');?></label>
+                            </div>
+                            <div class="col-sm-4 col-xs-8">
+                                <input type="text" name="user_info[tin]" id="tin" class="form-control" value="<?php echo $user_info['tin'];?>"/>
                             </div>
                         </div>
                     </div>
@@ -419,7 +427,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         $(document).off('change','#user_group');
         $(document).off('change','#blood_group');
 
-        $(".datepicker").datepicker({dateFormat : display_date_format});
+        //$(".datepicker").datepicker({dateFormat : display_date_format});
         $(".dob").datepicker({dateFormat : display_date_format,changeMonth: true,changeYear: true,yearRange: "-100:+0"});
         $(":file").filestyle({input: false,buttonText: "<?php echo $CI->lang->line('UPLOAD');?>", buttonName: "btn-danger"});
 

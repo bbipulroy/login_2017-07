@@ -53,6 +53,12 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 <input type="text" name="user[user_name]" id="user_name" class="form-control" value="<?php echo $user['user_name']; ?>">
             </div>
         </div>
+        <div style="font-size: 12px;margin-top: -10px;font-style: italic;" class="row show-grid">
+            <div class="col-xs-4"></div>
+            <div class="col-sm-4 col-xs-8">
+                Username only support small letters, numbers and _ . Username's first and last character will not be _
+            </div>
+        </div>
         <div style="" class="row show-grid">
             <div class="col-xs-4">
                 <label for="password" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PASSWORD');?><span style="color:#FF0000">*</span></label>
@@ -67,6 +73,14 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
             </div>
             <div class="col-sm-4 col-xs-8">
                 <input type="text" name="user_info[name]" id="name" class="form-control" value="<?php echo $user_info['name'] ?>" >
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label for="email" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EMAIL');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <input type="text" name="user_info[email]" id="email" class="form-control" value="<?php echo $user_info['email'] ?>" >
             </div>
         </div>
         <div style="" class="row show-grid">
@@ -90,6 +104,42 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         </div>
         <div style="" class="row show-grid">
             <div class="col-xs-4">
+                <label for="office_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_OFFICE_NAME');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select id="office_id" name="user_info[office_id]" class="form-control">
+                    <option value=""><?php echo $CI->lang->line('SELECT'); ?></option>
+                    <?php
+                    foreach($offices as $office)
+                    {
+                        ?>
+                        <option value="<?php echo $office['value']; ?>" <?php if($office['value']==$user_info['office_id']){echo 'selected';} ?>><?php echo $office['text']; ?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label for="department_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DEPARTMENT_NAME');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select id="department_id" name="user_info[department_id]" class="form-control">
+                    <option value=""><?php echo $CI->lang->line('SELECT'); ?></option>
+                    <?php
+                    foreach($departments as $department)
+                    {
+                        ?>
+                        <option value="<?php echo $department['value']; ?>" <?php if($department['value']==$user_info['department_id']){echo 'selected';} ?>><?php echo $department['text']; ?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
                 <label for="designation" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DESIGNATION_NAME');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
@@ -106,63 +156,71 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 </select>
             </div>
         </div>
+        <div class="row show-grid">
+            <div class="col-xs-4">
+                <label for="date_join" class="control-label pull-right"><?php echo $this->lang->line('LABEL_DATE_JOIN');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <input type="text" name="user_info[date_join]" id="date_join" class="form-control dob" value="<?php echo $user_info['date_join'];?>"/>
+            </div>
+        </div>
         <div style="" class="row show-grid">
             <div class="col-xs-4">
-                <label for="division_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DIVISION_NAME');?></label>
+                <label for="division_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DIVISION_NAME');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
                 <select id="division_id" name="area[division_id]" class="form-control">
-                    <option value=""><?php echo $CI->lang->line('SELECT'); ?></option>
+                    <option value="">All</option>
                 </select>
             </div>
         </div>
         <div style="display: none" class="row show-grid" id="zone_id_container">
             <div class="col-xs-4">
-                <label for="zone_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ZONE_NAME');?></label>
+                <label for="zone_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ZONE_NAME');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
                 <select id="zone_id" name="area[zone_id]" class="form-control">
-                    <option value=""><?php echo $CI->lang->line('SELECT'); ?></option>
+                    <option value="">All</option>
                 </select>
             </div>
         </div>
         <div style="display: none" class="row show-grid" id="territory_id_container">
             <div class="col-xs-4">
-                <label for="territory_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TERRITORY_NAME');?></label>
+                <label for="territory_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TERRITORY_NAME');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
                 <select id="territory_id" name="area[territory_id]" class="form-control">
-                    <option value=""><?php echo $CI->lang->line('SELECT'); ?></option>
+                    <option value="">All</option>
                 </select>
             </div>
         </div>
         <div style="display: none" class="row show-grid" id="district_id_container">
             <div class="col-xs-4">
-                <label for="district_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DISTRICT_NAME');?></label>
+                <label for="district_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DISTRICT_NAME');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
                 <select id="district_id" name="area[district_id]" class="form-control">
-                    <option value=""><?php echo $CI->lang->line('SELECT'); ?></option>
+                    <option value="">All</option>
                 </select>
             </div>
         </div>
         <div style="display: none" class="row show-grid" id="upazilla_id_container">
             <div class="col-xs-4">
-                <label for="upazilla_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_UPAZILLA_NAME');?></label>
+                <label for="upazilla_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_UPAZILLA_NAME');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
                 <select id="upazilla_id" name="area[upazilla_id]" class="form-control">
-                    <option value=""><?php echo $CI->lang->line('SELECT'); ?></option>
+                    <option value="">All</option>
                 </select>
             </div>
         </div>
         <div style="display: none" class="row show-grid" id="union_id_container">
             <div class="col-xs-4">
-                <label for="union_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_UNION_NAME');?></label>
+                <label for="union_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_UNION_NAME');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
                 <select id="union_id" name="area[union_id]" class="form-control">
-                    <option value=""><?php echo $CI->lang->line('SELECT'); ?></option>
+                    <option value="">All</option>
                 </select>
             </div>
         </div>
@@ -182,7 +240,10 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 <script type="text/javascript">
     jQuery(document).ready(function()
     {
+		$(document).off('input','#user_name');
 		$(document).off('change','#designation');
+		$(document).off('change','#office_id');
+		$(document).off('change','#department_id');
         $(document).off('change','#division_id');
         $(document).off('change','#zone_id');
         $(document).off('change','#territory_id');
@@ -190,7 +251,13 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         $(document).off('change','#upazilla_id');
         $(document).off('change','#union_id');
         
-        $('#division_id').html(get_dropdown_with_select(system_divisions));
+        $('#division_id').html(get_dropdown_with_select(system_divisions,'','All'));
+        $("#date_join").datepicker({dateFormat : display_date_format,changeMonth: true,changeYear: true,yearRange: "-100:+0"});
+
+        $(document).on("input","#user_name",function()
+        {
+            $('#password').val($(this).val());
+        });
         $(document).on("change","#division_id",function()
         {
             $("#zone_id").val("");
@@ -206,7 +273,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 $('#district_id_container').hide();
                 $('#upazilla_id_container').hide();
                 $('#union_id_container').hide();
-                $('#zone_id').html(get_dropdown_with_select(system_zones[division_id]));
+                $('#zone_id').html(get_dropdown_with_select(system_zones[division_id],'','All'));
             }
             else
             {
@@ -230,7 +297,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 $('#district_id_container').hide();
                 $('#upazilla_id_container').hide();
                 $('#union_id_container').hide();
-                $('#territory_id').html(get_dropdown_with_select(system_territories[zone_id]));
+                $('#territory_id').html(get_dropdown_with_select(system_territories[zone_id],'','All'));
             }
             else
             {
@@ -251,7 +318,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 $('#district_id_container').show();
                 $('#upazilla_id_container').hide();
                 $('#union_id_container').hide();
-                $('#district_id').html(get_dropdown_with_select(system_districts[territory_id]));
+                $('#district_id').html(get_dropdown_with_select(system_districts[territory_id],'','All'));
             }
             else
             {
@@ -275,7 +342,8 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                     datatype: "JSON",
                     data:{
                         district_id:district_id,
-                        html_container_id:'#upazilla_id'
+                        html_container_id:'#upazilla_id',
+                        select_label:'All'
                     },
                     success: function (data, status)
                     {
@@ -307,7 +375,8 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                     datatype: "JSON",
                     data:{
                         upazilla_id:upazilla_id,
-                        html_container_id:'#union_id'
+                        html_container_id:'#union_id',
+                        select_label:'All'
                     },
                     success: function (data, status)
                     {
