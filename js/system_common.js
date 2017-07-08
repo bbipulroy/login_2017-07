@@ -530,9 +530,9 @@ function animate_message(message)
     $("#system_message").html(message);
     $("#system_message").animate({right:"100px"}).animate({right:"30px"}).delay(3000).animate({right:"100px"}).animate({right:"-5000px"});
 }
-function get_dropdown_with_select(items,selected_value = '')
+function get_dropdown_with_select(items,selected_value = '',select_label='Select')
 {
-    var dropdown_html='<option value="">Select</option>';
+    var dropdown_html='<option value="">'+select_label+'</option>';
     for(var i=0;i<items.length;++i)
     {
         dropdown_html+='<option value="'+items[i].value+'"';
