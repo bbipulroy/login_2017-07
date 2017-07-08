@@ -601,7 +601,6 @@ class Setup_users extends Root_Controller
 
     private function system_save()
     {
-        print_r($this->input->post('area'));exit;
         $id = $this->input->post('id');
         $user = User_helper::get_user();
         if($id>0)
@@ -1239,7 +1238,7 @@ class Setup_users extends Root_Controller
             $ajax['system_message']='This Employee ID is already exists';
             $this->json_return($ajax);
         }
-        return false;
+        return true;
     }
     private function check_validation_for_edit()
     {
