@@ -98,6 +98,7 @@ $lang['LABEL_GENDER'] = 'Gender';
 $lang['LABEL_MARITAL_STATUS'] = 'Marital Status';
 $lang['LABEL_SPOUSE_NAME'] = 'Spouse Name';
 $lang['LABEL_NID'] = 'NID Number';
+$lang['LABEL_TIN'] = 'TIN Number';
 $lang['LABEL_ADDRESS_PRESENT'] = 'Present Address';
 $lang['LABEL_ADDRESS_PERMANENT'] = 'Permanent Address';
 $lang['LABEL_SALARY_BASIC'] = 'Basic Salary';
