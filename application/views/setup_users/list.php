@@ -28,6 +28,16 @@ if(isset($CI->permissions['action3']) && ($CI->permissions['action3']==1))
 {
     $action_buttons[]=array(
         'type'=>'button',
+        'label'=>'Change Employee ID',
+        'class'=>'button_jqx_action',
+        'data-message-confirm'=>'Are you sure to change employee ID?',
+        'data-action-link'=>site_url($CI->controller_url.'/index/edit_employeeID')
+    );
+}
+if(isset($CI->permissions['action3']) && ($CI->permissions['action3']==1))
+{
+    $action_buttons[]=array(
+        'type'=>'button',
         'label'=>'Change username',
         'class'=>'button_jqx_action',
         'data-message-confirm'=>'Are you sure to change username?',
