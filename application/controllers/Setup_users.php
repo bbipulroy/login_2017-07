@@ -850,6 +850,7 @@ class Setup_users extends Root_Controller
     }
     private function system_save_status()
     {
+        $time=time();
         $id = $this->input->post("id");
         $user = User_helper::get_user();
         if(!(isset($this->permissions['action3']) && ($this->permissions['action3']==1)))
@@ -870,7 +871,11 @@ class Setup_users extends Root_Controller
             $this->db->trans_start();  //DB Transaction Handle START
             $data['status']=$this->input->post('status');
             $data['user_updated'] = $user->user_id;
-            $data['date_updated'] = time();
+            $data['date_updated'] = $time;
+            if($this->input->post('status')==$this->config->item('system_status_inactive'))
+            {
+                $data['date_deactivated'] = $time;
+            }
             Query_helper::update($this->config->item('table_login_setup_user'),$data,array("id = ".$id));
 
             $this->db->trans_complete();   //DB Transaction Handle END
