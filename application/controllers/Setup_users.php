@@ -40,6 +40,10 @@ class Setup_users extends Root_Controller
         {
             $this->system_edit_password($id);
         }
+        elseif($action=="edit_employeeID")
+        {
+            $this->system_edit_employeeID($id);
+        }
         elseif($action=="edit_status")
         {
             $this->system_edit_status($id);
@@ -71,6 +75,10 @@ class Setup_users extends Root_Controller
         elseif($action=="save_username")
         {
             $this->system_save_username();
+        }
+        elseif($action=="save_employeeID")
+        {
+            $this->system_save_employeeID();
         }
         elseif($action=="save_status")
         {
@@ -285,6 +293,38 @@ class Setup_users extends Root_Controller
                 $ajax['system_message']=$this->message;
             }
             $ajax['system_page_url']=site_url($this->controller_url.'/index/edit_username/'.$user_id);
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
+    private function system_edit_employeeID($id)
+    {
+        if(isset($this->permissions['action3']) && ($this->permissions['action3']==1))
+        {
+            if(($this->input->post('id')))
+            {
+                $user_id=$this->input->post('id');
+            }
+            else
+            {
+                $user_id=$id;
+            }
+            $data['user_info']=Query_helper::get_info($this->config->item('table_login_setup_user_info'),'*',array('user_id ='.$user_id,'revision =1'),1);
+            $data['user']=Query_helper::get_info($this->config->item('table_login_setup_user'),'*',array('id ='.$user_id),1);
+            $data['title']="Reset Employee ID of (".$data['user_info']['name'].')';
+            $data['employee_id']=$data['user']['employee_id'];
+            $ajax['status']=true;
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/edit_employeeID",$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit_employeeId/'.$user_id);
             $this->json_return($ajax);
         }
         else
@@ -769,6 +809,45 @@ class Setup_users extends Root_Controller
             }
         }
     }
+    private function system_save_employeeID()
+    {
+        $id = $this->input->post("id");
+        $user = User_helper::get_user();
+        if(!(isset($this->permissions['action3']) && ($this->permissions['action3']==1)))
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+            die();
+        }
+        if(!$this->check_validation_employeeID())
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->message;
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $this->db->trans_start();  //DB Transaction Handle START
+            $data['employee_id']=$this->input->post('new_employeeID');
+            $data['user_updated'] = $user->user_id;
+            $data['date_updated'] = time();
+            Query_helper::update($this->config->item('table_login_setup_user'),$data,array("id = ".$id));
+
+            $this->db->trans_complete();   //DB Transaction Handle END
+            if ($this->db->trans_status() === TRUE)
+            {
+                $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
+                $this->system_list();
+            }
+            else
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
+                $this->json_return($ajax);
+            }
+        }
+    }
     private function system_save_status()
     {
         $id = $this->input->post("id");
@@ -1170,6 +1249,28 @@ class Setup_users extends Root_Controller
             if($duplicate_username_check)
             {
                 $ajax['system_message']='This username is already exists';
+                $this->json_return($ajax);
+            }
+        }
+        if($this->form_validation->run() == FALSE)
+        {
+            $this->message=validation_errors();
+            return false;
+        }
+        return true;
+    }
+    private function check_validation_employeeID()
+    {
+        $id = $this->input->post("id");
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('new_employeeID',$this->lang->line('LABEL_EMPLOYEE_ID'),'required');
+
+        if($this->input->post('new_employeeID'))
+        {
+            $duplicate_employee_id_check=Query_helper::get_info($this->config->item('table_login_setup_user'),array('employee_id'),array('id!='.$id,'employee_id ="'.$this->input->post('new_employeeID').'"'),1);
+            if($duplicate_employee_id_check)
+            {
+                $ajax['system_message']='This employee ID is already exists';
                 $this->json_return($ajax);
             }
         }
