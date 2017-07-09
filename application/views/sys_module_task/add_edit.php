@@ -122,7 +122,7 @@ $controller_folder->close();
         </div>
         <div style="" class="row show-grid">
             <div class="col-xs-4">
-                <label for="status" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TYPE');?><span style="color:#FF0000">*</span></label>
+                <label for="status" class="control-label pull-right"><?php echo $CI->lang->line('STATUS');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
                 <select id="status" name="item[status]" class="form-control" tabindex="-1">
