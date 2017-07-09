@@ -305,6 +305,14 @@ $CI=& get_instance();
                 <label class="control-label"><?php echo $user_info['nid'];?></label>
             </div>
         </div>
+        <div class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TIN');?></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo $user_info['tin'];?></label>
+            </div>
+        </div>
     </div>
 </div>
 <div class="panel panel-default">
