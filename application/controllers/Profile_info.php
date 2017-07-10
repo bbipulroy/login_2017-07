@@ -45,7 +45,7 @@ class Profile_info extends Root_Controller
             $this->db->join($this->config->item('table_login_setup_user_info').' user_info','user_info.user_id=user.id');
             $this->db->join($this->config->item('table_setup_offices').' office','office.id=user_info.office_id','left');
             $this->db->join($this->config->item('table_setup_department').' department','department.id=user_info.department_id','left');
-            $this->db->join($this->config->item('table_setup_designation').' designation','designation.id=user_info.designation','left');
+            $this->db->join($this->config->item('table_login_setup_designation').' designation','designation.id=user_info.designation','left');
             $this->db->join($this->config->item('table_login_setup_user_type').' u_type','u_type.id=user_info.user_type_id','left');
             $this->db->join($this->config->item('table_system_user_group').' u_group','u_group.id=user_info.user_group','left');
             $this->db->where('user.id',$user_id);
