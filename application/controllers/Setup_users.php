@@ -137,7 +137,7 @@ class Setup_users extends Root_Controller
         $this->db->join($this->config->item('table_login_setup_user_info').' user_info','user.id = user_info.user_id','INNER');
         $this->db->join($this->config->item('table_system_user_group').' ug','ug.id = user_info.user_group','LEFT');
         $this->db->join($this->config->item('table_login_setup_designation').' designation','designation.id = user_info.designation','LEFT');
-        $this->db->join($this->config->item('table_setup_department').' department','department.id = user_info.department_id','LEFT');
+        $this->db->join($this->config->item('table_login_setup_department').' department','department.id = user_info.department_id','LEFT');
         $this->db->where('user_info.revision',1);
         $this->db->order_by('user_info.ordering','ASC');
         if($user->user_group!=1)
@@ -184,9 +184,9 @@ class Setup_users extends Root_Controller
                 'ordering' => 999
             );
             $data['designations']=Query_helper::get_info($this->config->item('table_login_setup_designation'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['companies']=Query_helper::get_info($this->config->item('table_setup_company'),'*',array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['offices']=Query_helper::get_info($this->config->item('table_setup_offices'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['departments']=Query_helper::get_info($this->config->item('table_setup_department'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['companies']=Query_helper::get_info($this->config->item('table_login_setup_company'),'*',array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['offices']=Query_helper::get_info($this->config->item('table_login_setup_offices'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['departments']=Query_helper::get_info($this->config->item('table_login_setup_department'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $ajax['system_page_url']=site_url($this->controller_url.'/index/add');
 
             $ajax['status']=true;
@@ -228,9 +228,9 @@ class Setup_users extends Root_Controller
             $data['user_info']=Query_helper::get_info($this->config->item('table_login_setup_user_info'),'*',array('user_id ='.$user_id,'revision =1'),1);
             $data['title']="Edit User (".$data['user_info']['name'].')';
 
-            $data['offices']=Query_helper::get_info($this->config->item('table_setup_offices'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['offices']=Query_helper::get_info($this->config->item('table_login_setup_offices'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['designations']=Query_helper::get_info($this->config->item('table_login_setup_designation'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['departments']=Query_helper::get_info($this->config->item('table_setup_department'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['departments']=Query_helper::get_info($this->config->item('table_login_setup_department'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['user_types']=Query_helper::get_info($this->config->item('table_login_setup_user_type'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             if($user->user_group==1)
             {
@@ -403,8 +403,8 @@ class Setup_users extends Root_Controller
             $this->db->select('u_group.name group_name');
             $this->db->from($this->config->item('table_login_setup_user').' user');
             $this->db->join($this->config->item('table_login_setup_user_info').' user_info','user_info.user_id=user.id');
-            $this->db->join($this->config->item('table_setup_offices').' office','office.id=user_info.office_id','left');
-            $this->db->join($this->config->item('table_setup_department').' department','department.id=user_info.department_id','left');
+            $this->db->join($this->config->item('table_login_setup_offices').' office','office.id=user_info.office_id','left');
+            $this->db->join($this->config->item('table_login_setup_department').' department','department.id=user_info.department_id','left');
             $this->db->join($this->config->item('table_login_setup_designation').' designation','designation.id=user_info.designation','left');
             $this->db->join($this->config->item('table_login_setup_user_type').' u_type','u_type.id=user_info.user_type_id','left');
             $this->db->join($this->config->item('table_system_user_group').' u_group','u_group.id=user_info.user_group','left');
@@ -421,8 +421,8 @@ class Setup_users extends Root_Controller
 
             $data['title']="Details of User (".$data['user_info']['name'].')';
 
-            $data['companies']=Query_helper::get_info($this->config->item('table_setup_company'),'*',array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering'));
-            $assigned_companies=Query_helper::get_info($this->config->item('table_setup_users_company'),array('company_id'),array('user_id ='.$user_id,'revision =1'));
+            $data['companies']=Query_helper::get_info($this->config->item('table_login_setup_company'),'*',array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering'));
+            $assigned_companies=Query_helper::get_info($this->config->item('table_login_setup_users_company'),array('company_id'),array('user_id ='.$user_id,'revision =1'));
             $data['assigned_companies']=array();
             foreach($assigned_companies as $row)
             {
@@ -574,8 +574,8 @@ class Setup_users extends Root_Controller
             $data['user']=Query_helper::get_info($this->config->item('table_login_setup_user'),array('id','employee_id','user_name'),array('id ='.$user_id),1);
             $data['user_info']=Query_helper::get_info($this->config->item('table_login_setup_user_info'),'*',array('user_id ='.$user_id,'revision =1'),1);
             $data['title']="Assign Company for ".$data['user_info']['name'];
-            $data['companies']=Query_helper::get_info($this->config->item('table_setup_company'),'*',array('status ="'.$this->config->item('system_status_active').'"'));
-            $results=Query_helper::get_info($this->config->item('table_setup_users_company'),'*',array('user_id ='.$user_id,'revision =1'));
+            $data['companies']=Query_helper::get_info($this->config->item('table_login_setup_company'),'*',array('status ="'.$this->config->item('system_status_active').'"'));
+            $results=Query_helper::get_info($this->config->item('table_login_setup_users_company'),'*',array('user_id ='.$user_id,'revision =1'));
             $data['assigned_company']=array();
             foreach($results as $result)
             {
@@ -670,7 +670,7 @@ class Setup_users extends Root_Controller
                     $data_company['user_created'] = $user->user_id;
                     $data_company['date_created'] = $time;
                     $data_company['revision'] = 1;
-                    Query_helper::add($this->config->item('table_setup_users_company'),$data_company);
+                    Query_helper::add($this->config->item('table_login_setup_users_company'),$data_company);
                 }
 
                 $dir=(FCPATH).'images/profiles/'.$id;
@@ -1140,10 +1140,10 @@ class Setup_users extends Root_Controller
             $revision_history_data=array();
             $revision_history_data['date_updated']=$time;
             $revision_history_data['user_updated']=$user->user_id;
-            Query_helper::update($this->config->item('table_setup_users_company'),$revision_history_data,array('revision=1','user_id='.$id));
+            Query_helper::update($this->config->item('table_login_setup_users_company'),$revision_history_data,array('revision=1','user_id='.$id));
             $this->db->where('user_id',$id);
             $this->db->set('revision', 'revision+1', FALSE);
-            $this->db->update($this->config->item('table_setup_users_company'));
+            $this->db->update($this->config->item('table_login_setup_users_company'));
             if(is_array($companies))
             {
                 foreach($companies as $company)
@@ -1154,7 +1154,7 @@ class Setup_users extends Root_Controller
                     $data['user_created'] = $user->user_id;
                     $data['date_created'] = $time;
                     $data['revision'] = 1;
-                    Query_helper::add($this->config->item('table_setup_users_company'),$data);
+                    Query_helper::add($this->config->item('table_login_setup_users_company'),$data);
                 }
             }
             $this->db->trans_complete();   //DB Transaction Handle END
