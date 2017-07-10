@@ -136,7 +136,7 @@ class Setup_users extends Root_Controller
         $this->db->select('department.name department_name');
         $this->db->join($this->config->item('table_login_setup_user_info').' user_info','user.id = user_info.user_id','INNER');
         $this->db->join($this->config->item('table_system_user_group').' ug','ug.id = user_info.user_group','LEFT');
-        $this->db->join($this->config->item('table_setup_designation').' designation','designation.id = user_info.designation','LEFT');
+        $this->db->join($this->config->item('table_login_setup_designation').' designation','designation.id = user_info.designation','LEFT');
         $this->db->join($this->config->item('table_setup_department').' department','department.id = user_info.department_id','LEFT');
         $this->db->where('user_info.revision',1);
         $this->db->order_by('user_info.ordering','ASC');
@@ -183,7 +183,7 @@ class Setup_users extends Root_Controller
                 'designation' => '',
                 'ordering' => 999
             );
-            $data['designations']=Query_helper::get_info($this->config->item('table_setup_designation'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['designations']=Query_helper::get_info($this->config->item('table_login_setup_designation'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['companies']=Query_helper::get_info($this->config->item('table_setup_company'),'*',array('status ="'.$this->config->item('system_status_active').'"'));
             $data['offices']=Query_helper::get_info($this->config->item('table_setup_offices'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['departments']=Query_helper::get_info($this->config->item('table_setup_department'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
@@ -229,7 +229,7 @@ class Setup_users extends Root_Controller
             $data['title']="Edit User (".$data['user_info']['name'].')';
 
             $data['offices']=Query_helper::get_info($this->config->item('table_setup_offices'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['designations']=Query_helper::get_info($this->config->item('table_setup_designation'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['designations']=Query_helper::get_info($this->config->item('table_login_setup_designation'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['departments']=Query_helper::get_info($this->config->item('table_setup_department'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['user_types']=Query_helper::get_info($this->config->item('table_login_setup_user_type'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             if($user->user_group==1)
@@ -405,7 +405,7 @@ class Setup_users extends Root_Controller
             $this->db->join($this->config->item('table_login_setup_user_info').' user_info','user_info.user_id=user.id');
             $this->db->join($this->config->item('table_setup_offices').' office','office.id=user_info.office_id','left');
             $this->db->join($this->config->item('table_setup_department').' department','department.id=user_info.department_id','left');
-            $this->db->join($this->config->item('table_setup_designation').' designation','designation.id=user_info.designation','left');
+            $this->db->join($this->config->item('table_login_setup_designation').' designation','designation.id=user_info.designation','left');
             $this->db->join($this->config->item('table_login_setup_user_type').' u_type','u_type.id=user_info.user_type_id','left');
             $this->db->join($this->config->item('table_system_user_group').' u_group','u_group.id=user_info.user_group','left');
             $this->db->where('user.id',$user_id);
@@ -503,7 +503,6 @@ class Setup_users extends Root_Controller
             {
                 $data['assigned_sites'][]=$result['site_id'];
             }
-
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url.'/details',$data,true));
             if($this->message)
