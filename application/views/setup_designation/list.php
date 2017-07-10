@@ -9,42 +9,12 @@ if(isset($CI->permissions['action1']) && ($CI->permissions['action1']==1))
         'href'=>site_url($CI->controller_url.'/index/add')
     );
 }
-if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
-{
-    $action_buttons[]=array(
-        'type'=>'button',
-        'label'=>$CI->lang->line("ACTION_EDIT"),
-        'class'=>'button_jqx_action',
-        'data-action-link'=>site_url($CI->controller_url.'/index/edit')
-    );
-}
-if(isset($CI->permissions['action4']) && ($CI->permissions['action4']==1))
-{
-    $action_buttons[]=array(
-        'type'=>'button',
-        'label'=>$CI->lang->line("ACTION_PRINT"),
-        'class'=>'button_action_download',
-        'data-title'=>"Print",
-        'data-print'=>true
-    );
-}
-if(isset($CI->permissions['action5']) && ($CI->permissions['action5']==1))
-{
-    $action_buttons[]=array(
-        'type'=>'button',
-        'label'=>$CI->lang->line("ACTION_DOWNLOAD"),
-        'class'=>'button_action_download',
-        'data-title'=>"Download"
-    );
-}
 $action_buttons[]=array(
     'label'=>$CI->lang->line("ACTION_REFRESH"),
     'href'=>site_url($CI->controller_url.'/index/list')
-
 );
 $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 ?>
-
 <div class="row widget">
     <div class="widget-header">
         <div class="title">
@@ -52,50 +22,43 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         </div>
         <div class="clearfix"></div>
     </div>
-    <div class="col-xs-12" id="system_jqx_container">
-
+    <div class="col-xs-12" style="overflow-x: auto;">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th><?php echo $CI->lang->line("ID"); ?></th>
+                <th><?php echo $CI->lang->line("NAME"); ?></th>
+                <th><?php echo $CI->lang->line("LABEL_ORDER"); ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            if(sizeof($items)>0)
+            {
+                foreach($items as $item)
+                {
+                    ?>
+                    <tr>
+                        <td><?php echo $item['designation']['id']; ?></td>
+                        <td><?php echo $item['prefix']; ?><a href="<?php echo site_url($CI->controller_url.'/index/edit/'.$item['designation']['id']); ?>"><?php echo $item['designation']['name']; ?></a></td>
+                        <td><?php echo $item['designation']['ordering']; ?></td>
+                    </tr>
+                <?php
+                }
+            }
+            else
+            {
+                ?>
+                <tr>
+                    <td colspan="20" class="text-center alert-danger">
+                        <?php echo $CI->lang->line('NO_DATA_FOUND'); ?>
+                    </td>
+                </tr>
+            <?php
+            }
+            ?>
+            </tbody>
+        </table>
     </div>
 </div>
 <div class="clearfix"></div>
-<script type="text/javascript">
-    $(document).ready(function ()
-    {
-        var url = "<?php echo site_url($CI->controller_url.'/index/get_items'); ?>";
-        // prepare the data
-        var source =
-        {
-            dataType: "json",
-            dataFields: [
-                { name: 'id', type: 'int' },
-                { name: 'name', type: 'string' },
-                { name: 'ordering', type: 'int' },
-                { name: 'status', type: 'string' }
-            ],
-            id: 'id',
-            url: url
-        };
-
-        var dataAdapter = new $.jqx.dataAdapter(source);
-        // create jqxgrid.
-        $("#system_jqx_container").jqxGrid(
-            {
-                width: '100%',
-                source: dataAdapter,
-                pageable: true,
-                filterable: true,
-                sortable: true,
-                showfilterrow: true,
-                columnsresize: true,
-                pagesize:50,
-                pagesizeoptions: ['20', '50', '100', '200','300','500'],
-                selectionmode: 'singlerow',
-                altrows: true,
-                autoheight: true,
-                columns: [
-                    { text: '<?php echo $CI->lang->line('LABEL_NAME'); ?>', dataField: 'name'},
-                    { text: '<?php echo $CI->lang->line('LABEL_ORDER'); ?>', dataField: 'ordering',width:'150',cellsalign: 'right'},
-                    { text: '<?php echo $CI->lang->line('STATUS'); ?>', dataField: 'status',filtertype: 'list',width:'150',cellsalign: 'right'}
-                ]
-            });
-    });
-</script>

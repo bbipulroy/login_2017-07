@@ -26,9 +26,10 @@ $action_buttons[]=array(
 );
 $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 ?>
-<form class="form_valid" id="save_form" action="<?php echo site_url($CI->controller_url.'/index/save');?>" method="post">
-    <input type="hidden" id="id" name="id" value="<?php echo $designation['id']; ?>" />
+<form id="save_form" action="<?php echo site_url($CI->controller_url.'/index/save');?>" method="post">
+    <input type="hidden" id="id" name="id" value="<?php echo $item['id']; ?>" />
     <input type="hidden" id="system_save_new_status" name="system_save_new_status" value="0" />
+
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
@@ -39,19 +40,69 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 
         <div class="row show-grid">
             <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_NAME');?><span style="color:#FF0000">*</span></label>
+                <label for="name" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_NAME');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="designation[name]" id="name" class="form-control" value="<?php echo $designation['name'];?>"/>
+                <input type="text" name="item[name]" id="name" class="form-control" value="<?php echo $item['name']; ?>"/>
             </div>
         </div>
-
         <div style="" class="row show-grid">
             <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ORDER');?><span style="color:#FF0000">*</span></label>
+                <label for="parent" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARENT');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <input type="text" name="designation[ordering]" id="ordering" class="form-control" value="<?php echo $designation['ordering'] ?>" >
+                <select id="parent" name="item[parent]" data-placeholder="Select" class="form-control" tabindex="-1">
+                    <option value="0"><?php echo $CI->lang->line('SELECT'); ?></option>
+                    <?php
+                    foreach($designations as $designation)
+                    {
+                        ?>
+                        <option value='<?php echo $designation['designation']['id']; ?>' <?php if($designation['designation']['id']==$item['parent']){ echo ' selected';} ?>><?php echo $designation['prefix'].$designation['designation']['name']; ?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label for="ordering" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ORDER');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <input type="text" name="item[ordering]" id="ordering" class="form-control" value="<?php echo $item['ordering'] ?>" >
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label for="status" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TYPE');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select id="status" name="item[status]" class="form-control" tabindex="-1">
+                    <option value="<?php echo $CI->config->item('system_status_active'); ?>"
+                        <?php
+                        if($item['status']==$CI->config->item('system_status_active'))
+                        {
+                            echo ' selected';
+                        }
+                        ?> ><?php echo $CI->lang->line('ACTIVE') ?>
+                    </option>
+                    <option value="<?php echo $CI->config->item('system_status_inactive'); ?>"
+                        <?php
+                        if($item['status']==$CI->config->item('system_status_inactive'))
+                        {
+                            echo ' selected';
+                        }
+                        ?> ><?php echo $CI->lang->line('INACTIVE') ?>
+                    </option>
+                    <option value="<?php echo $CI->config->item('system_status_delete'); ?>"
+                        <?php
+                        if($item['status']==$CI->config->item('system_status_delete'))
+                        {
+                            echo ' selected';
+                        }
+                        ?> ><?php echo $CI->lang->line('DELETE') ?>
+                    </option>
+                </select>
             </div>
         </div>
     </div>
