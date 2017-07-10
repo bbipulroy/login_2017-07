@@ -11,7 +11,6 @@ class Setup_designation extends Root_Controller
         $this->message="";
         $this->permissions=User_helper::get_permission('Setup_designation');
         $this->controller_url='setup_designation';
-        //$this->load->model("sys_module_task_model");
     }
 
     public function index($action="list",$id=0)
@@ -47,6 +46,7 @@ class Setup_designation extends Root_Controller
         if(isset($this->permissions['action0']) && ($this->permissions['action0']==1))
         {
             $data['title']="Designation";
+            $data['items']=$this->get_designation_table_tree();
             $ajax['status']=true;
             $ajax['system_content'][]=array('id'=>'#system_content','html'=>$this->load->view($this->controller_url.'/list',$data,true));
             if($this->message)
@@ -67,22 +67,24 @@ class Setup_designation extends Root_Controller
 
     private function system_get_items()
     {
-        $items=Query_helper::get_info($this->config->item('table_setup_designation'),array('id','name','status','ordering'),array('status !="'.$this->config->item('system_status_delete').'"'));
+        $items=Query_helper::get_info($this->config->item('table_login_setup_designation'),array('id','name','status','ordering'),array('status !="'.$this->config->item('system_status_delete').'"'));
         $this->json_return($items);
     }
 
     private function system_add()
     {
-        if(isset($this->permissions['action1']) && ($this->permissions['action1']==1))
+        if(isset($this->permissions['action1'])&&($this->permissions['action1']==1))
         {
             $data['title']="Create New Designation";
-            $data["designation"] = Array(
+            $data["item"] = Array(
                 'id' => 0,
                 'name' => '',
+                'parent' => 0,
                 'ordering' => 99,
                 'status' => $this->config->item('system_status_active')
             );
             $ajax['system_page_url']=site_url($this->controller_url."/index/add");
+            $data['designations']=$this->get_designation_table_tree();
             $ajax['status']=true;
             $ajax['system_content'][]=array('id'=>'#system_content','html'=>$this->load->view($this->controller_url.'/add_edit',$data,true));
             if($this->message)
@@ -100,25 +102,18 @@ class Setup_designation extends Root_Controller
     }
     private function system_edit($id)
     {
-        if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
+        if(isset($this->permissions['action2'])&&($this->permissions['action2']==1))
         {
-            if(($this->input->post('id')))
-            {
-                $designation_id=$this->input->post('id');
-            }
-            else
-            {
-                $designation_id=$id;
-            }
-            $data['designation']=Query_helper::get_info($this->config->item('table_setup_designation'),'*',array('id ='.$designation_id),1);
-            $data['title']="Edit Designation (".$data['designation']['name'].')';
+            $data['item']=$this->get_designation_info($id);
+            $data['title']='Edit '.$data['item']['name'];
+            $ajax['system_page_url']=site_url($this->controller_url."/index/edit/".$id);
+            $data['designations']=$this->get_designation_table_tree();
             $ajax['status']=true;
             $ajax['system_content'][]=array('id'=>'#system_content','html'=>$this->load->view($this->controller_url.'/add_edit',$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
             }
-            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit/'.$designation_id);
             $this->json_return($ajax);
         }
         else
@@ -128,7 +123,6 @@ class Setup_designation extends Root_Controller
             $this->json_return($ajax);
         }
     }
-
     private function system_save()
     {
         $id = $this->input->post("id");
@@ -162,22 +156,19 @@ class Setup_designation extends Root_Controller
         }
         else
         {
-            $data=$this->input->post('designation');
+            $data=$this->input->post('item');
             $this->db->trans_start();  //DB Transaction Handle START
             if($id>0)
             {
                 $data['user_updated'] = $user->user_id;
                 $data['date_updated'] = time();
-
-                Query_helper::update($this->config->item('table_setup_designation'),$data,array("id = ".$id));
-
+                Query_helper::update($this->config->item('table_login_setup_designation'),$data,array("id = ".$id));
             }
             else
             {
-
                 $data['user_created'] = $user->user_id;
                 $data['date_created'] = time();
-                Query_helper::add($this->config->item('table_setup_designation'),$data);
+                Query_helper::add($this->config->item('table_login_setup_designation'),$data);
             }
             $this->db->trans_complete();   //DB Transaction Handle END
             if ($this->db->trans_status() === TRUE)
@@ -201,16 +192,61 @@ class Setup_designation extends Root_Controller
             }
         }
     }
+
     private function check_validation()
     {
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('designation[name]',$this->lang->line('LABEL_NAME'),'required');
-
+        $this->form_validation->set_rules('item[name]',$this->lang->line('LABEL_NAME'),'required');
         if($this->form_validation->run() == FALSE)
         {
             $this->message=validation_errors();
             return false;
         }
         return true;
+    }
+
+    private function get_designation_table_tree()
+    {
+        $CI=& get_instance();
+        $CI->db->from($CI->config->item('table_login_setup_designation'));
+        $CI->db->order_by('ordering');
+        $results=$CI->db->get()->result_array();
+        $children=array();
+        foreach($results as $result)
+        {
+            $children[$result['parent']]['ids'][$result['id']]=$result['id'];
+            $children[$result['parent']]['designations'][$result['id']]=$result;
+        }
+        $level0=$children[0]['designations'];
+        $tree=array();
+        foreach ($level0 as $designation)
+        {
+            $this->get_sub_designation_tree($designation,'',$tree,$children);
+        }
+        return $tree;
+    }
+
+    private function get_sub_designation_tree($designation,$prefix,&$tree,$children)
+    {
+        $tree[]=array('prefix'=>$prefix,'designation'=>$designation);
+        $subs=array();
+        if(isset($children[$designation['id']]))
+        {
+            $subs=$children[$designation['id']]['designations'];
+        }
+        if(sizeof($subs)>0)
+        {
+            foreach($subs as $sub)
+            {
+                $this->get_sub_designation_tree($sub,$prefix.'- ',$tree,$children);
+            }
+        }
+    }
+
+    private function get_designation_info($id)
+    {
+        $this->db->from($this->config->item('table_login_setup_designation'));
+        $this->db->where('id',$id);
+        return $this->db->get()->row_array();
     }
 }
