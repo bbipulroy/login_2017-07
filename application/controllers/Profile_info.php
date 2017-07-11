@@ -43,8 +43,8 @@ class Profile_info extends Root_Controller
             $this->db->select('u_group.name group_name');
             $this->db->from($this->config->item('table_login_setup_user').' user');
             $this->db->join($this->config->item('table_login_setup_user_info').' user_info','user_info.user_id=user.id');
-            $this->db->join($this->config->item('table_setup_offices').' office','office.id=user_info.office_id','left');
-            $this->db->join($this->config->item('table_setup_department').' department','department.id=user_info.department_id','left');
+            $this->db->join($this->config->item('table_login_setup_offices').' office','office.id=user_info.office_id','left');
+            $this->db->join($this->config->item('table_login_setup_department').' department','department.id=user_info.department_id','left');
             $this->db->join($this->config->item('table_login_setup_designation').' designation','designation.id=user_info.designation','left');
             $this->db->join($this->config->item('table_login_setup_user_type').' u_type','u_type.id=user_info.user_type_id','left');
             $this->db->join($this->config->item('table_system_user_group').' u_group','u_group.id=user_info.user_group','left');
@@ -61,8 +61,8 @@ class Profile_info extends Root_Controller
 
             $data['title']=$data['user_info']['name'];
 
-            $data['companies']=Query_helper::get_info($this->config->item('table_setup_company'),'*',array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering'));
-            $assigned_companies=Query_helper::get_info($this->config->item('table_setup_users_company'),array('company_id'),array('user_id ='.$user_id,'revision =1'));
+            $data['companies']=Query_helper::get_info($this->config->item('table_login_setup_company'),'*',array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering'));
+            $assigned_companies=Query_helper::get_info($this->config->item('table_login_setup_users_company'),array('company_id'),array('user_id ='.$user_id,'revision =1'));
             $data['assigned_companies']=array();
             foreach($assigned_companies as $row)
             {
