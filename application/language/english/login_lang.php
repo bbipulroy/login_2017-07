@@ -128,6 +128,12 @@ $lang['LABEL_UNION_NAME'] = 'Union';
 
 //crop classification
 $lang['LABEL_CROP_NAME']='Crop';
+$lang['LABEL_CROP_TYPE']='Crop Type';
+$lang['LABEL_WHOSE']='Variety Category';
+$lang['LABEL_COMPETITOR_NAME']='Competitor';
+$lang['LABEL_STOCK_ID']='Stock Id';
+$lang['LABEL_PRINCIPAL_NAME']='Principal';
+$lang['LABEL_HYBRID']='Hybrid';
 
 //Basic Setup
 $lang['LABEL_DATE_START'] = 'Starting Date';

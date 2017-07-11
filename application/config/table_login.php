@@ -21,6 +21,7 @@ $config['table_system_assigned_area'] = 'arm_login_2017_07.login_setup_user_area
 //crop classification
 $config['table_login_setup_classification_crops']='arm_login_2017_07.login_setup_classification_crops';
 $config['table_login_setup_classification_crop_types']='arm_login_2017_07.login_setup_classification_crop_types';
+$config['table_login_setup_classification_varieties']='arm_login_2017_07.login_setup_classification_varieties';
 //customer setup
 $config['table_login_csetup_cus_type'] = 'arm_login_2017_07.login_csetup_cus_type';
 $config['table_login_csetup_incharge'] = 'arm_login_2017_07.login_csetup_incharge';

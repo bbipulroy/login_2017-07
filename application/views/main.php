@@ -2,6 +2,13 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $CI = & get_instance();
 
+$system_crops=Query_helper::get_info($CI->config->item('table_login_setup_classification_crops'),array('id value,name text'),array('status ="'.$CI->config->item('system_status_active').'"'),0,0,array('ordering'));
+$results=Query_helper::get_info($CI->config->item('table_login_setup_classification_crop_types'),array('id value,name text,crop_id'),array('status ="'.$CI->config->item('system_status_active').'"'),0,0,array('ordering'));
+$system_types=array();
+foreach($results as $result)
+{
+    $system_types[$result['crop_id']][]=$result;
+}
 $system_divisions=Query_helper::get_info($CI->config->item('table_setup_location_divisions'),array('id value','name text'),array('status ="'.$CI->config->item('system_status_active').'"'));
 $results=Query_helper::get_info($CI->config->item('table_setup_location_zones'),array('id value','name text,division_id'),array('status ="'.$CI->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
 $system_zones=array();
@@ -81,6 +88,8 @@ foreach($results as $result)
             var SELECT_ONE_ITEM = "<?php echo $CI->lang->line('SELECT_ONE_ITEM'); ?>";
             var DELETE_CONFIRM = "<?php echo $CI->lang->line('DELETE_CONFIRM'); ?>";
             var resized_image_files=[];
+            var system_crops=JSON.parse('<?php echo json_encode($system_crops);?>');
+            var system_types=JSON.parse('<?php echo json_encode($system_types);?>');
             var system_divisions=JSON.parse('<?php echo json_encode($system_divisions);?>');
             var system_zones=JSON.parse('<?php echo json_encode($system_zones);?>');
             var system_territories=JSON.parse('<?php echo json_encode($system_territories);?>');
