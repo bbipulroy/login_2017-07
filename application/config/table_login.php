@@ -24,3 +24,8 @@ $config['table_login_setup_classification_crop_types']='arm_login_2017_07.login_
 //customer setup
 $config['table_login_csetup_cus_type'] = 'arm_login_2017_07.login_csetup_cus_type';
 $config['table_login_csetup_incharge'] = 'arm_login_2017_07.login_csetup_incharge';
+//Basic Setup
+$config['table_login_basic_setup_fiscal_year'] = 'arm_login_2017_07.login_basic_setup_fiscal_year';
+$config['table_login_basic_setup_competitor'] = 'arm_login_2017_07.login_basic_setup_competitor';
+$config['table_login_basic_setup_principal'] = 'arm_login_2017_07.login_basic_setup_principal';
+
