@@ -140,3 +140,19 @@ $lang['LABEL_PACK_NAME'] = 'Pack Size(gm)';
 //Basic Setup
 $lang['LABEL_DATE_START'] = 'Starting Date';
 $lang['LABEL_DATE_END'] = 'End Date';
+
+//customer
+$lang['LABEL_CUSTOMER_CODE'] = 'Customer Code';
+$lang['LABEL_PHONE'] = 'Phone';
+$lang['LABEL_NAME_OWNER'] = 'Owner Name';
+$lang['LABEL_NAME_MARKET'] = 'Market Name';
+$lang['LABEL_EMAIL'] = 'Email';
+$lang['LABEL_AGREEMENT'] = 'Agreement';
+$lang['LABEL_OPENING_BALANCE'] = 'Opening Balance';
+$lang['LABEL_CUSTOMER_CREDIT_LIMIT'] = 'Credit Limit';
+$lang['LABEL_DATE_OPENING'] = 'Opening Date';
+$lang['LABEL_DATE_CLOSING'] = 'Closing Date';
+$lang['LABEL_CUSTOMER_TYPE'] = 'Customer Type';
+$lang['LABEL_PICTURE'] = 'Picture';
+$lang['LABEL_MAP_ADDRESS'] = 'Google Map Address';
+$lang['LABEL_INCHARGE'] = 'In-charge';

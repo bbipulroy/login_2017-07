@@ -12,3 +12,10 @@ $config['system_status_active']='Active';
 $config['system_status_inactive']='In-Active';
 $config['system_status_delete']='Deleted';
 $config['system_image_base_url']='http://localhost/login_2017_07/';
+
+
+$config['system_status_not_done']='Not Done';
+$config['system_status_done']='Done';
+
+
+$config['system_save']='save';
