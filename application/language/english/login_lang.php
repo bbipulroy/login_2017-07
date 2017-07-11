@@ -126,3 +126,5 @@ $lang['LABEL_DISTRICT_NAME'] = 'District';
 $lang['LABEL_UPAZILLA_NAME'] = 'Upazila';
 $lang['LABEL_UNION_NAME'] = 'Union';
 
+//crop classification
+$lang['LABEL_CROP_NAME']='Crop';
