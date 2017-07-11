@@ -76,6 +76,7 @@ $lang['LABEL_QUANTITY'] = 'Quantity';
 $lang['LABEL_TOTAL'] = 'Total';
 $lang['LABEL_SEARCH'] = 'Search';
 $lang['LABEL_ADDRESS'] = 'Address';
+$lang['LABEL_DESCRIPTION'] = 'Description';
 //system_other_sites
 $lang['LABEL_SHORT_NAME'] = 'Short Name';
 $lang['LABEL_FULL_NAME'] = 'Full Name';

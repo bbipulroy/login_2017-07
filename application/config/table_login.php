@@ -18,6 +18,8 @@ $config['table_setup_location_districts'] = 'arm_login_2017_07.login_districts';
 $config['table_setup_location_upazillas'] = 'arm_login_2017_07.login_upazillas';
 $config['table_setup_location_unions'] = 'arm_login_2017_07.login_unions';
 $config['table_system_assigned_area'] = 'arm_login_2017_07.login_setup_user_area';
+//crop classification
+$config['table_login_setup_classification_crops']='arm_login_2017_07.login_setup_classification_crops';
 //customer setup
 $config['table_login_csetup_cus_type'] = 'arm_login_2017_07.login_csetup_cus_type';
 $config['table_login_csetup_incharge'] = 'arm_login_2017_07.login_csetup_incharge';
