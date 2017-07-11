@@ -128,3 +128,7 @@ $lang['LABEL_UNION_NAME'] = 'Union';
 
 //crop classification
 $lang['LABEL_CROP_NAME']='Crop';
+
+//Basic Setup
+$lang['LABEL_DATE_START'] = 'Starting Date';
+$lang['LABEL_DATE_END'] = 'End Date';
