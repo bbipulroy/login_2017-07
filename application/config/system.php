@@ -19,3 +19,5 @@ $config['system_status_done']='Done';
 
 
 $config['system_save']='save';
+
+$config['num_year_prediction']=0;
