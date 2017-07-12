@@ -18,6 +18,52 @@ if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
         'data-action-link'=>site_url($CI->controller_url.'/index/edit')
     );
 }
+$action_buttons[]=array(
+    'type'=>'button',
+    'label'=>$CI->lang->line('ACTION_DETAILS'),
+    'class'=>'button_jqx_action',
+    'data-action-link'=>site_url($CI->controller_url.'/index/details')
+);
+if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
+{
+    $action_buttons[]=array(
+        'type'=>'button',
+        'label'=>'Change Principals',
+        'class'=>'button_jqx_action',
+        'data-action-link'=>site_url($CI->controller_url.'/index/edit'),
+        'data-message-confirm'=>'Are you sure to change principals?'
+    );
+}
+if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
+{
+    $action_buttons[]=array(
+        'type'=>'button',
+        'label'=>'Pricing',
+        'class'=>'button_jqx_action',
+        'data-action-link'=>site_url($CI->controller_url.'/index/edit'),
+        'data-message-confirm'=>'Are you sure to assign pricing this variety?'
+    );
+}
+if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
+{
+    $action_buttons[]=array(
+        'type'=>'button',
+        'label'=>'Pricing in KG',
+        'class'=>'button_jqx_action',
+        'data-action-link'=>site_url($CI->controller_url.'/index/edit'),
+        'data-message-confirm'=>'Are you sure to assign pricing in KG this variety?'
+    );
+}
+if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
+{
+    $action_buttons[]=array(
+        'type'=>'button',
+        'label'=>'Set Season',
+        'class'=>'button_jqx_action',
+        'data-action-link'=>site_url($CI->controller_url.'/index/edit'),
+        'data-message-confirm'=>'Are you sure to set Season to this variety?'
+    );
+}
 if(isset($CI->permissions['action4']) && ($CI->permissions['action4']==1))
 {
     $action_buttons[]=array(
