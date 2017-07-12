@@ -134,6 +134,8 @@ $lang['LABEL_COMPETITOR_NAME']='Competitor';
 $lang['LABEL_STOCK_ID']='Stock Id';
 $lang['LABEL_PRINCIPAL_NAME']='Principal';
 $lang['LABEL_HYBRID']='Hybrid';
+$lang['LABEL_DATE_RELEASE']='Release Date';
+$lang['LABEL_TRIAL_COMPLETED']='Number of Trials Completed';
 $lang['LABEL_PACK_NAME'] = 'Pack Size(gm)';
 
 

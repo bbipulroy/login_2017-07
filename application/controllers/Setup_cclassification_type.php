@@ -70,8 +70,9 @@ class Setup_cclassification_type extends Root_Controller
         $this->db->select('ct.id,ct.name,ct.status,ct.ordering');
         $this->db->select('crop.name crop_name');
         $this->db->join($this->config->item('table_login_setup_classification_crops').' crop','crop.id = ct.crop_id','INNER');
-        $this->db->order_by('ct.ordering','ASC');
         $this->db->where('ct.status !=',$this->config->item('system_status_delete'));
+        $this->db->order_by('crop.ordering','ASC');
+        $this->db->order_by('ct.ordering','ASC');
         $items=$this->db->get()->result_array();
         $this->json_return($items);
     }

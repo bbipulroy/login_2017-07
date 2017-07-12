@@ -25,6 +25,7 @@ $config['table_login_setup_classification_varieties']='arm_login_2017_07.login_s
 $config['table_login_setup_classification_vpack_size'] = 'arm_login_2017_07.login_setup_classification_variety_pack_size';
 $config['table_login_setup_classification_variety_category'] = 'arm_login_2017_07.login_setup_classification_variety_category';
 $config['table_login_setup_classification_hybrid'] = 'arm_login_2017_07.login_setup_classification_hybrid';
+$config['table_login_setup_variety_principals'] = 'arm_login_2017_07.login_setup_variety_principals';
 //customer setup
 $config['table_login_csetup_cus_type'] = 'arm_login_2017_07.login_csetup_customer_type';
 $config['table_login_csetup_incharge'] = 'arm_login_2017_07.login_csetup_incharge';
