@@ -36,9 +36,17 @@ class Setup_cclassification_variety extends Root_Controller
         {
             $this->system_details($id);
         }
+        elseif($action=="change_principals")
+        {
+            $this->system_change_principals($id);
+        }
         elseif($action=="save")
         {
             $this->system_save();
+        }
+        elseif($action=="save_principals")
+        {
+            $this->system_save_principals();
         }
         else
         {
@@ -198,17 +206,25 @@ class Setup_cclassification_variety extends Root_Controller
                 $item_id=$id;
             }
 
-            $this->db->from($this->config->item('table_login_setup_classification_varieties').' v');
             $this->db->select('v.*');
-            $this->db->select('type.crop_id crop_id');
+            $this->db->select('type.name crop_type_name,type.id crop_type_id');
+            $this->db->select('crop.name crop_name,crop.id crop_id');
+            $this->db->select('comp.name comp_name');
+            $this->db->select('h.name hybrid_name');
+            $this->db->from($this->config->item('table_login_setup_classification_varieties').' v');
             $this->db->join($this->config->item('table_login_setup_classification_crop_types').' type','type.id = v.crop_type_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_classification_crops').' crop','crop.id = type.crop_id','INNER');
+            $this->db->join($this->config->item('table_login_basic_setup_competitor').' comp','comp.id = v.competitor_id','LEFT');
+            $this->db->join($this->config->item('table_login_setup_classification_hybrid').' h','h.id = v.hybrid','LEFT');
             $this->db->where('v.id',$item_id);
             $data['item']=$this->db->get()->row_array();
 
-            $data['crops']=Query_helper::get_info($this->config->item('table_login_setup_classification_crops'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['crop_types']=Query_helper::get_info($this->config->item('table_login_setup_classification_crop_types'),array('id value','name text'),array('crop_id ='.$data['variety']['crop_id']));
-            $data['competitors']=Query_helper::get_info($this->config->item('table_login_basic_setup_competitor'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['principals']=Query_helper::get_info($this->config->item('table_login_basic_setup_principal'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $this->db->select('p.name');
+            $this->db->from($this->config->item('table_login_setup_variety_principals').' vp');
+            $this->db->join($this->config->item('table_login_basic_setup_principal').' p','p.id=vp.principal_id');
+            $this->db->where('vp.variety_id',$item_id);
+            $this->db->where('vp.revision',1);
+            $data['principals']=$this->db->get()->result_array();
 
             $data['title']="Details of (".$data['item']['name'].')';
             $ajax['status']=true;
@@ -218,6 +234,46 @@ class Setup_cclassification_variety extends Root_Controller
                 $ajax['system_message']=$this->message;
             }
             $ajax['system_page_url']=site_url($this->controller_url.'/index/details/'.$item_id);
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
+    private function system_change_principals($id)
+    {
+        if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
+        {
+            if(($this->input->post('id')))
+            {
+                $item_id=$this->input->post('id');
+            }
+            else
+            {
+                $item_id=$id;
+            }
+
+            $data['item']=Query_helper::get_info($this->config->item('table_login_setup_classification_varieties'),'id,name',array('id ='.$item_id),1);
+            $data['principals']=Query_helper::get_info($this->config->item('table_login_basic_setup_principal'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+
+            $results=Query_helper::get_info($this->config->item('table_login_setup_variety_principals'),'*',array('variety_id ='.$item_id,'revision =1'));
+            $data['assigned_principals']=array();
+            foreach($results as $result)
+            {
+                $data['assigned_principals'][]=$result['principal_id'];
+            }
+
+            $data['title']="Edit Principals of Variety (".$data['item']['name'].')';
+            $ajax['status']=true;
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/change_principals",$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/change_principals/'.$item_id);
             $this->json_return($ajax);
         }
         else
@@ -330,6 +386,74 @@ class Setup_cclassification_variety extends Root_Controller
                 $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
                 $this->json_return($ajax);
             }
+        }
+    }
+    private function system_save_principals()
+    {
+        $id = $this->input->post("id");
+        $user = User_helper::get_user();
+        $time=time();
+        if($id>0)
+        {
+            if(!(isset($this->permissions['action2']) && ($this->permissions['action2']==1)))
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->json_return($ajax);
+            }
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']='Wrong input. You use illegal way.';
+            $this->json_return($ajax);
+        }
+
+        $this->db->trans_start();  //DB Transaction Handle START
+
+        $revision_history_data=array();
+        $revision_history_data['date_updated']=$time;
+        $revision_history_data['user_updated']=$user->user_id;
+        Query_helper::update($this->config->item('table_login_setup_variety_principals'),$revision_history_data,array('revision=1','variety_id='.$id));
+
+        $this->db->where('variety_id',$id);
+        $this->db->set('revision', 'revision+1', FALSE);
+        $this->db->update($this->config->item('table_login_setup_variety_principals'));
+
+        $principal_ids=$this->input->post('principal_ids');
+        if(is_array($principal_ids))
+        {
+            foreach($principal_ids as $principal_id)
+            {
+                $data=array();
+                $data['variety_id']=$id;
+                $data['principal_id']=$principal_id;
+                $data['user_created'] = $user->user_id;
+                $data['date_created'] = $time;
+                $data['revision'] = 1;
+                Query_helper::add($this->config->item('table_login_setup_variety_principals'),$data);
+            }
+        }
+
+        $this->db->trans_complete();   //DB Transaction Handle END
+        if ($this->db->trans_status() === TRUE)
+        {
+            $save_and_new=$this->input->post('system_save_new_status');
+            $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
+            if($save_and_new==1)
+            {
+                $this->system_add();
+            }
+            else
+            {
+                $this->system_list();
+            }
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
+            $this->json_return($ajax);
         }
     }
     private function check_validation()

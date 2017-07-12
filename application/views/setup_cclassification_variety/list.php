@@ -30,7 +30,7 @@ if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
         'type'=>'button',
         'label'=>'Change Principals',
         'class'=>'button_jqx_action',
-        'data-action-link'=>site_url($CI->controller_url.'/index/edit'),
+        'data-action-link'=>site_url($CI->controller_url.'/index/change_principals'),
         'data-message-confirm'=>'Are you sure to change principals?'
     );
 }
