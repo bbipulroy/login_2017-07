@@ -58,6 +58,7 @@ $lang['MSG_SAVED_FAIL'] = 'Failed to Save!';
 $lang['MSG_INVALID_INPUT'] = 'Invalid data entry';
 
 $lang['LABEL_DATE']='Date';
+$lang['LABEL_DATE_CREATED']='Creation date';
 $lang['MSG_FILE_SIZE_ERROR']='File Size Error';
 $lang['MSG_FILE_TYPE_ERROR']='File Type Error';
 
@@ -129,6 +130,7 @@ $lang['LABEL_UNION_NAME'] = 'Union';
 //crop classification
 $lang['LABEL_CROP_NAME']='Crop';
 $lang['LABEL_CROP_TYPE']='Crop Type';
+$lang['LABEL_VARIETY']='Variety';
 $lang['LABEL_WHOSE']='Variety Category';
 $lang['LABEL_COMPETITOR_NAME']='Competitor';
 $lang['LABEL_STOCK_ID']='Stock Id';
