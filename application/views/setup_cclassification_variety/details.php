@@ -1,0 +1,180 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+$CI=& get_instance();
+$action_buttons=array();
+$action_buttons[]=array(
+    'label'=>$CI->lang->line("ACTION_BACK"),
+    'href'=>site_url($CI->controller_url)
+);
+if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
+{
+    $action_buttons[]=array(
+        'label'=>$CI->lang->line("ACTION_EDIT"),
+        'href'=>site_url($CI->controller_url.'/index/edit/'.$item['id'])
+    );
+}
+$CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
+?>
+
+<div class="row widget">
+    <div class="widget-header">
+        <div class="title">
+            <?php echo $title; ?>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div style="" class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_CROP_NAME');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label"><?php echo $item['crop_name'];;?></label>
+        </div>
+    </div>
+
+    <div class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_CROP_TYPE');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label"><?php echo $item['crop_type_name'];;?></label>
+        </div>
+    </div>
+    <div class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_VARIETY');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label"><?php echo $item['name'];;?></label>
+        </div>
+    </div>
+    <div class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_WHOSE');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label"><?php echo $item['whose'];?></label>
+        </div>
+    </div>
+    <?php
+        if($item['whose']=='Competitor')
+        {
+            ?>
+            <div class="row show-grid">
+                <div class="col-xs-4">
+                    <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_COMPETITOR_NAME');?></label>
+                </div>
+                <div class="col-sm-4 col-xs-8">
+                    <label class="control-label"><?php echo $item['comp_name'];?></label>
+                </div>
+            </div>
+            <?php
+        }
+    ?>
+    <div class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_DATE_CREATED');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label"><?php echo System_helper::display_date($item['date_created']);?></label>
+        </div>
+    </div>
+    <div class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_STOCK_ID');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label"><?php echo $item['stock_id'];?></label>
+        </div>
+    </div>
+    <div style="" class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_HYBRID');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label"><?php echo $item['hybrid_name'];?></label>
+        </div>
+    </div>
+    <div style="" class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DESCRIPTION');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label"><?php echo $item['description'];?></label>
+        </div>
+    </div>
+    <div style="" class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DATE_RELEASE');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label"><?php echo System_helper::display_date($item['date_release']);?></label>
+        </div>
+    </div>
+    <div style="" class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TRIAL_COMPLETED');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label"><?php echo $item['trial_completed'];?></label>
+        </div>
+    </div>
+    <div style="" class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ORDER');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label"><?php echo $item['ordering'];?></label>
+        </div>
+    </div>
+    <div style="" class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('STATUS');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label"><?php echo $item['status'];?></label>
+        </div>
+    </div>
+    <div style="" class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PRINCIPAL_NAME');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <?php
+            if(count($principals)>0)
+            {
+                ?><ul><?php
+                foreach($principals as $principal)
+                {
+                    ?>
+                    <li><?php echo $principal['name']; ?></li>
+                    <?php
+                }
+                ?></ul><?php
+            }
+            else
+            {
+                ?>None of principals assigned<?php
+            }
+            ?>
+        </div>
+    </div>
+    <div style="" class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right">Import Name</label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label"><?php echo $item['name_import'];?></label>
+        </div>
+    </div>
+    <div style="" class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_REMARKS');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label"><?php echo $item['remarks'];?></label>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
