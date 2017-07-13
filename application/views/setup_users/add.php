@@ -240,6 +240,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 <script type="text/javascript">
     jQuery(document).ready(function()
     {
+        $(document).off('input','#employee_id');
 		$(document).off('input','#user_name');
 		$(document).off('change','#designation');
 		$(document).off('change','#office_id');
@@ -254,6 +255,11 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         $('#division_id').html(get_dropdown_with_select(system_divisions,'','All'));
         $("#date_join").datepicker({dateFormat : display_date_format,changeMonth: true,changeYear: true,yearRange: "-100:+0"});
 
+        $(document).on("input","#employee_id",function()
+        {
+            $('#user_name').val($(this).val());
+            $('#password').val($(this).val());
+        });
         $(document).on("input","#user_name",function()
         {
             $('#password').val($(this).val());
