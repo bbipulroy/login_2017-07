@@ -10,6 +10,7 @@ $action_buttons[]=array(
 $action_buttons[]=array(
     'type'=>'button',
     'label'=>$CI->lang->line("ACTION_SAVE"),
+    'data-message-confirm'=>'Are you sure to change password?',
     'id'=>'button_action_save',
     'data-form'=>'#save_form'
 );
@@ -23,7 +24,6 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 ?>
 <form id="save_form" action="<?php echo site_url($CI->controller_url.'/index/save_password');?>" method="post">
     <input type="hidden" id="id" name="id" value="<?php echo $user_info['user_id']; ?>" />
-    <input type="hidden" id="system_save_new_status" name="system_save_new_status" value="0" />
     <div class="row widget">
         <div class="widget-header">
             <div class="title">
