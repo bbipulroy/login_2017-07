@@ -114,16 +114,14 @@ class Setup_cclassification_variety extends Root_Controller
                 'trial_completed' => '',
                 'remarks' => '',
                 'ordering' => 999,
-                'principal_id' => 0,
-                'name_import' => '',
                 'status' => $this->config->item('system_status_active')
             );
             $data['crops']=Query_helper::get_info($this->config->item('table_login_setup_classification_crops'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['crop_types']=array();
             $data['competitors']=Query_helper::get_info($this->config->item('table_login_basic_setup_competitor'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['principals']=Query_helper::get_info($this->config->item('table_login_basic_setup_principal'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            #$data['principals']=Query_helper::get_info($this->config->item('table_login_basic_setup_principal'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['hybrids']=Query_helper::get_info($this->config->item('table_login_setup_classification_hybrid'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['assigned_principals']=array();
+            #$data['assigned_principals']=array();
             $ajax['system_page_url']=site_url($this->controller_url."/index/add");
 
             $ajax['status']=true;
@@ -166,15 +164,15 @@ class Setup_cclassification_variety extends Root_Controller
             $data['crops']=Query_helper::get_info($this->config->item('table_login_setup_classification_crops'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['crop_types']=Query_helper::get_info($this->config->item('table_login_setup_classification_crop_types'),array('id value','name text'),array('crop_id ='.$data['item']['crop_id']));
             $data['competitors']=Query_helper::get_info($this->config->item('table_login_basic_setup_competitor'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['principals']=Query_helper::get_info($this->config->item('table_login_basic_setup_principal'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            #$data['principals']=Query_helper::get_info($this->config->item('table_login_basic_setup_principal'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['hybrids']=Query_helper::get_info($this->config->item('table_login_setup_classification_hybrid'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
 
             $results=Query_helper::get_info($this->config->item('table_login_setup_variety_principals'),'*',array('variety_id ='.$item_id,'revision =1'));
-            $data['assigned_principals']=array();
+            /*$data['assigned_principals']=array();
             foreach($results as $result)
             {
                 $data['assigned_principals'][]=$result['principal_id'];
-            }
+            }*/
 
             $data['title']="Edit Variety (".$data['item']['name'].')';
             $ajax['status']=true;
@@ -329,29 +327,30 @@ class Setup_cclassification_variety extends Root_Controller
                 $data['date_updated'] = $time;
                 Query_helper::update($this->config->item('table_login_setup_classification_varieties'),$data,array("id = ".$id));
 
-                $revision_history_data=array();
+                /*$revision_history_data=array();
                 $revision_history_data['date_updated']=$time;
                 $revision_history_data['user_updated']=$user->user_id;
                 Query_helper::update($this->config->item('table_login_setup_variety_principals'),$revision_history_data,array('revision=1','variety_id='.$id));
 
                 $this->db->where('variety_id',$id);
                 $this->db->set('revision', 'revision+1', FALSE);
-                $this->db->update($this->config->item('table_login_setup_variety_principals'));
+                $this->db->update($this->config->item('table_login_setup_variety_principals'));*/
             }
             else
             {
                 $data['user_created'] = $user->user_id;
                 $data['date_created'] = $time;
-                $id=Query_helper::add($this->config->item('table_login_setup_classification_varieties'),$data);
+                Query_helper::add($this->config->item('table_login_setup_classification_varieties'),$data);
+                /*$id=Query_helper::add($this->config->item('table_login_setup_classification_varieties'),$data);
                 if($id===false)
                 {
                     $ajax['status']=false;
                     $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
                     $this->json_return($ajax);
-                }
+                }*/
             }
 
-            $principal_ids=$this->input->post('principal_ids');
+            /*$principal_ids=$this->input->post('principal_ids');
             if(is_array($principal_ids))
             {
                 foreach($principal_ids as $principal_id)
@@ -364,7 +363,7 @@ class Setup_cclassification_variety extends Root_Controller
                     $data['revision'] = 1;
                     Query_helper::add($this->config->item('table_login_setup_variety_principals'),$data);
                 }
-            }
+            }*/
 
             $this->db->trans_complete();   //DB Transaction Handle END
             if ($this->db->trans_status() === TRUE)
