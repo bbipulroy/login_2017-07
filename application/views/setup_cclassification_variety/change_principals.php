@@ -9,13 +9,8 @@ $action_buttons[]=array(
 $action_buttons[]=array(
     'type'=>'button',
     'label'=>$CI->lang->line("ACTION_SAVE"),
+    'data-message-confirm'=>'Are you sure to change principals?',
     'id'=>'button_action_save',
-    'data-form'=>'#save_form'
-);
-$action_buttons[]=array(
-    'type'=>'button',
-    'label'=>$CI->lang->line("ACTION_SAVE_NEW"),
-    'id'=>'button_action_save_new',
     'data-form'=>'#save_form'
 );
 $action_buttons[]=array(
