@@ -61,21 +61,28 @@ $CI=& get_instance();
         </h4>
     </div>
     <div id="collapse2" class="panel-collapse collapse">
-        <?php
-        foreach($companies as $company)
-        {
-            ?>
-            <div style="" class="row show-grid">
-                <div class="col-xs-4">
-                    <label title="<?php echo $company['full_name'];?>" class="control-label pull-right"><?php echo $company['short_name'];?></label>
-                </div>
-                <div class="col-sm-4 col-xs-8">
-                    <label class="control-label"><?php if(in_array($company['id'],$assigned_companies)){echo 'YES';}else{echo 'NO';}?></label>
-                </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4"></div>
+            <div class="col-sm-4 col-xs-8">
+                <?php
+                    if(count($assigned_companies)>0)
+                    {
+                        ?><ul><?php
+                        foreach($assigned_companies as $company)
+                        {
+                            ?>
+                            <li style="font-weight: bolder;"><?php echo $company['full_name'].' ('.$company['short_name'].')'; ?></li>
+                            <?php
+                        }
+                        ?></ul><?php
+                    }
+                    else
+                    {
+                        ?><span style="font-weight: bolder;">None of company assigned</span><?php
+                    }
+                ?>
             </div>
-        <?php
-        }
-        ?>
+        </div>
     </div>
 </div>
 <div class="panel panel-default">
@@ -208,21 +215,28 @@ $CI=& get_instance();
         </h4>
     </div>
     <div id="collapse5" class="panel-collapse collapse">
-        <?php
-        foreach($sites as $site)
-        {
-            ?>
-            <div style="" class="row show-grid">
-                <div class="col-xs-4">
-                    <label title="<?php echo $site['full_name'];?>" class="control-label pull-right"><?php echo $site['short_name'];?></label>
-                </div>
-                <div class="col-sm-4 col-xs-8">
-                    <label class="control-label"><?php if(in_array($site['id'],$assigned_sites)){echo 'YES';}else{echo 'NO';}?></label>
-                </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4"></div>
+            <div class="col-sm-4 col-xs-8">
+                <?php
+                    if(count($assigned_sites)>0)
+                    {
+                        ?><ul><?php
+                        foreach($assigned_sites as $site)
+                        {
+                            ?>
+                            <li style=""><?php echo $site['full_name'].' ('.$site['short_name'].')'; ?></li>
+                            <?php
+                        }
+                        ?></ul><?php
+                    }
+                    else
+                    {
+                        ?><span style="font-weight: bolder;">None of site assigned</span><?php
+                    }
+                ?>
             </div>
-        <?php
-        }
-        ?>
+        </div>
     </div>
 </div>
 <div class="panel panel-default">

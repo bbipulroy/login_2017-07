@@ -61,13 +61,19 @@ class Profile_info extends Root_Controller
 
             $data['title']=$data['user_info']['name'];
 
-            $data['companies']=Query_helper::get_info($this->config->item('table_login_setup_company'),'*',array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering'));
-            $assigned_companies=Query_helper::get_info($this->config->item('table_login_setup_users_company'),array('company_id'),array('user_id ='.$user_id,'revision =1'));
-            $data['assigned_companies']=array();
-            foreach($assigned_companies as $row)
-            {
-                $data['assigned_companies'][]=$row['company_id'];
-            }
+            $this->db->select('comp.*');
+            $this->db->from($this->config->item('table_login_setup_users_company').' u_comp');
+            $this->db->join($this->config->item('table_login_setup_company').' comp','comp.id=u_comp.company_id');
+            $this->db->where('u_comp.user_id',$user_id);
+            $this->db->where('u_comp.revision',1);
+            $data['assigned_companies']=$this->db->get()->result_array();
+
+            $this->db->select('os.*');
+            $this->db->from($this->config->item('table_login_setup_users_other_sites').' uos');
+            $this->db->join($this->config->item('table_system_other_sites').' os','os.id=uos.site_id');
+            $this->db->where('uos.user_id',$user_id);
+            $this->db->where('uos.revision',1);
+            $data['assigned_sites']=$this->db->get()->result_array();
 
             $this->db->from($this->config->item('table_system_assigned_area').' aa');
             $this->db->select('aa.*');
@@ -134,14 +140,6 @@ class Profile_info extends Root_Controller
                 $data['assigned_area']['district_name']=false;
                 $data['assigned_area']['upazilla_name']=false;
                 $data['assigned_area']['union_name']=false;
-            }
-
-            $data['sites']=Query_helper::get_info($this->config->item('table_system_other_sites'),'*',array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering'));
-            $results=Query_helper::get_info($this->config->item('table_login_setup_users_other_sites'),'*',array('revision =1','user_id='.$user_id));
-            $data['assigned_sites']=array();
-            foreach($results as $result)
-            {
-                $data['assigned_sites'][]=$result['site_id'];
             }
 
             $ajax['status']=true;
