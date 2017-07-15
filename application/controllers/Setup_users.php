@@ -699,10 +699,18 @@ class Setup_users extends Root_Controller
         if(isset($data_user_info['date_birth']))
         {
            $data_user_info['date_birth']=System_helper::get_time($data_user_info['date_birth']);
+           if($data_user_info['date_birth']===0)
+           {
+                unset($data_user_info['date_birth']);
+           }
         }
         if(isset($data_user_info['date_join']))
         {
            $data_user_info['date_join']=System_helper::get_time($data_user_info['date_join']);
+           if($data_user_info['date_join']===0)
+           {
+                unset($data_user_info['date_join']);
+           }
         }
         if($id>0)
         {

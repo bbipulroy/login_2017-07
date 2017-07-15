@@ -309,6 +309,10 @@ class Setup_cclassification_variety extends Root_Controller
                 $data['competitor_id']='';
             }
             $data['date_release']=System_helper::get_time($data['date_release']);
+            if($data['date_release']===0)
+            {
+                unset($data['date_release']);
+            }
 
             $this->db->trans_start();  //DB Transaction Handle START
             if($id>0)
