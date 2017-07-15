@@ -14,10 +14,8 @@ $action_buttons[]=array(
     'data-form'=>'#save_form'
 );
 $action_buttons[]=array(
-    'type'=>'button',
     'label'=>$CI->lang->line("ACTION_CLEAR"),
-    'id'=>'button_action_clear',
-    'data-form'=>'#save_form'
+    'href'=>site_url($CI->controller_url.'/index/change_principals/'.$item['id'])
 );
 $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 ?>
@@ -31,26 +29,59 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
             <div class="clearfix"></div>
         </div>
         
-        <div style="" class="row show-grid">
-            <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PRINCIPAL_NAME');?></label>
+        <div class="row show-grid" style="overflow-x: auto;">
+            <div class="col-xs-2"></div>
+            <div class="col-xs-8">
+                <table class="table table-bordered" style="table-layout: fixed;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center;">Principal Name</th>
+                            <th style="width: 50px;"></th>
+                            <th style="text-align: center;">Import Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            foreach($principals as $principal)
+                            {
+                                ?>
+                                <tr>
+                                    <td>
+                                        <label style="font-weight: normal;" for="principal_id_<?php echo $principal['value']; ?>"><?php echo $principal['text']; ?></label>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <input type="checkbox" name="principal_ids[]" value="<?php echo $principal['value']; ?>" <?php if(array_key_exists($principal['value'],$assigned_principals)){echo 'checked';} ?> id="principal_id_<?php echo $principal['value']; ?>" data-id="<?php echo $principal['value']; ?>" class="principal_id">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="name_imports[<?php echo $principal['value']; ?>]" id="name_import_<?php echo $principal['value']; ?>" value="<?php if(isset($assigned_principals[$principal['value']])){echo $assigned_principals[$principal['value']]['name_import'];} ?>" class="form-control input-sm" <?php if(!isset($assigned_principals[$principal['value']])){echo 'disabled';} ?>>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        ?>
+                    </tbody>
+                </table>
             </div>
-            <div class="col-sm-4 col-xs-8">
-                <?php
-                foreach($principals as $principal)
-                {
-                    ?>
-                    <div class="checkbox">
-                        <label title="<?php echo $principal['text']; ?>">
-                            <input type="checkbox" name="principal_ids[]" value="<?php echo $principal['value']; ?>" <?php if(in_array($principal['value'],$assigned_principals)){echo 'checked';} ?>><?php echo $principal['text']; ?>
-                        </label>
-                    </div>
-                <?php
-                }
-                ?>
-            </div>
+            <div class="col-xs-2"></div>
         </div>
     </div>
 
     <div class="clearfix"></div>
 </form>
+<script type="text/javascript">
+    jQuery(document).ready(function()
+    {
+        $(document).off('change','.principal_id');
+        $(document).on('change','.principal_id',function(event)
+        {
+            if($(this).is(':checked'))
+            {
+                $('#name_import_'+$(this).attr('data-id')).removeAttr('disabled').val('<?php echo $item['name']; ?>').focus();
+            }
+            else
+            {
+                $('#name_import_'+$(this).attr('data-id')).val('').attr('disabled',true);
+            }
+        });
+    });
+</script>

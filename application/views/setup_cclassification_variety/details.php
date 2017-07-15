@@ -140,23 +140,38 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         <div class="col-xs-4">
             <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PRINCIPAL_NAME');?></label>
         </div>
-        <div class="col-sm-4 col-xs-8">
+        <div class="col-sm-4 col-xs-8" style="font-size: 13px;">
             <?php
-            if(count($principals)>0)
-            {
-                ?><ul><?php
-                foreach($principals as $principal)
+                if(count($principals)<1)
+                {
+                    ?>None of principals assigned<?php
+                }
+                else
                 {
                     ?>
-                    <li><?php echo $principal['name']; ?></li>
+                    <table class="table table-bordered" style="table-layout: fixed;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">Principal Name</th>
+                                <th style="text-align: center;">Import Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach($principals as $principal)
+                            {
+                                ?>
+                                <tr>
+                                    <td><?php echo $principal['name']; ?></td>
+                                    <td><?php echo $principal['name_import']; ?></td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+                        </tbody>
+                    </table>
                     <?php
                 }
-                ?></ul><?php
-            }
-            else
-            {
-                ?>None of principals assigned<?php
-            }
             ?>
         </div>
     </div>
