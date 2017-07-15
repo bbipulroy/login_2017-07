@@ -59,7 +59,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                                 if($module_task['module_task']['type']=='TASK')
                                 {
                                 ?>
-                                <label><input type="checkbox" data-id='<?php echo $module_task['module_task']['id'];?>' class="task_action_all">
+                                <label style="font-weight: normal;"><input type="checkbox" data-id='<?php echo $module_task['module_task']['id'];?>' class="task_action_all">
                                     <?php
                                     }
                                     ?>
