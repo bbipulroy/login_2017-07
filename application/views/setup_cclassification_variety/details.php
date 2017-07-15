@@ -177,14 +177,6 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
     </div>
     <div style="" class="row show-grid">
         <div class="col-xs-4">
-            <label class="control-label pull-right">Import Name</label>
-        </div>
-        <div class="col-sm-4 col-xs-8">
-            <label class="control-label"><?php echo $item['name_import'];?></label>
-        </div>
-    </div>
-    <div style="" class="row show-grid">
-        <div class="col-xs-4">
             <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_REMARKS');?></label>
         </div>
         <div class="col-sm-4 col-xs-8">
