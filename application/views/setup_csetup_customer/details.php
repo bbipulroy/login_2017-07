@@ -6,6 +6,10 @@ $action_buttons[]=array(
     'label'=>$CI->lang->line("ACTION_BACK"),
     'href'=>site_url($CI->controller_url)
 );
+$action_buttons[]=array(
+    'label'=>$CI->lang->line("ACTION_EDIT"),
+    'href'=>site_url($CI->controller_url).'/index/edit/'.$customer['id']
+);
 $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 ?>
 <form class="form_valid" id="save_form" action="<?php echo site_url($CI->controller_url.'/index/save');?>" method="post">
@@ -128,10 +132,11 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
     <div class="col-xs-4">
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PROFILE_PICTURE');?></label>
     </div>
+    <div class="col-xs-1"></div>
     <div class="col-xs-4" id="image_profile">
         <img style="max-width: 250px;" src="<?php echo $customer_info['picture_profile']; ?>">
     </div>
-    <div class="col-sm-2"></div>
+    <div class="col-xs-3"></div>
 </div>
 <div class="row show-grid">
     <div class="col-xs-4">
@@ -226,6 +231,57 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
     <div class="col-sm-4 col-xs-8">
         <label class="control-label"><?php echo $customer_info['remarks']; ?></label>
     </div>
+</div>
+
+<div style="overflow-x: auto;" class="row show-grid">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th style="min-width: 70px;">Serial No.</th>
+            <th style="min-width: 250px;"><?php echo $document;?></th>
+            <th style="max-width: 150px;">Remarks</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        foreach($file_details as $index=>$file)
+        {
+            $type=substr($file['file_type'],0,5);
+            $is_image=false;
+            if($type=='image')
+            {
+                $is_image=true;
+            }
+            ?>
+            <tr>
+                <td style="max-width: 70px;">
+                    <h4><?php echo $index+1;?></h4>
+                </td>
+                <td>
+                    <div class="preview_container_file" id="preview_container_file_<?php echo $index+1;?>">
+                        <?php
+                        if($is_image)
+                        {
+                            ?>
+                            <img style="max-width: 250px;" src="<?php echo $CI->config->item('system_image_base_url').$file['file_location']; ?>">
+                        <?php
+                        }
+                        else
+                        {
+                            ?><a class="external" href="<?php echo $CI->config->item('system_image_base_url').$file['file_location'];?>" target="_tab"><?php echo $file['file_name'];?></a><?php
+                        }
+                        ?>
+                    </div>
+                </td>
+                <td style="max-width: 100px;">
+                    <textarea class="form-control remarks" id="remarks" name="remarks[<?php echo $index+1;?>]"><?php if(isset($file['file_remarks'])){echo $file['file_remarks'];} ?></textarea>
+                </td>
+            </tr>
+        <?php
+        }
+        ?>
+        </tbody>
+    </table>
 </div>
 
 </div>

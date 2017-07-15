@@ -285,7 +285,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
     <div class="col-xs-4">
         <label class="control-label pull-right">
             <?php echo $this->lang->line('LABEL_MAP_ADDRESS').'<br>';?>
-            <p style="color: #942724" id="map">(Click Here)</p>
+            <p style="color: #942724" id="map">(Google Maps)</p>
         </label>
     </div>
     <div class="col-sm-4 col-xs-8">
@@ -402,6 +402,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         $(document).off('change','#division_id');
         $(document).off('change','#zone_id');
         $(document).off('change','#territory_id');
+        $(document).off('click','#map');
 
         $(":file").filestyle({input: false,buttonText: "<?php echo $CI->lang->line('UPLOAD');?>", buttonName: "btn-primary"});
         $("#date_open").datepicker({
