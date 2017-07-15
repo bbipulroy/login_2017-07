@@ -46,9 +46,9 @@ class Setup_csetup_customer extends Root_Controller {
         {
             $this->system_edit($id);
         }
-        elseif($action=="documents")
+        elseif($action=="document")
         {
-            $this->system_documents();
+            $this->system_documents($id);
         }
         elseif($action=="details")
         {
@@ -57,6 +57,10 @@ class Setup_csetup_customer extends Root_Controller {
         elseif($action=="save")
         {
             $this->system_save();
+        }
+        elseif($action=="save_document")
+        {
+            $this->system_document_save();
         }
         else
         {
@@ -570,7 +574,17 @@ class Setup_csetup_customer extends Root_Controller {
             $data['customer']['id']=$data['customer_info']['customer_id'];
             $data['customer']['status']=$data['customer_info']['status'];
 
+            $data['file_details']=array();
+            $data['video_file_details']=array();
+
+            $results=Query_helper::get_info($this->config->item('table_login_csetup_cus_document'),'*',array('customer_id ='.$customer_id,'revision=1'));
+            foreach($results as $result)
+            {
+                $data['file_details'][]=$result;
+            }
+
             $data['title']="Customer (".$data['customer_info']['name'].') Details';
+            $data['document']='Customer Documents';
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_csetup_customer/details",$data,true));
             if($this->message)
@@ -584,6 +598,139 @@ class Setup_csetup_customer extends Root_Controller {
         {
             $ajax['status']=false;
             $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
+    private function system_documents($id)
+    {
+        if(isset($this->permissions['action2'])&&($this->permissions['action2']==1))
+        {
+            if(($this->input->post('id')))
+            {
+                $customer_id=$this->input->post('id');
+            }
+            else
+            {
+                $customer_id=$id;
+            }
+            $result=Query_helper::get_info($this->config->item('table_login_csetup_customer'),'*',array('id ='.$customer_id));
+            if(!$result)
+            {
+                System_helper::invalid_try($this->config->item('system_edit_not_exists'),$customer_id);
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->json_return($ajax);
+            }
+            $results=Query_helper::get_info($this->config->item('table_login_csetup_cus_document'),'*',array('customer_id ='.$customer_id,'revision=1'));
+            $info=Query_helper::get_info($this->config->item('table_login_csetup_cus_info'),'*',array('customer_id ='.$customer_id,'revision=1'));
+            $data['customer']['id']=$customer_id;
+            $data['file_details']=array();
+            if($results)
+            {
+                $data['file_details']=$results;
+            }
+
+            $data['title']='Customer ('.$info[0]['name'].') Documents :';
+            $ajax['status']=true;
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_csetup_customer/document",$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/document/'.$customer_id);
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
+    private function system_document_save()
+    {
+        $id = $this->input->post("id");
+        $user=User_helper::get_user();
+        $time=time();
+
+        $this->db->trans_start();  //DB Transaction Handle START
+
+        $results=Query_helper::get_info($this->config->item('table_login_csetup_cus_document'),'*',array('customer_id ='.$id));
+        if($results)
+        {
+            $revision_history_data=array();
+            $revision_history_data['date_updated']=$time;
+            $revision_history_data['user_updated']=$user->user_id;
+            Query_helper::update($this->config->item('table_login_csetup_cus_document'),$revision_history_data,array('revision=1','customer_id='.$id));
+
+            $this->db->where('customer_id',$id);
+            $this->db->set('revision', 'revision+1', FALSE);
+            $this->db->update($this->config->item('table_login_csetup_cus_document'));
+        }
+        $file_folder='images/customer_documents/'.$id;
+        $dir=(FCPATH).$file_folder;
+        if(!is_dir($dir))
+        {
+            mkdir($dir, 0777);
+        }
+        $types='gif|jpg|png|jpeg|doc|docx|pdf|xls|xlsx|ppt|pptx|txt';
+        $uploaded_files = System_helper::upload_file($file_folder,$types);
+        foreach($uploaded_files as $file)
+        {
+            if(!$file['status'])
+            {
+                $this->db->trans_complete();
+                $ajax['status']=false;
+                $ajax['system_message']=$file['message'];
+                $this->json_return($ajax);
+            }
+        }
+
+        $files=array();
+        $remarks=array();
+        if($this->input->post('files')){
+            $files=$this->input->post('files');
+        }
+        if($this->input->post('remarks')){
+            $remarks=$this->input->post('remarks');
+        }
+//        print_r($files);
+//        print_r($remarks);exit;
+
+        foreach($remarks as $index=>$remark)
+        {
+            $data=array();
+            $data['customer_id']=$id;
+            if(isset($uploaded_files['file_'.$index]))
+            {
+                $data['file_location']=$file_folder.'/'.$uploaded_files['file_'.$index]['info']['file_name'];
+                $data['file_name']=$uploaded_files['file_'.$index]['info']['file_name'];
+                $data['file_type']=$uploaded_files['file_'.$index]['info']['file_type'];
+            }
+            else
+            {
+                $data['file_location']=$file_folder.'/'.$files['file_'.$index];
+                $data['file_name']=$files['file_'.$index];
+                $data['file_type']=$files['file_type_'.$index];
+            }
+            $data['file_remarks']=$remark;
+            $data['user_created'] = $user->user_id;
+            $data['date_created'] = $time;
+            $data['revision']=1;
+            Query_helper::add($this->config->item('table_login_csetup_cus_document'),$data);
+        }
+
+        $this->db->trans_complete(); //DB Transaction Handle END
+
+        if ($this->db->trans_status() === TRUE)
+        {
+            $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
+            $this->system_list();
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
             $this->json_return($ajax);
         }
     }
