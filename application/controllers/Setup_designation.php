@@ -31,6 +31,10 @@ class Setup_designation extends Root_Controller
         {
             $this->system_edit($id);
         }
+        elseif($action=="organogram_view")
+        {
+            $this->system_organogram_view();
+        }
         elseif($action=="save")
         {
             $this->system_save();
@@ -114,6 +118,28 @@ class Setup_designation extends Root_Controller
             {
                 $ajax['system_message']=$this->message;
             }
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
+    private function system_organogram_view()
+    {
+        if(isset($this->permissions['action0']) && ($this->permissions['action0']==1))
+        {
+            $data['title']="Designation Wise Organogram";
+            $data['items']=$this->get_designation_table_tree();
+            $ajax['status']=true;
+            $ajax['system_content'][]=array('id'=>'#system_content','html'=>$this->load->view($this->controller_url.'/organogram',$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url);
             $this->json_return($ajax);
         }
         else
