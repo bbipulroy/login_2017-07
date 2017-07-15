@@ -13,18 +13,24 @@ if(isset($CI->permissions['action2'])&&($CI->permissions['action2']==1))
     $action_buttons[]=array(
         'type'=>'button',
         'label'=>$CI->lang->line("ACTION_EDIT"),
-        'class'=>'button_action_batch',
-        'id'=>'button_action_edit',
+        'class'=>'button_jqx_action',
         'data-action-link'=>site_url($CI->controller_url.'/index/edit')
     );
 }
-if(isset($CI->permissions['action4'])&&($CI->permissions['action4']==1))
+$action_buttons[]=array(
+    'type'=>'button',
+    'label'=>$CI->lang->line('ACTION_DETAILS'),
+    'class'=>'button_jqx_action',
+    'data-action-link'=>site_url($CI->controller_url.'/index/details')
+);
+if(isset($CI->permissions['action4']) && ($CI->permissions['action4']==1))
 {
     $action_buttons[]=array(
         'type'=>'button',
         'label'=>$CI->lang->line("ACTION_PRINT"),
-        'id'=>'button_action_print',
-        'data-title'=>'PRINT'
+        'class'=>'button_action_download',
+        'data-title'=>"Print",
+        'data-print'=>true
     );
 }
 if(isset($CI->permissions['action5'])&&($CI->permissions['action5']==1))
@@ -32,7 +38,7 @@ if(isset($CI->permissions['action5'])&&($CI->permissions['action5']==1))
     $action_buttons[]=array(
         'type'=>'button',
         'label'=>$CI->lang->line("ACTION_DOWNLOAD"),
-        'id'=>'button_action_csv',
+        'class'=>'button_action_download',
         'data-title'=>'Download'
     );
 }
@@ -81,14 +87,11 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div class="clearfix"></div>
 
-<!--
-
 
 <script type="text/javascript">
     $(document).ready(function ()
     {
-        turn_off_triggers();
-        var url = "<?php echo base_url($CI->controller_url.'/get_items');?>";
+        var url = "<?php echo base_url($CI->controller_url.'/index/get_items');?>";
 
         // prepare the data
         var source =
@@ -98,13 +101,13 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 { name: 'id', type: 'int' },
                 { name: 'name', type: 'string' },
                 { name: 'name_short', type: 'string' },
-                { name: 'type', type: 'string' },
+                { name: 'type_name', type: 'string' },
                 { name: 'division_name', type: 'string' },
                 { name: 'zone_name', type: 'string' },
                 { name: 'territory_name', type: 'string' },
                 { name: 'district_name', type: 'string' },
                 { name: 'customer_code', type: 'string' },
-                { name: 'incharge', type: 'string' },
+                { name: 'incharge_name', type: 'string' },
                 { name: 'phone', type: 'string' },
                 { name: 'ordering', type: 'int' },
                 { name: 'status', type: 'string' }
@@ -132,13 +135,13 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 columns: [
                     { text: '<?php echo $CI->lang->line('LABEL_NAME'); ?>', dataField: 'name',width:'300'},
                     { text: '<?php echo $CI->lang->line('LABEL_SHORT_NAME'); ?>', dataField: 'name_short',width:'100'},
-                    { text: '<?php echo $CI->lang->line('LABEL_CUSTOMER_TYPE'); ?>', dataField: 'type',width:'100',filtertype: 'list'},
+                    { text: '<?php echo $CI->lang->line('LABEL_CUSTOMER_TYPE'); ?>', dataField: 'type_name',width:'100',filtertype: 'list'},
                     { text: '<?php echo $CI->lang->line('LABEL_DIVISION_NAME'); ?>', dataField: 'division_name',filtertype: 'list'},
                     { text: '<?php echo $CI->lang->line('LABEL_ZONE_NAME'); ?>', dataField: 'zone_name'},
                     { text: '<?php echo $CI->lang->line('LABEL_TERRITORY_NAME'); ?>', dataField: 'territory_name'},
                     { text: '<?php echo $CI->lang->line('LABEL_DISTRICT_NAME'); ?>', dataField: 'district_name'},
                     { text: '<?php echo $CI->lang->line('LABEL_CUSTOMER_CODE'); ?>', dataField: 'customer_code'},
-                    { text: 'Incharge', dataField: 'incharge',filtertype: 'list'},
+                    { text: '<?php echo $CI->lang->line('LABEL_INCHARGE'); ?>', dataField: 'incharge_name',filtertype: 'list'},
                     { text: '<?php echo $CI->lang->line('LABEL_PHONE'); ?>', dataField: 'phone'},
                     { text: '<?php echo $CI->lang->line('LABEL_ORDER'); ?>', dataField: 'ordering',width:'100',cellsalign: 'right'},
                     { text: '<?php echo $CI->lang->line('STATUS'); ?>', dataField: 'status',filtertype: 'list',width:'150',cellsalign: 'right'}
@@ -148,4 +151,3 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </script>
 
 
--->

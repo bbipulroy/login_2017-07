@@ -36,7 +36,6 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
     </div>
     <div class="clearfix"></div>
 </div>
-
 <div style="" class="row show-grid">
     <div class="col-xs-4">
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_CUSTOMER_TYPE');?><span style="color:#FF0000">*</span></label>
@@ -47,7 +46,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
             <?php
             foreach($customer_types as $types)
             {?>
-                <option value="<?php echo $types['value']?>" <?php if($types['value']==$customer_info['type_id']){ echo "selected";}?>><?php echo $types['text'];?></option>
+                <option value="<?php echo $types['value']?>" <?php if($types['value']==$customer_info['type']){ echo "selected";}?>><?php echo $types['text'];?></option>
             <?php
             }
             ?>
@@ -90,8 +89,9 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 <option value=""><?php echo $this->lang->line('SELECT');?></option>
                 <?php
                 foreach($divisions as $division)
-                {?>
-                    <option value="<?php echo $division['value']?>" <?php if($division['value']==$customer['division_id']){ echo "selected";}?>><?php echo $division['text'];?></option>
+                {
+                ?>
+                    <option value="<?php echo $division['value']?>" <?php if($division['value']==$customer_info['division_id']){ echo "selected";}?>><?php echo $division['text'];?></option>
                 <?php
                 }
                 ?>
@@ -122,7 +122,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 <?php
                 foreach($zones as $zone)
                 {?>
-                    <option value="<?php echo $zone['value']?>" <?php if($zone['value']==$customer['zone_id']){ echo "selected";}?>><?php echo $zone['text'];?></option>
+                    <option value="<?php echo $zone['value']?>" <?php if($zone['value']==$customer_info['zone_id']){ echo "selected";}?>><?php echo $zone['text'];?></option>
                 <?php
                 }
                 ?>
@@ -152,7 +152,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 <?php
                 foreach($territories as $territory)
                 {?>
-                    <option value="<?php echo $territory['value']?>" <?php if($territory['value']==$customer['territory_id']){ echo "selected";}?>><?php echo $territory['text'];?></option>
+                    <option value="<?php echo $territory['value']?>" <?php if($territory['value']==$customer_info['territory_id']){ echo "selected";}?>><?php echo $territory['text'];?></option>
                 <?php
                 }
                 ?>
@@ -221,7 +221,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CUSTOMER_CREDIT_LIMIT');?></label>
+        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CUSTOMER_CREDIT_LIMIT');?><span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <input type="text" name="customer_info[credit_limit]" id="credit_limit" class="form-control" value="<?php echo $customer_info['credit_limit'];?>"/>
@@ -258,6 +258,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
     </div>
     <div class="col-sm-2">
         <input type="file" class="browse_button" data-preview-container="#image_profile" name="image_profile">
+        <input type="hidden" name="customer_info[picture_profile]" value="<?php echo $customer_info['picture_profile']; ?>">
     </div>
     <div class="col-xs-4" id="image_profile">
         <img style="max-width: 250px;" src="<?php echo $customer_info['picture_profile']; ?>">
@@ -282,7 +283,10 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_MAP_ADDRESS');?></label>
+        <label class="control-label pull-right">
+            <?php echo $this->lang->line('LABEL_MAP_ADDRESS').'<br>';?>
+            <p style="color: #942724" id="map">(Click Here)</p>
+        </label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <textarea class="form-control" name="customer_info[map_address]"><?php echo $customer_info['map_address'];?></textarea>
@@ -296,7 +300,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_PHONE');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <input type="text" name="customer_contact[phone]" id="phone" class="form-control" value="<?php echo $customer_contact['phone'];?>"/>
+        <input type="text" name="customer_info[phone]" id="phone" class="form-control" value="<?php echo $customer_info['phone'];?>"/>
     </div>
 </div>
 
@@ -337,7 +341,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         <label for="opening_date" class="control-label pull-right"><?php echo $this->lang->line('LABEL_DATE_OPENING');?><span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <input type="text" name="customer_info[opening_date]" id="date_open" class="form-control" value="<?php echo $customer_info['opening_date'];?>"/>
+        <input type="text" name="customer_info[opening_date]" id="date_open" class="form-control" value="<?php echo System_helper::display_date($customer_info['opening_date'])?>"/>
     </div>
 </div>
 <div class="row show-grid">
@@ -345,7 +349,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         <label for="closing_date" class="control-label pull-right"><?php echo $this->lang->line('LABEL_DATE_CLOSING');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <input type="text" name="customer_info[closing_date]" id="date_close" class="form-control" value="<?php echo $customer_info['closing_date'];?>"/>
+        <input type="text" name="customer_info[closing_date]" id="date_close" class="form-control" value="<?php echo System_helper::display_date($customer_info['closing_date'])?>"/>
     </div>
 </div>
 <div style="" class="row show-grid">
@@ -404,7 +408,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
             dateFormat : display_date_format,
             changeMonth: true,
             changeYear: true,
-            yearRange: "-5:+0",
+            yearRange: "-5:+5",
             onClose: function( selectedDate ) {
             $( "#date_close" ).datepicker( "option", "minDate", selectedDate );}
         });
@@ -413,12 +417,23 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
             dateFormat : display_date_format,
             changeMonth: true,
             changeYear: true,
-            yearRange: "-5:+0",
+            yearRange: "-5:+5",
             onClose: function( selectedDate ) {
             $( "#date_open" ).datepicker( "option", "maxDate", selectedDate );}
         });
 
-        $('#division_id').html(get_dropdown_with_select(system_divisions));
+        $(document).on('click','#map',function()
+        {
+            var win = window.open('https://maps.google.com', '_blank');
+            if (win) {
+                //Browser has allowed it to be opened
+                win.focus();
+            } else {
+                //Browser has blocked it
+                alert('Please allow popups for this website');
+            }
+        });
+
         $(document).on("change","#division_id",function()
         {
             $("#zone_id").val("");
