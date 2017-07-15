@@ -2,23 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $CI=& get_instance();
 $action_buttons=array();
-if(isset($CI->permissions['action1']) && ($CI->permissions['action1']==1))
-{
-    $action_buttons[]=array(
-        'label'=>$CI->lang->line("ACTION_NEW"),
-        'href'=>site_url($CI->controller_url.'/index/add')
-    );
-}
-if(isset($CI->permissions['action0']) && ($CI->permissions['action0']==1))
-{
-    $action_buttons[]=array(
-        'label'=>$CI->lang->line("LABEL_OGANOGRAM_VIEW"),
-        'href'=>site_url($CI->controller_url.'/index/organogram_view')
-    );
-}
 $action_buttons[]=array(
     'label'=>$CI->lang->line("ACTION_REFRESH"),
-    'href'=>site_url($CI->controller_url.'/index/list')
+    'href'=>site_url($CI->controller_url.'/index/organogram_view')
 );
 $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 ?>
@@ -47,7 +33,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                     ?>
                     <tr>
                         <td><?php echo $item['designation']['id']; ?></td>
-                        <td><?php echo $item['prefix']; ?><a href="<?php echo site_url($CI->controller_url.'/index/edit/'.$item['designation']['id']); ?>"><?php echo $item['designation']['name']; ?></a></td>
+                        <td><?php echo $item['prefix']; ?><?php echo $item['designation']['name']; ?></td>
                         <td><?php echo $item['designation']['ordering']; ?></td>
                     </tr>
                 <?php
