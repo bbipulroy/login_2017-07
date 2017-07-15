@@ -33,7 +33,6 @@ $config['table_login_csetup_incharge'] = 'arm_login_2017_07.login_csetup_incharg
 $config['table_login_csetup_customer'] = 'arm_login_2017_07.login_csetup_customer';
 $config['table_login_csetup_cus_info'] = 'arm_login_2017_07.login_csetup_customer_info';
 $config['table_login_csetup_cus_document'] = 'arm_login_2017_07.login_csetup_customer_document';
-$config['table_login_csetup_cus_contact_number'] = 'arm_login_2017_07.login_csetup_customer_contact_number';
 //Basic Setup
 $config['table_login_basic_setup_fiscal_year'] = 'arm_login_2017_07.login_basic_setup_fiscal_year';
 $config['table_login_basic_setup_competitor'] = 'arm_login_2017_07.login_basic_setup_competitor';

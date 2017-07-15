@@ -20,7 +20,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div style="" class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_CUSTOMER_TYPE');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_CUSTOMER_TYPE');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <label class="control-label"><?php echo $customer_info['type_name'];?></label>
@@ -28,7 +28,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div style="" class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_INCHARGE');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_INCHARGE');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <label class="control-label"><?php echo $customer_info['incharge_name'];?></label>
@@ -36,7 +36,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div style="" class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DIVISION_NAME');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DIVISION_NAME');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <label class="control-label"><?php echo $customer_info['division_name'];?></label>
@@ -45,7 +45,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 
 <div style="" class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ZONE_NAME');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ZONE_NAME');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <label class="control-label"><?php echo $customer_info['zone_name'];?></label>
@@ -53,7 +53,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div style="" class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TERRITORY_NAME');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TERRITORY_NAME');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <label class="control-label"><?php echo $customer_info['territory_name'];?></label>
@@ -61,7 +61,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div style="" class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DISTRICT_NAME');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DISTRICT_NAME');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <label class="control-label"><?php echo $customer_info['district_name'];?></label>
@@ -69,7 +69,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_NAME');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_NAME');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <label class="control-label"><?php echo $customer_info['name']; ?></label>
@@ -93,7 +93,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CUSTOMER_CREDIT_LIMIT');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_CUSTOMER_CREDIT_LIMIT');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <label class="control-label"><?php echo $customer_info['credit_limit']; ?></label>
@@ -118,7 +118,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 
 <div style="" class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_NID');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_NID');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <label class="control-label"><?php echo $customer_info['nid'] ?></label>
@@ -126,7 +126,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PICTURE');?></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PROFILE_PICTURE');?></label>
     </div>
     <div class="col-xs-4" id="image_profile">
         <img style="max-width: 250px;" src="<?php echo $customer_info['picture_profile']; ?>">
@@ -189,7 +189,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label for="opening_date" class="control-label pull-right"><?php echo $this->lang->line('LABEL_DATE_OPENING');?><span style="color:#FF0000">*</span></label>
+        <label for="opening_date" class="control-label pull-right"><?php echo $this->lang->line('LABEL_DATE_OPENING');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <label class="control-label"><?php if($customer_info['opening_date'])  echo System_helper::display_date($customer_info['opening_date']); ?></label>
@@ -205,7 +205,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div style="" class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ORDER');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ORDER');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <label class="control-label"><?php echo $customer_info['ordering']?></label>
@@ -213,7 +213,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div style="" class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('STATUS');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('STATUS');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <label class="control-label"><?php echo $customer['status']; ?></label>

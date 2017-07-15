@@ -553,7 +553,6 @@ class Setup_csetup_customer extends Root_Controller {
             $this->db->where('cus.id',$customer_id);
             $this->db->where('cus_info.revision',1);
             $data['customer_info']=$this->db->get()->row_array();
-            //print_r($data['customer_info']);exit;
             if(!$data['customer_info'])
             {
                 System_helper::invalid_try($this->config->item('system_edit_not_exists'),$customer_id);
@@ -571,14 +570,6 @@ class Setup_csetup_customer extends Root_Controller {
             $data['customer']['id']=$data['customer_info']['customer_id'];
             $data['customer']['status']=$data['customer_info']['status'];
 
-
-            //$data['customer_types']=Query_helper::get_info($this->config->item('table_login_csetup_cus_type'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            //$data['incharge']=Query_helper::get_info($this->config->item('table_login_csetup_incharge'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-
-            //$data['divisions']=Query_helper::get_info($this->config->item('table_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            //$data['zones']=Query_helper::get_info($this->config->item('table_setup_location_zones'),array('id value','name text'),array('division_id ='.$data['customer_info']['division_id']));
-            //$data['territories']=Query_helper::get_info($this->config->item('table_setup_location_territories'),array('id value','name text'),array('zone_id ='.$data['customer_info']['zone_id']));
-            //$data['districts']=Query_helper::get_info($this->config->item('table_setup_location_districts'),array('id value','name text'),array('territory_id ='.$data['customer_info']['territory_id']));
             $data['title']="Customer (".$data['customer_info']['name'].') Details';
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_csetup_customer/details",$data,true));
