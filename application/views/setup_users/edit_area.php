@@ -115,7 +115,7 @@ if(isset($assigned_area['user_id']))
             </div>
             <div class="col-sm-4 col-xs-8">
                 <select id="division_id" name="area[division_id]" class="form-control">
-                    <option value=""><?php echo $CI->lang->line('SELECT'); ?></option>
+                    <option value="">All</option>
                 </select>
             </div>
         </div>
@@ -125,7 +125,7 @@ if(isset($assigned_area['user_id']))
             </div>
             <div class="col-sm-4 col-xs-8">
                 <select id="zone_id" name="area[zone_id]" class="form-control">
-                    <option value=""><?php echo $this->lang->line('SELECT');?></option>
+                    <option value="">All</option>
                 </select>
             </div>
         </div>
@@ -135,7 +135,7 @@ if(isset($assigned_area['user_id']))
             </div>
             <div class="col-sm-4 col-xs-8">
                 <select id="territory_id" name="area[territory_id]" class="form-control">
-                    <option value=""><?php echo $this->lang->line('SELECT');?></option>
+                    <option value="">All</option>
                 </select>
             </div>
         </div>
@@ -145,7 +145,7 @@ if(isset($assigned_area['user_id']))
             </div>
             <div class="col-sm-4 col-xs-8">
                 <select id="district_id" name="area[district_id]" class="form-control">
-                    <option value=""><?php echo $this->lang->line('SELECT');?></option>
+                    <option value="">All</option>
                 </select>
             </div>
         </div>
@@ -155,7 +155,7 @@ if(isset($assigned_area['user_id']))
             </div>
             <div class="col-sm-4 col-xs-8">
                 <select id="upazilla_id" name="area[upazilla_id]" class="form-control">
-                    <option value=""><?php echo $this->lang->line('SELECT');?></option>
+                    <option value="">All</option>
                 </select>
             </div>
         </div>
@@ -165,7 +165,7 @@ if(isset($assigned_area['user_id']))
             </div>
             <div class="col-sm-4 col-xs-8">
                 <select id="union_id" name="area[union_id]" class="form-control">
-                    <option value=""><?php echo $this->lang->line('SELECT');?></option>
+                    <option value="">All</option>
                 </select>
             </div>
         </div>
@@ -192,7 +192,7 @@ if(isset($assigned_area['user_id']))
         $(document).off('change','#upazilla_id');
         $(document).off('change','#union_id');
 
-        $('#division_id').html(get_dropdown_with_select(system_divisions));
+        $('#division_id').html(get_dropdown_with_select(system_divisions,'','All'));
         $(document).on("change","#division_id",function()
         {
             $("#zone_id").val("");
@@ -208,7 +208,7 @@ if(isset($assigned_area['user_id']))
                 $('#district_id_container').hide();
                 $('#upazilla_id_container').hide();
                 $('#union_id_container').hide();
-                $('#zone_id').html(get_dropdown_with_select(system_zones[division_id]));
+                $('#zone_id').html(get_dropdown_with_select(system_zones[division_id],'','All'));
             }
             else
             {
@@ -232,7 +232,7 @@ if(isset($assigned_area['user_id']))
                 $('#district_id_container').hide();
                 $('#upazilla_id_container').hide();
                 $('#union_id_container').hide();
-                $('#territory_id').html(get_dropdown_with_select(system_territories[zone_id]));
+                $('#territory_id').html(get_dropdown_with_select(system_territories[zone_id],'','All'));
             }
             else
             {
@@ -253,7 +253,7 @@ if(isset($assigned_area['user_id']))
                 $('#district_id_container').show();
                 $('#upazilla_id_container').hide();
                 $('#union_id_container').hide();
-                $('#district_id').html(get_dropdown_with_select(system_districts[territory_id]));
+                $('#district_id').html(get_dropdown_with_select(system_districts[territory_id],'','All'));
             }
             else
             {
@@ -277,7 +277,8 @@ if(isset($assigned_area['user_id']))
                     datatype: "JSON",
                     data:{
                         district_id:district_id,
-                        html_container_id:'#upazilla_id'
+                        html_container_id:'#upazilla_id',
+                        select_label:'All'
                     },
                     success: function (data, status)
                     {
@@ -309,7 +310,8 @@ if(isset($assigned_area['user_id']))
                     datatype: "JSON",
                     data:{
                         upazilla_id:upazilla_id,
-                        html_container_id:'#union_id'
+                        html_container_id:'#union_id',
+                        select_label:'All'
                     },
                     success: function (data, status)
                     {
