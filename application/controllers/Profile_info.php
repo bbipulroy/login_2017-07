@@ -66,6 +66,7 @@ class Profile_info extends Root_Controller
             $this->db->join($this->config->item('table_login_setup_company').' comp','comp.id=u_comp.company_id');
             $this->db->where('u_comp.user_id',$user_id);
             $this->db->where('u_comp.revision',1);
+            $this->db->order_by('comp.ordering');
             $data['assigned_companies']=$this->db->get()->result_array();
 
             $this->db->select('os.*');
@@ -73,6 +74,7 @@ class Profile_info extends Root_Controller
             $this->db->join($this->config->item('table_system_other_sites').' os','os.id=uos.site_id');
             $this->db->where('uos.user_id',$user_id);
             $this->db->where('uos.revision',1);
+            $this->db->order_by('os.ordering');
             $data['assigned_sites']=$this->db->get()->result_array();
 
             $this->db->from($this->config->item('table_system_assigned_area').' aa');

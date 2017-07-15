@@ -71,7 +71,7 @@ $CI=& get_instance();
                         foreach($assigned_companies as $company)
                         {
                             ?>
-                            <li style="font-weight: bolder;"><?php echo $company['full_name'].' ('.$company['short_name'].')'; ?></li>
+                            <li style=""><b><?php echo strtoupper($company['short_name']).'</b> - '.$company['full_name']; ?></li>
                             <?php
                         }
                         ?></ul><?php
@@ -225,7 +225,7 @@ $CI=& get_instance();
                         foreach($assigned_sites as $site)
                         {
                             ?>
-                            <li style=""><?php echo $site['full_name'].' ('.$site['short_name'].')'; ?></li>
+                            <li style=""><b><?php echo strtoupper($site['short_name']).'</b> - '.$site['full_name']; ?></li>
                             <?php
                         }
                         ?></ul><?php
