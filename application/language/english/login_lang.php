@@ -23,6 +23,7 @@ $lang['ACTION_PRINT'] = 'Print';
 $lang['ACTION_DOWNLOAD'] = 'Download';
 $lang['MSG_ROLE_ASSIGN_SUCCESS'] = 'Role Assign Successful.';
 $lang['ACTION_LOAD_MORE'] = 'Load More';
+$lang['ACTION_DOCUMENT'] = 'Documents';
 
 
 //****MODULE TASK//
