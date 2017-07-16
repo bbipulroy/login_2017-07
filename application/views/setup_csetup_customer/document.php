@@ -50,7 +50,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                                         }
                                         else
                                         {
-                                            ?><a class="external" href="<?php echo $CI->config->item('system_image_base_url').$file['file_location'];?>" target="_tab"><?php echo $file['file_name'];?></a><?php
+                                            ?><a class="external" href="<?php echo $CI->config->item('system_image_base_url').$file['file_location'];?>" target="_blank"><?php echo $file['file_name'];?></a><?php
                                         }
                                         ?>
                                     </div>

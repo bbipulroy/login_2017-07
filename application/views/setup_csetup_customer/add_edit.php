@@ -285,7 +285,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
     <div class="col-xs-4">
         <label class="control-label pull-right">
             <?php echo $this->lang->line('LABEL_MAP_ADDRESS').'<br>';?>
-            <p style="color: #942724" id="map">(Google Maps)</p>
+            <p style="color: #942724;cursor:pointer" id="map">(Google Maps)</p>
         </label>
     </div>
     <div class="col-sm-4 col-xs-8">

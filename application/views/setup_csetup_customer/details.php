@@ -274,7 +274,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                     </div>
                 </td>
                 <td style="max-width: 100px;">
-                    <textarea class="form-control remarks" id="remarks" name="remarks[<?php echo $index+1;?>]"><?php if(isset($file['file_remarks'])){echo $file['file_remarks'];} ?></textarea>
+                    <label class="control-label"><?php if(isset($file['file_remarks'])){echo $file['file_remarks'];} ?></label>
                 </td>
             </tr>
         <?php
