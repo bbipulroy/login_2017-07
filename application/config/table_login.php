@@ -12,13 +12,13 @@ $config['table_login_setup_company'] = 'arm_login_2017_07.login_setup_company';
 $config['table_login_setup_users_company'] = 'arm_login_2017_07.login_setup_users_company';
 $config['table_login_setup_employee_class'] = 'arm_login_2017_07.login_setup_employee_class';
 //location setup
-$config['table_setup_location_divisions'] = 'arm_login_2017_07.login_divisions';
-$config['table_setup_location_zones'] = 'arm_login_2017_07.login_zones';
-$config['table_setup_location_territories'] = 'arm_login_2017_07.login_territories';
-$config['table_setup_location_districts'] = 'arm_login_2017_07.login_districts';
-$config['table_setup_location_upazillas'] = 'arm_login_2017_07.login_upazillas';
-$config['table_setup_location_unions'] = 'arm_login_2017_07.login_unions';
-$config['table_system_assigned_area'] = 'arm_login_2017_07.login_setup_user_area';
+$config['table_login_setup_location_divisions'] = 'arm_login_2017_07.login_divisions';
+$config['table_login_setup_location_zones'] = 'arm_login_2017_07.login_zones';
+$config['table_login_setup_location_territories'] = 'arm_login_2017_07.login_territories';
+$config['table_login_setup_location_districts'] = 'arm_login_2017_07.login_districts';
+$config['table_login_setup_location_upazillas'] = 'arm_login_2017_07.login_upazillas';
+$config['table_login_setup_location_unions'] = 'arm_login_2017_07.login_unions';
+$config['table_login_system_assigned_area'] = 'arm_login_2017_07.login_setup_user_area';
 //crop classification
 $config['table_login_setup_classification_crops']='arm_login_2017_07.login_setup_classification_crops';
 $config['table_login_setup_classification_crop_types']='arm_login_2017_07.login_setup_classification_crop_types';
