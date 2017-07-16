@@ -128,6 +128,14 @@ $CI=& get_instance();
         </div>
         <div class="row show-grid">
             <div class="col-xs-4">
+                <label class="control-label pull-right">Employee Class</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo $user_info['employee_class_name']; ?></label>
+            </div>
+        </div>
+        <div class="row show-grid">
+            <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_USER_GROUP');?></label>
             </div>
             <div class="col-sm-4 col-xs-8">
