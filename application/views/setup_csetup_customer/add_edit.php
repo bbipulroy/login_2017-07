@@ -75,30 +75,17 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DIVISION_NAME');?><span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <?php
-        if($CI->locations['division_id']>0)
-        {
+        <select id="division_id" class="form-control">
+            <option value=""><?php echo $this->lang->line('SELECT');?></option>
+            <?php
+            foreach($divisions as $division)
+            {
             ?>
-            <label class="control-label"><?php echo $CI->locations['division_name'];?></label>
-        <?php
-        }
-        else
-        {
+                <option value="<?php echo $division['value']?>" <?php if($division['value']==$customer_info['division_id']){ echo "selected";}?>><?php echo $division['text'];?></option>
+            <?php
+            }
             ?>
-            <select id="division_id" class="form-control">
-                <option value=""><?php echo $this->lang->line('SELECT');?></option>
-                <?php
-                foreach($divisions as $division)
-                {
-                ?>
-                    <option value="<?php echo $division['value']?>" <?php if($division['value']==$customer_info['division_id']){ echo "selected";}?>><?php echo $division['text'];?></option>
-                <?php
-                }
-                ?>
-            </select>
-        <?php
-        }
-        ?>
+        </select>
     </div>
 </div>
 
@@ -107,29 +94,16 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ZONE_NAME');?><span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <?php
-        if($CI->locations['zone_id']>0)
-        {
+        <select id="zone_id" class="form-control">
+            <option value=""><?php echo $this->lang->line('SELECT');?></option>
+            <?php
+            foreach($zones as $zone)
+            {?>
+                <option value="<?php echo $zone['value']?>" <?php if($zone['value']==$customer_info['zone_id']){ echo "selected";}?>><?php echo $zone['text'];?></option>
+            <?php
+            }
             ?>
-            <label class="control-label"><?php echo $CI->locations['zone_name'];?></label>
-        <?php
-        }
-        else
-        {
-            ?>
-            <select id="zone_id" class="form-control">
-                <option value=""><?php echo $this->lang->line('SELECT');?></option>
-                <?php
-                foreach($zones as $zone)
-                {?>
-                    <option value="<?php echo $zone['value']?>" <?php if($zone['value']==$customer_info['zone_id']){ echo "selected";}?>><?php echo $zone['text'];?></option>
-                <?php
-                }
-                ?>
-            </select>
-        <?php
-        }
-        ?>
+        </select>
     </div>
 </div>
 <div style="<?php if(!(sizeof($territories)>0)){echo 'display:none';} ?>" class="row show-grid" id="territory_id_container">
@@ -137,30 +111,16 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TERRITORY_NAME');?><span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <?php
-        if($CI->locations['territory_id']>0)
-        {
+        <select id="territory_id" class="form-control">
+            <option value=""><?php echo $this->lang->line('SELECT');?></option>
+            <?php
+            foreach($territories as $territory)
+            {?>
+                <option value="<?php echo $territory['value']?>" <?php if($territory['value']==$customer_info['territory_id']){ echo "selected";}?>><?php echo $territory['text'];?></option>
+            <?php
+            }
             ?>
-            <label class="control-label"><?php echo $CI->locations['territory_name'];?></label>
-        <?php
-        }
-        else
-        {
-            ?>
-            <select id="territory_id" class="form-control">
-                <option value=""><?php echo $this->lang->line('SELECT');?></option>
-                <?php
-                foreach($territories as $territory)
-                {?>
-                    <option value="<?php echo $territory['value']?>" <?php if($territory['value']==$customer_info['territory_id']){ echo "selected";}?>><?php echo $territory['text'];?></option>
-                <?php
-                }
-                ?>
-            </select>
-        <?php
-        }
-        ?>
-
+        </select>
     </div>
 </div>
 <div style="<?php if(!(sizeof($districts)>0)){echo 'display:none';} ?>" class="row show-grid" id="district_id_container">
@@ -168,31 +128,16 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DISTRICT_NAME');?><span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <?php
-        if($CI->locations['district_id']>0)
-        {
+        <select id="district_id" name="customer_info[district_id]" class="form-control">
+            <option value=""><?php echo $this->lang->line('SELECT');?></option>
+            <?php
+            foreach($districts as $district)
+            {?>
+                <option value="<?php echo $district['value']?>" <?php if($district['value']==$customer_info['district_id']){ echo "selected";}?>><?php echo $district['text'];?></option>
+            <?php
+            }
             ?>
-            <label class="control-label"><?php echo $CI->locations['district_name'];?></label>
-            <input type="hidden" name="customer_info[district_id]" value="<?php echo $CI->locations['district_id']; ?>">
-        <?php
-        }
-        else
-        {
-            ?>
-            <select id="district_id" name="customer_info[district_id]" class="form-control">
-                <option value=""><?php echo $this->lang->line('SELECT');?></option>
-                <?php
-                foreach($districts as $district)
-                {?>
-                    <option value="<?php echo $district['value']?>" <?php if($district['value']==$customer_info['district_id']){ echo "selected";}?>><?php echo $district['text'];?></option>
-                <?php
-                }
-                ?>
-            </select>
-        <?php
-        }
-        ?>
-
+        </select>
     </div>
 </div>
 <div class="row show-grid">

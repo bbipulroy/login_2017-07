@@ -280,6 +280,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         <?php
         }
         ?>
+
         </tbody>
     </table>
 </div>
