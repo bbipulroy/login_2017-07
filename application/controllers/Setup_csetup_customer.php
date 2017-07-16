@@ -10,22 +10,6 @@ class Setup_csetup_customer extends Root_Controller {
         parent::__construct();
         $this->message="";
         $this->permissions=User_helper::get_permission('Setup_csetup_customer');
-        $this->locations=User_helper::get_locations();
-        if(!is_array($this->locations))
-        {
-            if($this->locations=='wrong')
-            {
-                $ajax['status']=false;
-                $ajax['system_message']=$this->lang->line('MSG_LOCATION_INVALID');
-                $this->json_return($ajax);
-            }
-            else
-            {
-                $ajax['status']=false;
-                $ajax['system_message']=$this->lang->line('MSG_LOCATION_NOT_ASSIGNED');
-                $this->json_return($ajax);
-            }
-        }
         $this->controller_url='setup_csetup_customer';
     }
     public function index($action="list",$id=0)
@@ -106,22 +90,7 @@ class Setup_csetup_customer extends Root_Controller {
         $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
         $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = zone.division_id','INNER');
         $this->db->join($this->config->item('table_login_csetup_incharge').' cus_incharge','cus_incharge.id = cus_info.incharge','INNER');
-        if($this->locations['division_id']>0)
-        {
-            $this->db->where('division.id',$this->locations['division_id']);
-            if($this->locations['zone_id']>0)
-            {
-                $this->db->where('zone.id',$this->locations['zone_id']);
-                if($this->locations['territory_id']>0)
-                {
-                    $this->db->where('t.id',$this->locations['territory_id']);
-                    if($this->locations['district_id']>0)
-                    {
-                        $this->db->where('d.id',$this->locations['district_id']);
-                    }
-                }
-            }
-        }
+
         $this->db->order_by('division.ordering','ASC');
         $this->db->order_by('zone.ordering','ASC');
         $this->db->order_by('t.ordering','ASC');
@@ -130,7 +99,6 @@ class Setup_csetup_customer extends Root_Controller {
         $this->db->where('cus_info.revision',1);
         $this->db->where('cus.status !=',$this->config->item('system_status_delete'));
         $items=$this->db->get()->result_array();
-        //print_r($items);exit;
         $this->json_return($items);
     }
     private function system_add()
@@ -174,20 +142,8 @@ class Setup_csetup_customer extends Root_Controller {
             $data['zones']=array();
             $data['territories']=array();
             $data['districts']=array();
-            if($this->locations['division_id']>0)
-            {
-                $data['zones']=Query_helper::get_info($this->config->item('table_login_setup_location_zones'),array('id value','name text'),array('division_id ='.$this->locations['division_id']));
-                if($this->locations['zone_id']>0)
-                {
-                    $data['territories']=Query_helper::get_info($this->config->item('table_login_setup_location_territories'),array('id value','name text'),array('zone_id ='.$this->locations['zone_id']));
-                    if($this->locations['territory_id']>0)
-                    {
-                        $data['districts']=Query_helper::get_info($this->config->item('table_login_setup_location_districts'),array('id value','name text'),array('territory_id ='.$this->locations['territory_id']));
-                    }
-                }
-            }
-            $ajax['system_page_url']=site_url($this->controller_url."/index/add");
 
+            $ajax['system_page_url']=site_url($this->controller_url."/index/add");
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_csetup_customer/add_edit",$data,true));
             if($this->message)
@@ -236,20 +192,11 @@ class Setup_csetup_customer extends Root_Controller {
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->json_return($ajax);
             }
-            if(!$this->check_my_editable($data['customer_info']))
-            {
-                System_helper::invalid_try($this->config->item('system_edit_others'),$customer_id);
-                $ajax['status']=false;
-                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
-                $this->json_return($ajax);
-            }
             $data['customer']['id']=$data['customer_info']['customer_id'];
             $data['customer']['status']=$data['customer_info']['status'];
 
-
             $data['customer_types']=Query_helper::get_info($this->config->item('table_login_csetup_cus_type'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['incharge']=Query_helper::get_info($this->config->item('table_login_csetup_incharge'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-
             $data['divisions']=Query_helper::get_info($this->config->item('table_login_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['zones']=Query_helper::get_info($this->config->item('table_login_setup_location_zones'),array('id value','name text'),array('division_id ='.$data['customer_info']['division_id']));
             $data['territories']=Query_helper::get_info($this->config->item('table_login_setup_location_territories'),array('id value','name text'),array('zone_id ='.$data['customer_info']['zone_id']));
@@ -359,7 +306,6 @@ class Setup_csetup_customer extends Root_Controller {
                 }
                 else
                 {
-
                     $data_customer_info['customer_id']=$customer_id;
                     $data_customer_info['revision']=1;
                     $data_customer_info['user_created'] = $user->user_id;
@@ -395,9 +341,6 @@ class Setup_csetup_customer extends Root_Controller {
                 $this->db->where('customer_id',$id);
                 $this->db->set('revision', 'revision+1', FALSE);
                 $this->db->update($this->config->item('table_login_csetup_cus_info'));
-
-
-
 
                 $data_customer_info['customer_id']=$id;
                 $data_customer_info['revision']=1;
@@ -472,6 +415,7 @@ class Setup_csetup_customer extends Root_Controller {
             $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.id = d.territory_id','INNER');
             $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
             $this->db->where('cus_info.customer_id',$id);
+            $this->db->where('cus_info.revision',1);
             $customer=$this->db->get()->row_array();
             if(!$customer)
             {
@@ -479,49 +423,6 @@ class Setup_csetup_customer extends Root_Controller {
                 $this->message="Invalid Try";
                 return false;
             }
-            if(!$this->check_my_editable($customer))
-            {
-                System_helper::invalid_try($this->config->item('system_save'),$id,'Hack To edit other customer that does not in my area');
-                $this->message="Invalid Try";
-                return false;
-            }
-        }
-
-        $data=$this->input->post('customer_info');
-        $this->db->from($this->config->item('table_login_setup_location_districts').' d');
-        $this->db->select('d.id district_id');
-        $this->db->select('t.id territory_id');
-        $this->db->select('zone.id zone_id');
-        $this->db->select('zone.division_id division_id');
-        $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.id = d.territory_id','INNER');
-        $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
-        $this->db->where('d.id',$data['district_id']);
-        $info=$this->db->get()->row_array();
-        if(!$this->check_my_editable($info))
-        {
-            $this->message="Invalid Try";
-            System_helper::invalid_try($this->config->item('system_save'),$id,'Hack To assign other district that does not belong to me.');
-            return false;
-        }
-        return true;
-    }
-    private function check_my_editable($customer)
-    {
-        if(($this->locations['division_id']>0)&&($this->locations['division_id']!=$customer['division_id']))
-        {
-            return false;
-        }
-        if(($this->locations['zone_id']>0)&&($this->locations['zone_id']!=$customer['zone_id']))
-        {
-            return false;
-        }
-        if(($this->locations['territory_id']>0)&&($this->locations['territory_id']!=$customer['territory_id']))
-        {
-            return false;
-        }
-        if(($this->locations['district_id']>0)&&($this->locations['district_id']!=$customer['district_id']))
-        {
-            return false;
         }
         return true;
     }
@@ -564,25 +465,19 @@ class Setup_csetup_customer extends Root_Controller {
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->json_return($ajax);
             }
-            if(!$this->check_my_editable($data['customer_info']))
-            {
-                System_helper::invalid_try($this->config->item('system_edit_others'),$customer_id);
-                $ajax['status']=false;
-                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
-                $this->json_return($ajax);
-            }
             $data['customer']['id']=$data['customer_info']['customer_id'];
             $data['customer']['status']=$data['customer_info']['status'];
 
             $data['file_details']=array();
-            $data['video_file_details']=array();
 
             $results=Query_helper::get_info($this->config->item('table_login_csetup_cus_document'),'*',array('customer_id ='.$customer_id,'revision=1'));
-            foreach($results as $result)
+            if($results)
             {
-                $data['file_details'][]=$result;
+                foreach($results as $result)
+                {
+                    $data['file_details'][]=$result;
+                }
             }
-
             $data['title']="Customer (".$data['customer_info']['name'].') Details';
             $data['document']='Customer Documents';
             $ajax['status']=true;
@@ -694,8 +589,6 @@ class Setup_csetup_customer extends Root_Controller {
         if($this->input->post('remarks')){
             $remarks=$this->input->post('remarks');
         }
-//        print_r($files);
-//        print_r($remarks);exit;
 
         foreach($remarks as $index=>$remark)
         {
@@ -734,5 +627,4 @@ class Setup_csetup_customer extends Root_Controller {
             $this->json_return($ajax);
         }
     }
-
 }
