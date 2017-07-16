@@ -90,6 +90,7 @@ $lang['LABEL_USERNAME'] = 'User name';
 $lang['LABEL_RE_USERNAME'] = 'Re-type User name';
 $lang['LABEL_OFFICE_NAME'] = 'Office';
 $lang['LABEL_DESIGNATION_NAME'] = 'Designation';
+$lang['LABEL_OGANOGRAM_VIEW'] = 'Organogram View';
 $lang['LABEL_DEPARTMENT_NAME'] = 'Department';
 $lang['LABEL_COMPANY_NAME'] = 'Company';
 $lang['LABEL_USER_TYPE'] = 'User Type';
