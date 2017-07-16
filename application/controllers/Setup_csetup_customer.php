@@ -101,10 +101,10 @@ class Setup_csetup_customer extends Root_Controller {
         $this->db->select('cus_incharge.name incharge_name');
         $this->db->join($this->config->item('table_login_csetup_cus_info').' cus_info','cus_info.customer_id = cus.id','INNER');
         $this->db->join($this->config->item('table_login_csetup_cus_type').' cus_type','cus_type.id = cus_info.type','INNER');
-        $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = cus_info.district_id','INNER');
-        $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
-        $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
-        $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = zone.division_id','INNER');
+        $this->db->join($this->config->item('table_login_setup_location_districts').' d','d.id = cus_info.district_id','INNER');
+        $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.id = d.territory_id','INNER');
+        $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
+        $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = zone.division_id','INNER');
         $this->db->join($this->config->item('table_login_csetup_incharge').' cus_incharge','cus_incharge.id = cus_info.incharge','INNER');
         if($this->locations['division_id']>0)
         {
@@ -170,19 +170,19 @@ class Setup_csetup_customer extends Root_Controller {
             );
             $data['customer_types']=Query_helper::get_info($this->config->item('table_login_csetup_cus_type'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['incharge']=Query_helper::get_info($this->config->item('table_login_csetup_incharge'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['divisions']=Query_helper::get_info($this->config->item('table_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['divisions']=Query_helper::get_info($this->config->item('table_login_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['zones']=array();
             $data['territories']=array();
             $data['districts']=array();
             if($this->locations['division_id']>0)
             {
-                $data['zones']=Query_helper::get_info($this->config->item('table_setup_location_zones'),array('id value','name text'),array('division_id ='.$this->locations['division_id']));
+                $data['zones']=Query_helper::get_info($this->config->item('table_login_setup_location_zones'),array('id value','name text'),array('division_id ='.$this->locations['division_id']));
                 if($this->locations['zone_id']>0)
                 {
-                    $data['territories']=Query_helper::get_info($this->config->item('table_setup_location_territories'),array('id value','name text'),array('zone_id ='.$this->locations['zone_id']));
+                    $data['territories']=Query_helper::get_info($this->config->item('table_login_setup_location_territories'),array('id value','name text'),array('zone_id ='.$this->locations['zone_id']));
                     if($this->locations['territory_id']>0)
                     {
-                        $data['districts']=Query_helper::get_info($this->config->item('table_setup_location_districts'),array('id value','name text'),array('territory_id ='.$this->locations['territory_id']));
+                        $data['districts']=Query_helper::get_info($this->config->item('table_login_setup_location_districts'),array('id value','name text'),array('territory_id ='.$this->locations['territory_id']));
                     }
                 }
             }
@@ -223,9 +223,9 @@ class Setup_csetup_customer extends Root_Controller {
             $this->db->select('t.zone_id zone_id');
             $this->db->select('zone.division_id division_id');
             $this->db->join($this->config->item('table_login_csetup_cus_info').' cus_info','cus_info.customer_id = cus.id','INNER');
-            $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = cus_info.district_id','INNER');
-            $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
-            $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_location_districts').' d','d.id = cus_info.district_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.id = d.territory_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
             $this->db->where('cus.id',$customer_id);
             $this->db->where('cus_info.revision',1);
             $data['customer_info']=$this->db->get()->row_array();
@@ -250,10 +250,10 @@ class Setup_csetup_customer extends Root_Controller {
             $data['customer_types']=Query_helper::get_info($this->config->item('table_login_csetup_cus_type'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['incharge']=Query_helper::get_info($this->config->item('table_login_csetup_incharge'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
 
-            $data['divisions']=Query_helper::get_info($this->config->item('table_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['zones']=Query_helper::get_info($this->config->item('table_setup_location_zones'),array('id value','name text'),array('division_id ='.$data['customer_info']['division_id']));
-            $data['territories']=Query_helper::get_info($this->config->item('table_setup_location_territories'),array('id value','name text'),array('zone_id ='.$data['customer_info']['zone_id']));
-            $data['districts']=Query_helper::get_info($this->config->item('table_setup_location_districts'),array('id value','name text'),array('territory_id ='.$data['customer_info']['territory_id']));
+            $data['divisions']=Query_helper::get_info($this->config->item('table_login_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['zones']=Query_helper::get_info($this->config->item('table_login_setup_location_zones'),array('id value','name text'),array('division_id ='.$data['customer_info']['division_id']));
+            $data['territories']=Query_helper::get_info($this->config->item('table_login_setup_location_territories'),array('id value','name text'),array('zone_id ='.$data['customer_info']['zone_id']));
+            $data['districts']=Query_helper::get_info($this->config->item('table_login_setup_location_districts'),array('id value','name text'),array('territory_id ='.$data['customer_info']['territory_id']));
             $data['title']="Edit Customer (".$data['customer_info']['name'].')';
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_csetup_customer/add_edit",$data,true));
@@ -468,9 +468,9 @@ class Setup_csetup_customer extends Root_Controller {
             $this->db->select('d.territory_id');
             $this->db->select('t.zone_id zone_id');
             $this->db->select('zone.division_id division_id');
-            $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = cus_info.district_id','INNER');
-            $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
-            $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_location_districts').' d','d.id = cus_info.district_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.id = d.territory_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
             $this->db->where('cus_info.customer_id',$id);
             $customer=$this->db->get()->row_array();
             if(!$customer)
@@ -488,13 +488,13 @@ class Setup_csetup_customer extends Root_Controller {
         }
 
         $data=$this->input->post('customer_info');
-        $this->db->from($this->config->item('table_setup_location_districts').' d');
+        $this->db->from($this->config->item('table_login_setup_location_districts').' d');
         $this->db->select('d.id district_id');
         $this->db->select('t.id territory_id');
         $this->db->select('zone.id zone_id');
         $this->db->select('zone.division_id division_id');
-        $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
-        $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
+        $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.id = d.territory_id','INNER');
+        $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
         $this->db->where('d.id',$data['district_id']);
         $info=$this->db->get()->row_array();
         if(!$this->check_my_editable($info))
@@ -549,10 +549,10 @@ class Setup_csetup_customer extends Root_Controller {
             $this->db->select('cus_incharge.name incharge_name');
             $this->db->join($this->config->item('table_login_csetup_cus_info').' cus_info','cus_info.customer_id = cus.id','INNER');
             $this->db->join($this->config->item('table_login_csetup_cus_type').' cus_type','cus_type.id = cus_info.type','INNER');
-            $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = cus_info.district_id','INNER');
-            $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
-            $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
-            $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = zone.division_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_location_districts').' d','d.id = cus_info.district_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.id = d.territory_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = zone.division_id','INNER');
             $this->db->join($this->config->item('table_login_csetup_incharge').' cus_incharge','cus_incharge.id = cus_info.incharge','INNER');
             $this->db->where('cus.id',$customer_id);
             $this->db->where('cus_info.revision',1);
