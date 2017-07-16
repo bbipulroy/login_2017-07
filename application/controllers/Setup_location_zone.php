@@ -65,10 +65,10 @@ class Setup_location_zone extends Root_Controller
 
     private function system_get_items()
     {
-        $this->db->from($this->config->item('table_setup_location_zones').' zone');
+        $this->db->from($this->config->item('table_login_setup_location_zones').' zone');
         $this->db->select('zone.id,zone.name,zone.status,zone.ordering');
         $this->db->select('division.name division_name');
-        $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = zone.division_id','INNER');
+        $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = zone.division_id','INNER');
         $this->db->order_by('zone.ordering','ASC');
         $this->db->where('zone.status !=',$this->config->item('system_status_delete'));
         $items=$this->db->get()->result_array();
@@ -87,7 +87,7 @@ class Setup_location_zone extends Root_Controller
                 'ordering' => 99,
                 'status' => $this->config->item('system_status_active')
             );
-            $data['divisions']=Query_helper::get_info($this->config->item('table_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['divisions']=Query_helper::get_info($this->config->item('table_login_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $ajax['system_page_url']=site_url($this->controller_url."/index/add");
 
             $ajax['status']=true;
@@ -119,8 +119,8 @@ class Setup_location_zone extends Root_Controller
                 $zone_id=$id;
             }
 
-            $data['zone']=Query_helper::get_info($this->config->item('table_setup_location_zones'),'*',array('id ='.$zone_id),1);
-            $data['divisions']=Query_helper::get_info($this->config->item('table_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['zone']=Query_helper::get_info($this->config->item('table_login_setup_location_zones'),'*',array('id ='.$zone_id),1);
+            $data['divisions']=Query_helper::get_info($this->config->item('table_login_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['title']="Edit Zone (".$data['zone']['name'].')';
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_location_zone/add_edit",$data,true));
@@ -177,13 +177,13 @@ class Setup_location_zone extends Root_Controller
             {
                 $data['user_updated'] = $user->user_id;
                 $data['date_updated'] = time();
-                Query_helper::update($this->config->item('table_setup_location_zones'),$data,array("id = ".$id));
+                Query_helper::update($this->config->item('table_login_setup_location_zones'),$data,array("id = ".$id));
             }
             else
             {
                 $data['user_created'] = $user->user_id;
                 $data['date_created'] = time();
-                Query_helper::add($this->config->item('table_setup_location_zones'),$data);
+                Query_helper::add($this->config->item('table_login_setup_location_zones'),$data);
             }
             $this->db->trans_complete();   //DB Transaction Handle END
             if ($this->db->trans_status() === TRUE)

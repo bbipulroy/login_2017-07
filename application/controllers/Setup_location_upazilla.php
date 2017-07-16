@@ -65,16 +65,16 @@ class Setup_location_upazilla extends Root_Controller
 
     private function system_get_items()
     {
-        $this->db->from($this->config->item('table_setup_location_upazillas').' u');
+        $this->db->from($this->config->item('table_login_setup_location_upazillas').' u');
         $this->db->select('u.id,u.name,u.status,u.ordering');
         $this->db->select('d.name district_name');
         $this->db->select('t.name territory_name');
         $this->db->select('zone.name zone_name');
         $this->db->select('division.name division_name');
-        $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = u.district_id','INNER');
-        $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
-        $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
-        $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = zone.division_id','INNER');
+        $this->db->join($this->config->item('table_login_setup_location_districts').' d','d.id = u.district_id','INNER');
+        $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.id = d.territory_id','INNER');
+        $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
+        $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = zone.division_id','INNER');
         $this->db->order_by('u.ordering','ASC');
         $this->db->where('u.status !=',$this->config->item('system_status_delete'));
         $items=$this->db->get()->result_array();
@@ -96,7 +96,7 @@ class Setup_location_upazilla extends Root_Controller
                 'ordering' => 99,
                 'status' => $this->config->item('system_status_active')
             );
-            $data['divisions']=Query_helper::get_info($this->config->item('table_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['divisions']=Query_helper::get_info($this->config->item('table_login_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['zones']=array();
             $data['territories']=array();
             $data['districts']=array();
@@ -131,21 +131,21 @@ class Setup_location_upazilla extends Root_Controller
                 $upazilla_id=$id;
             }
 
-            $this->db->from($this->config->item('table_setup_location_upazillas').' u');
+            $this->db->from($this->config->item('table_login_setup_location_upazillas').' u');
             $this->db->select('u.*');
             $this->db->select('d.territory_id');
             $this->db->select('t.zone_id zone_id');
             $this->db->select('zone.division_id division_id');
-            $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = u.district_id','INNER');
-            $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
-            $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_location_districts').' d','d.id = u.district_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.id = d.territory_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
             $this->db->where('u.id',$upazilla_id);
             $data['upazilla']=$this->db->get()->row_array();
 
-            $data['divisions']=Query_helper::get_info($this->config->item('table_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
-            $data['zones']=Query_helper::get_info($this->config->item('table_setup_location_zones'),array('id value','name text'),array('division_id ='.$data['upazilla']['division_id']));
-            $data['territories']=Query_helper::get_info($this->config->item('table_setup_location_territories'),array('id value','name text'),array('zone_id ='.$data['upazilla']['zone_id']));
-            $data['districts']=Query_helper::get_info($this->config->item('table_setup_location_districts'),array('id value','name text'),array('territory_id ='.$data['upazilla']['territory_id']));
+            $data['divisions']=Query_helper::get_info($this->config->item('table_login_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['zones']=Query_helper::get_info($this->config->item('table_login_setup_location_zones'),array('id value','name text'),array('division_id ='.$data['upazilla']['division_id']));
+            $data['territories']=Query_helper::get_info($this->config->item('table_login_setup_location_territories'),array('id value','name text'),array('zone_id ='.$data['upazilla']['zone_id']));
+            $data['districts']=Query_helper::get_info($this->config->item('table_login_setup_location_districts'),array('id value','name text'),array('territory_id ='.$data['upazilla']['territory_id']));
             $data['title']="Edit Upazilla (".$data['upazilla']['name'].')';
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_location_upazilla/add_edit",$data,true));
@@ -202,13 +202,13 @@ class Setup_location_upazilla extends Root_Controller
             {
                 $data['user_updated'] = $user->user_id;
                 $data['date_updated'] = time();
-                Query_helper::update($this->config->item('table_setup_location_upazillas'),$data,array("id = ".$id));
+                Query_helper::update($this->config->item('table_login_setup_location_upazillas'),$data,array("id = ".$id));
             }
             else
             {
                 $data['user_created'] = $user->user_id;
                 $data['date_created'] = time();
-                Query_helper::add($this->config->item('table_setup_location_upazillas'),$data);
+                Query_helper::add($this->config->item('table_login_setup_location_upazillas'),$data);
             }
             $this->db->trans_complete();   //DB Transaction Handle END
             if ($this->db->trans_status() === TRUE)
