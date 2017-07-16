@@ -153,6 +153,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         $(document).off('change','#zone_id');
         $(document).off('change','#territory_id');
         $(document).off('change','#district_id');
+        $(document).off('change','#upazilla_id');
         $(document).on("change","#division_id",function()
         {
             $("#zone_id").val("");
