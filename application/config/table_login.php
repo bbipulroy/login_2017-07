@@ -10,6 +10,7 @@ $config['table_login_setup_users_other_sites'] = 'arm_login_2017_07.login_setup_
 $config['table_login_other_sites_visit'] = 'arm_login_2017_07.login_other_sites_visit';
 $config['table_login_setup_company'] = 'arm_login_2017_07.login_setup_company';
 $config['table_login_setup_users_company'] = 'arm_login_2017_07.login_setup_users_company';
+$config['table_login_setup_employee_class'] = 'arm_login_2017_07.login_setup_employee_class';
 //location setup
 $config['table_setup_location_divisions'] = 'arm_login_2017_07.login_divisions';
 $config['table_setup_location_zones'] = 'arm_login_2017_07.login_zones';
