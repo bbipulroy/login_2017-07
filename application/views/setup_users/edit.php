@@ -143,6 +143,23 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                         </div>
                         <div class="row show-grid">
                             <div class="col-xs-4">
+                                <label for="employee_class_id" class="control-label pull-right">Employee Class</label>
+                            </div>
+                            <div class="col-sm-4 col-xs-8">
+                                <select id="employee_class_id" name="user_info[employee_class_id]" class="form-control">
+                                    <option value=""><?php echo $this->lang->line('SELECT');?></option>
+                                    <?php
+                                    foreach($employee_classes as $employee_class)
+                                    {?>
+                                        <option value="<?php echo $employee_class['value']?>" <?php if($employee_class['value']==$user_info['employee_class_id']){ echo "selected";}?>><?php echo $employee_class['text'];?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row show-grid">
+                            <div class="col-xs-4">
                                 <label for="user_group" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_USER_GROUP');?><span style="color:#FF0000">*</span></label>
                             </div>
                             <div class="col-sm-4 col-xs-8">

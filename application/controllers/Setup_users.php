@@ -232,6 +232,7 @@ class Setup_users extends Root_Controller
             $data['designations']=Query_helper::get_info($this->config->item('table_login_setup_designation'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['departments']=Query_helper::get_info($this->config->item('table_login_setup_department'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['user_types']=Query_helper::get_info($this->config->item('table_login_setup_user_type'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['employee_classes']=Query_helper::get_info($this->config->item('table_login_setup_employee_class'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             if($user->user_group==1)
             {
                 $data['user_groups']=Query_helper::get_info($this->config->item('table_system_user_group'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
@@ -400,6 +401,7 @@ class Setup_users extends Root_Controller
             $this->db->select('designation.name designation_name');
             $this->db->select('department.name department_name');
             $this->db->select('u_type.name type_name');
+            $this->db->select('e_class.name employee_class_name');
             $this->db->select('u_group.name group_name');
             $this->db->from($this->config->item('table_login_setup_user').' user');
             $this->db->join($this->config->item('table_login_setup_user_info').' user_info','user_info.user_id=user.id');
@@ -407,6 +409,7 @@ class Setup_users extends Root_Controller
             $this->db->join($this->config->item('table_login_setup_department').' department','department.id=user_info.department_id','left');
             $this->db->join($this->config->item('table_login_setup_designation').' designation','designation.id=user_info.designation','left');
             $this->db->join($this->config->item('table_login_setup_user_type').' u_type','u_type.id=user_info.user_type_id','left');
+            $this->db->join($this->config->item('table_login_setup_employee_class').' e_class','e_class.id=user_info.employee_class_id','left');
             $this->db->join($this->config->item('table_system_user_group').' u_group','u_group.id=user_info.user_group','left');
             $this->db->where('user.id',$user_id);
             $this->db->where('user_info.revision',1);
