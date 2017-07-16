@@ -202,36 +202,6 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 </select>
             </div>
         </div>
-        <!--<div style="" class="row show-grid">
-            <div class="col-xs-4">
-                <a class="accordion-toggle external control-label pull-right" data-toggle="collapse" data-target="#collapse1" href="#">
-                    <span style="font-weight: bolder;color: black;"><?php echo $CI->lang->line('LABEL_PRINCIPAL_NAME');?></span>
-                    <span style="color: black;">(Click it)</span>
-                </a>
-            </div>
-            <div id="collapse1" class="col-sm-4 col-xs-8 panel-collapse collapse">
-                <?php
-                foreach($principals as $principal)
-                {
-                    ?>
-                    <div class="checkbox">
-                        <label title="<?php echo $principal['text']; ?>">
-                            <input type="checkbox" name="principal_ids[]" value="<?php echo $principal['value']; ?>" <?php if(in_array($principal['value'],$assigned_principals)){echo 'checked';} ?>><?php echo $principal['text']; ?>
-                        </label>
-                    </div>
-                <?php
-                }
-                ?>
-            </div>
-        </div>-->
-        <!--<div style="" class="row show-grid">
-            <div class="col-xs-4">
-                <label for="name_import" class="control-label pull-right">Import Name</label>
-            </div>
-            <div class="col-sm-4 col-xs-8">
-                <input type="text" name="item[name_import]" id="name_import" class="form-control" value="<?php echo $item['name_import'] ?>" >
-            </div>
-        </div>-->
     </div>
 
     <div class="clearfix"></div>
