@@ -171,7 +171,7 @@ class User_helper
         $user=User_helper::get_user();
         $CI->db->from($CI->config->item('table_login_setup_users_other_sites').' uos');
         $CI->db->select('os.id,os.short_name,os.full_name');
-        $CI->db->join($CI->config->item('table_system_other_sites').' os','os.id = uos.site_id','INNER');
+        $CI->db->join($CI->config->item('table_login_system_other_sites').' os','os.id = uos.site_id','INNER');
         $CI->db->where('uos.revision',1);
         $CI->db->where('uos.user_id',$user->user_id);
         $CI->db->where('os.status',$CI->config->item('system_status_active'));

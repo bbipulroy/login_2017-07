@@ -13,7 +13,7 @@ class Other_sites_visit extends CI_Controller
         $user=User_helper::get_user();
         if($user)
         {
-            $site_info=Query_helper::get_info($this->config->item('table_system_other_sites'),array('site_url,replace_text'),array('id ='.$site_id),1);
+            $site_info=Query_helper::get_info($this->config->item('table_login_system_other_sites'),array('site_url,replace_text'),array('id ='.$site_id),1);
             if($site_info)
             {
                 //$key=md5(time());

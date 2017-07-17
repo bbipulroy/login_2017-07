@@ -73,7 +73,7 @@ class Profile_info extends Root_Controller
 
             $this->db->select('os.*');
             $this->db->from($this->config->item('table_login_setup_users_other_sites').' uos');
-            $this->db->join($this->config->item('table_system_other_sites').' os','os.id=uos.site_id');
+            $this->db->join($this->config->item('table_login_system_other_sites').' os','os.id=uos.site_id');
             $this->db->where('uos.user_id',$user_id);
             $this->db->where('uos.revision',1);
             $this->db->order_by('os.ordering');

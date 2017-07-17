@@ -74,7 +74,7 @@ class Sys_other_sites extends Root_Controller
     }
     private function system_get_items()
     {
-        $items=Query_helper::get_info($this->config->item('table_system_other_sites'),array('id','short_name','site_url','status','ordering'),array('status !="'.$this->config->item('system_status_delete').'"'));
+        $items=Query_helper::get_info($this->config->item('table_login_system_other_sites'),array('id','short_name','site_url','status','ordering'),array('status !="'.$this->config->item('system_status_delete').'"'));
         $this->json_return($items);
 
     }
@@ -125,7 +125,7 @@ class Sys_other_sites extends Root_Controller
                 $site_id=$id;
             }
 
-            $data['site']=Query_helper::get_info($this->config->item('table_system_other_sites'),'*',array('id ='.$site_id),1);
+            $data['site']=Query_helper::get_info($this->config->item('table_login_system_other_sites'),'*',array('id ='.$site_id),1);
             $data['title']="Edit site (".$data['site']['short_name'].')';
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("sys_other_sites/add_edit",$data,true));
@@ -156,7 +156,7 @@ class Sys_other_sites extends Root_Controller
                 $site_id=$id;
             }
 
-            $data['site']=Query_helper::get_info($this->config->item('table_system_other_sites'),'*',array('id ='.$site_id),1);
+            $data['site']=Query_helper::get_info($this->config->item('table_login_system_other_sites'),'*',array('id ='.$site_id),1);
             $data['title']="Details of site (".$data['site']['short_name'].')';
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("sys_other_sites/details",$data,true));
@@ -182,7 +182,7 @@ class Sys_other_sites extends Root_Controller
             $user = User_helper::get_user();
             $this->db->trans_start();  //DB Transaction Handle START
             $time=time();
-            Query_helper::update($this->config->item('table_system_other_sites'),array('status'=>$this->config->item('system_status_delete'),'user_updated'=>$user->user_id,'date_updated'=>$time),array("id = ".$id));
+            Query_helper::update($this->config->item('table_login_system_other_sites'),array('status'=>$this->config->item('system_status_delete'),'user_updated'=>$user->user_id,'date_updated'=>$time),array("id = ".$id));
             $this->db->trans_complete();   //DB Transaction Handle END
 
             if ($this->db->trans_status() === TRUE)
@@ -246,7 +246,7 @@ class Sys_other_sites extends Root_Controller
                 $data['user_updated'] = $user->user_id;
                 $data['date_updated'] = time();
 
-                Query_helper::update($this->config->item('table_system_other_sites'),$data,array("id = ".$id));
+                Query_helper::update($this->config->item('table_login_system_other_sites'),$data,array("id = ".$id));
 
             }
             else
@@ -254,7 +254,7 @@ class Sys_other_sites extends Root_Controller
 
                 $data['user_created'] = $user->user_id;
                 $data['date_created'] = time();
-                Query_helper::add($this->config->item('table_system_other_sites'),$data);
+                Query_helper::add($this->config->item('table_login_system_other_sites'),$data);
             }
             $this->db->trans_complete();   //DB Transaction Handle END
             if ($this->db->trans_status() === TRUE)
