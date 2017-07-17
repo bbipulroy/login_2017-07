@@ -40,9 +40,9 @@ class Setup_users extends Root_Controller
         {
             $this->system_edit_password($id);
         }
-        elseif($action=="edit_employeeID")
+        elseif($action=="edit_employee_id")
         {
-            $this->system_edit_employeeID($id);
+            $this->system_edit_employee_id($id);
         }
         elseif($action=="edit_status")
         {
@@ -76,9 +76,9 @@ class Setup_users extends Root_Controller
         {
             $this->system_save_username();
         }
-        elseif($action=="save_employeeID")
+        elseif($action=="save_employee_id")
         {
-            $this->system_save_employeeID();
+            $this->system_save_employee_id();
         }
         elseif($action=="save_status")
         {
@@ -320,7 +320,7 @@ class Setup_users extends Root_Controller
             $this->json_return($ajax);
         }
     }
-    private function system_edit_employeeID($id)
+    private function system_edit_employee_id($id)
     {
         if(isset($this->permissions['action3']) && ($this->permissions['action3']==1))
         {
@@ -337,12 +337,12 @@ class Setup_users extends Root_Controller
             $data['title']="Reset Employee ID of (".$data['user_info']['name'].')';
             $data['employee_id']=$data['user']['employee_id'];
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/edit_employeeID",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/edit_employee_id",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
             }
-            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit_employeeId/'.$user_id);
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit_employee_id/'.$user_id);
             $this->json_return($ajax);
         }
         else
@@ -432,7 +432,7 @@ class Setup_users extends Root_Controller
                 $data['assigned_companies'][]=$row['company_id'];
             }
 
-            $this->db->from($this->config->item('table_system_assigned_area').' aa');
+            $this->db->from($this->config->item('table_login_system_assigned_area').' aa');
             $this->db->select('aa.*');
             $this->db->select('union.name union_name');
             $this->db->select('u.name upazilla_name');
@@ -440,45 +440,45 @@ class Setup_users extends Root_Controller
             $this->db->select('t.name territory_name');
             $this->db->select('zone.name zone_name');
             $this->db->select('division.name division_name');
-            $this->db->join($this->config->item('table_setup_location_unions').' union','union.id = aa.union_id','LEFT');
-            $this->db->join($this->config->item('table_setup_location_upazillas').' u','u.id = aa.upazilla_id','LEFT');
-            $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = aa.district_id','LEFT');
-            $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = aa.territory_id','LEFT');
-            $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = aa.zone_id','LEFT');
-            $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = aa.division_id','LEFT');
+            $this->db->join($this->config->item('table_login_setup_location_unions').' union','union.id = aa.union_id','LEFT');
+            $this->db->join($this->config->item('table_login_setup_location_upazillas').' u','u.id = aa.upazilla_id','LEFT');
+            $this->db->join($this->config->item('table_login_setup_location_districts').' d','d.id = aa.district_id','LEFT');
+            $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.id = aa.territory_id','LEFT');
+            $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = aa.zone_id','LEFT');
+            $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = aa.division_id','LEFT');
             $this->db->where('aa.revision',1);
             $this->db->where('aa.user_id',$user_id);
             $data['assigned_area']=$this->db->get()->row_array();
             if($data['assigned_area'])
             {
-                $this->db->from($this->config->item('table_system_assigned_area').' aa');
+                $this->db->from($this->config->item('table_login_system_assigned_area').' aa');
                 if($data['assigned_area']['division_id']>0)
                 {
-                    $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = aa.division_id','INNER');
+                    $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = aa.division_id','INNER');
                 }
                 if($data['assigned_area']['zone_id']>0)
                 {
-                    $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.division_id = division.id','INNER');
+                    $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.division_id = division.id','INNER');
                     $this->db->where('zone.id',$data['assigned_area']['zone_id']);
                 }
                 if($data['assigned_area']['territory_id']>0)
                 {
-                    $this->db->join($this->config->item('table_setup_location_territories').' t','t.zone_id = zone.id','INNER');
+                    $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.zone_id = zone.id','INNER');
                     $this->db->where('t.id',$data['assigned_area']['territory_id']);
                 }
                 if($data['assigned_area']['district_id']>0)
                 {
-                    $this->db->join($this->config->item('table_setup_location_districts').' d','d.territory_id = t.id','INNER');
+                    $this->db->join($this->config->item('table_login_setup_location_districts').' d','d.territory_id = t.id','INNER');
                     $this->db->where('d.id',$data['assigned_area']['district_id']);
                 }
                 if($data['assigned_area']['upazilla_id']>0)
                 {
-                    $this->db->join($this->config->item('table_setup_location_upazillas').' u','u.district_id = d.id','INNER');
+                    $this->db->join($this->config->item('table_login_setup_location_upazillas').' u','u.district_id = d.id','INNER');
                     $this->db->where('u.id',$data['assigned_area']['upazilla_id']);
                 }
                 if($data['assigned_area']['union_id']>0)
                 {
-                    $this->db->join($this->config->item('table_setup_location_unions').' union','union.upazilla_id = u.id','INNER');
+                    $this->db->join($this->config->item('table_login_setup_location_unions').' union','union.upazilla_id = u.id','INNER');
                     $this->db->where('union.id',$data['assigned_area']['union_id']);
                 }
                 $this->db->where('aa.revision',1);
@@ -662,7 +662,7 @@ class Setup_users extends Root_Controller
                 $data_area['user_created'] = $user->user_id;
                 $data_area['date_created'] = $time;
                 $data_area['revision'] = 1;
-                Query_helper::add($this->config->item('table_system_assigned_area'),$data_area);
+                Query_helper::add($this->config->item('table_login_system_assigned_area'),$data_area);
 
                 $companies=$this->input->post('company');
                 foreach($companies as $company)
@@ -835,7 +835,7 @@ class Setup_users extends Root_Controller
             }
         }
     }
-    private function system_save_employeeID()
+    private function system_save_employee_id()
     {
         $id = $this->input->post("id");
         $user = User_helper::get_user();
@@ -846,7 +846,7 @@ class Setup_users extends Root_Controller
             $this->json_return($ajax);
             die();
         }
-        if(!$this->check_validation_employeeID())
+        if(!$this->check_validation_employee_id())
         {
             $ajax['status']=false;
             $ajax['system_message']=$this->message;
@@ -855,7 +855,7 @@ class Setup_users extends Root_Controller
         else
         {
             $this->db->trans_start();  //DB Transaction Handle START
-            $data['employee_id']=$this->input->post('new_employeeID');
+            $data['employee_id']=$this->input->post('new_employee_id');
             $data['user_updated'] = $user->user_id;
             $data['date_updated'] = time();
             Query_helper::update($this->config->item('table_login_setup_user'),$data,array("id = ".$id));
@@ -940,7 +940,7 @@ class Setup_users extends Root_Controller
             }
             $data['title']="Assign (".$data['user_info']['name'].') to an Area';
 
-            $this->db->from($this->config->item('table_system_assigned_area').' aa');
+            $this->db->from($this->config->item('table_login_system_assigned_area').' aa');
             $this->db->select('aa.*');
             $this->db->select('union.name union_name');
             $this->db->select('u.name upazilla_name');
@@ -948,45 +948,45 @@ class Setup_users extends Root_Controller
             $this->db->select('t.name territory_name');
             $this->db->select('zone.name zone_name');
             $this->db->select('division.name division_name');
-            $this->db->join($this->config->item('table_setup_location_unions').' union','union.id = aa.union_id','LEFT');
-            $this->db->join($this->config->item('table_setup_location_upazillas').' u','u.id = aa.upazilla_id','LEFT');
-            $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = aa.district_id','LEFT');
-            $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = aa.territory_id','LEFT');
-            $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = aa.zone_id','LEFT');
-            $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = aa.division_id','LEFT');
+            $this->db->join($this->config->item('table_login_setup_location_unions').' union','union.id = aa.union_id','LEFT');
+            $this->db->join($this->config->item('table_login_setup_location_upazillas').' u','u.id = aa.upazilla_id','LEFT');
+            $this->db->join($this->config->item('table_login_setup_location_districts').' d','d.id = aa.district_id','LEFT');
+            $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.id = aa.territory_id','LEFT');
+            $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = aa.zone_id','LEFT');
+            $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = aa.division_id','LEFT');
             $this->db->where('aa.revision',1);
             $this->db->where('aa.user_id',$user_id);
             $data['assigned_area']=$this->db->get()->row_array();
             if($data['assigned_area'])
             {
-                $this->db->from($this->config->item('table_system_assigned_area').' aa');
+                $this->db->from($this->config->item('table_login_system_assigned_area').' aa');
                 if($data['assigned_area']['division_id']>0)
                 {
-                    $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = aa.division_id','INNER');
+                    $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = aa.division_id','INNER');
                 }
                 if($data['assigned_area']['zone_id']>0)
                 {
-                    $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.division_id = division.id','INNER');
+                    $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.division_id = division.id','INNER');
                     $this->db->where('zone.id',$data['assigned_area']['zone_id']);
                 }
                 if($data['assigned_area']['territory_id']>0)
                 {
-                    $this->db->join($this->config->item('table_setup_location_territories').' t','t.zone_id = zone.id','INNER');
+                    $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.zone_id = zone.id','INNER');
                     $this->db->where('t.id',$data['assigned_area']['territory_id']);
                 }
                 if($data['assigned_area']['district_id']>0)
                 {
-                    $this->db->join($this->config->item('table_setup_location_districts').' d','d.territory_id = t.id','INNER');
+                    $this->db->join($this->config->item('table_login_setup_location_districts').' d','d.territory_id = t.id','INNER');
                     $this->db->where('d.id',$data['assigned_area']['district_id']);
                 }
                 if($data['assigned_area']['upazilla_id']>0)
                 {
-                    $this->db->join($this->config->item('table_setup_location_upazillas').' u','u.district_id = d.id','INNER');
+                    $this->db->join($this->config->item('table_login_setup_location_upazillas').' u','u.district_id = d.id','INNER');
                     $this->db->where('u.id',$data['assigned_area']['upazilla_id']);
                 }
                 if($data['assigned_area']['union_id']>0)
                 {
-                    $this->db->join($this->config->item('table_setup_location_unions').' union','union.upazilla_id = u.id','INNER');
+                    $this->db->join($this->config->item('table_login_setup_location_unions').' union','union.upazilla_id = u.id','INNER');
                     $this->db->where('union.id',$data['assigned_area']['union_id']);
                 }
                 $this->db->where('aa.revision',1);
@@ -1094,18 +1094,18 @@ class Setup_users extends Root_Controller
             $revision_history_data=array();
             $revision_history_data['date_updated']=$time;
             $revision_history_data['user_updated']=$user->user_id;
-            Query_helper::update($this->config->item('table_system_assigned_area'),$revision_history_data,array('revision=1','user_id='.$id));
+            Query_helper::update($this->config->item('table_login_system_assigned_area'),$revision_history_data,array('revision=1','user_id='.$id));
 
             $this->db->where('user_id',$id);
             $this->db->set('revision', 'revision+1', FALSE);
-            $this->db->update($this->config->item('table_system_assigned_area'));
+            $this->db->update($this->config->item('table_login_system_assigned_area'));
 
             $data=$this->input->post('area');
             $data['user_id']=$id;
             $data['user_created'] = $user->user_id;
             $data['date_created'] = $time;
             $data['revision'] = 1;
-            Query_helper::add($this->config->item('table_system_assigned_area'),$data);
+            Query_helper::add($this->config->item('table_login_system_assigned_area'),$data);
 
             $this->db->trans_complete();   //DB Transaction Handle END
             if ($this->db->trans_status() === TRUE)
@@ -1306,15 +1306,15 @@ class Setup_users extends Root_Controller
         }
         return true;
     }
-    private function check_validation_employeeID()
+    private function check_validation_employee_id()
     {
         $id = $this->input->post("id");
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('new_employeeID',$this->lang->line('LABEL_EMPLOYEE_ID'),'required');
+        $this->form_validation->set_rules('new_employee_id',$this->lang->line('LABEL_EMPLOYEE_ID'),'required');
 
-        if($this->input->post('new_employeeID'))
+        if($this->input->post('new_employee_id'))
         {
-            $duplicate_employee_id_check=Query_helper::get_info($this->config->item('table_login_setup_user'),array('employee_id'),array('id!='.$id,'employee_id ="'.$this->input->post('new_employeeID').'"'),1);
+            $duplicate_employee_id_check=Query_helper::get_info($this->config->item('table_login_setup_user'),array('employee_id'),array('id!='.$id,'employee_id ="'.$this->input->post('new_employee_id').'"'),1);
             if($duplicate_employee_id_check)
             {
                 $ajax['system_message']='This employee ID is already exists';
