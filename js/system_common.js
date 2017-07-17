@@ -132,7 +132,6 @@ $(document).ready(function()
                 form_data.set(file.key,file.value,file.name);
             }
         }
-        system_resized_image_files=[];
         event.preventDefault();
         $.ajax({
             url: $(this).attr("action"),

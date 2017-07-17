@@ -117,6 +117,8 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 
     jQuery(document).ready(function()
     {
+        system_resized_image_files=[];
+
         $(document).off("click", ".system_button_add_more");
         $(document).off("click", ".system_button_add_delete");
 

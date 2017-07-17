@@ -47,6 +47,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 
     jQuery(document).ready(function()
     {
+        system_resized_image_files=[];
         $(":file").filestyle({input: false,buttonText: "<?php echo $CI->lang->line('UPLOAD');?>", buttonName: "btn-danger"});
     });
 </script>

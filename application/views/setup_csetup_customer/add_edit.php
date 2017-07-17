@@ -344,6 +344,8 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 <script type="text/javascript">
     jQuery(document).ready(function()
     {
+        system_resized_image_files=[];
+
         $(document).off('change','#division_id');
         $(document).off('change','#zone_id');
         $(document).off('change','#territory_id');
