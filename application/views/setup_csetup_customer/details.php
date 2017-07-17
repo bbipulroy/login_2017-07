@@ -119,7 +119,6 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         <label class="control-label"><?php echo $customer_info['tin']; ?></label>
     </div>
 </div>
-
 <div style="" class="row show-grid">
     <div class="col-xs-4">
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_NID');?></label>
@@ -156,15 +155,12 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 </div>
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_MAP_ADDRESS');?></label>
+        <label class="control-label pull-right"><?php echo $customer_info['type_name'];?> Location</label>
     </div>
-    <div class="col-xs-6">
+    <div class="col-sm-4 col-xs-8">
         <?php if($customer_info['map_address']) {echo $customer_info['map_address'];}?>
     </div>
 </div>
-
-
-
 <div class="row show-grid">
     <div class="col-xs-4">
         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_PHONE');?></label>
@@ -173,9 +169,6 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         <label class="control-label"><?php echo $customer_info['phone'];?></label>
     </div>
 </div>
-
-
-
 <div class="row show-grid">
     <div class="col-xs-4">
         <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_EMAIL');?></label>

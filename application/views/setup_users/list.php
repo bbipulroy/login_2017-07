@@ -30,7 +30,7 @@ if(isset($CI->permissions['action3']) && ($CI->permissions['action3']==1))
         'type'=>'button',
         'label'=>'Change Employee ID',
         'class'=>'button_jqx_action',
-        'data-action-link'=>site_url($CI->controller_url.'/index/edit_employeeID')
+        'data-action-link'=>site_url($CI->controller_url.'/index/edit_employee_id')
     );
 }
 if(isset($CI->permissions['action3']) && ($CI->permissions['action3']==1))
