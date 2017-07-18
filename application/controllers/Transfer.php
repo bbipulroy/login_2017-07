@@ -784,7 +784,7 @@ class Transfer extends CI_Controller {
 
     public function variety()
     {
-        $results=Query_helper::get_info('shaiful_arm_ems.ems_varieties','*',array());  // source table
+        $results=Query_helper::get_info('arm_ems.ems_varieties','*',array());  // source table
         $this->db->trans_start();  //DB Transaction Handle START
         foreach($results as $result)
         {
