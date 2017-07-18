@@ -89,7 +89,7 @@ class Setup_csetup_customer extends Root_Controller {
         $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.id = d.territory_id','INNER');
         $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
         $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = zone.division_id','INNER');
-        $this->db->join($this->config->item('table_login_csetup_incharge').' cus_incharge','cus_incharge.id = cus_info.incharge','INNER');
+        $this->db->join($this->config->item('table_login_csetup_incharge').' cus_incharge','cus_incharge.id = cus_info.incharge','LEFT');
 
         $this->db->order_by('division.ordering','ASC');
         $this->db->order_by('zone.ordering','ASC');
@@ -99,6 +99,13 @@ class Setup_csetup_customer extends Root_Controller {
         $this->db->where('cus_info.revision',1);
         $this->db->where('cus.status !=',$this->config->item('system_status_delete'));
         $items=$this->db->get()->result_array();
+        foreach($items as &$item)
+        {
+            if(strlen($item['incharge_name'])<1)
+            {
+                $item['incharge_name']='Not assigned';
+            }
+        }
         $this->json_return($items);
     }
     private function system_add()
@@ -454,7 +461,7 @@ class Setup_csetup_customer extends Root_Controller {
             $this->db->join($this->config->item('table_login_setup_location_territories').' t','t.id = d.territory_id','INNER');
             $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
             $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = zone.division_id','INNER');
-            $this->db->join($this->config->item('table_login_csetup_incharge').' cus_incharge','cus_incharge.id = cus_info.incharge','INNER');
+            $this->db->join($this->config->item('table_login_csetup_incharge').' cus_incharge','cus_incharge.id = cus_info.incharge','LEFT');
             $this->db->where('cus.id',$customer_id);
             $this->db->where('cus_info.revision',1);
             $data['customer_info']=$this->db->get()->row_array();
