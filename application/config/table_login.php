@@ -39,4 +39,5 @@ $config['table_login_csetup_cus_document'] = 'arm_login_2017_07.login_csetup_cus
 $config['table_login_basic_setup_fiscal_year'] = 'arm_login_2017_07.login_basic_setup_fiscal_year';
 $config['table_login_basic_setup_competitor'] = 'arm_login_2017_07.login_basic_setup_competitor';
 $config['table_login_basic_setup_principal'] = 'arm_login_2017_07.login_basic_setup_principal';
-
+// transfer
+$config['table_old_csetup_customer'] = 'arm_ems.ems_csetup_customers';
