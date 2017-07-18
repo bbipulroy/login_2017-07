@@ -743,7 +743,13 @@ class Transfer extends CI_Controller {
             $data['whose']=$result['whose'];
             $data['competitor_id']=$result['competitor_id'];
             $data['stock_id']=$result['stock_id'];
-            $data['hybrid']=$result['hybrid'];
+            if($result['hybrid']=='F1 Hybrid')
+            {
+                $data['hybrid']=1;
+            }else if($result['hybrid']=='OP')
+            {
+                $data['hybrid']=2;
+            }
             $data['description']=$result['description'];
             $data['status']=$result['status'];
             $data['ordering']=$result['ordering'];
