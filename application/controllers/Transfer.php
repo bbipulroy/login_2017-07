@@ -25,6 +25,110 @@ class Transfer extends CI_Controller {
             $this->dbforge->rename_table($table, 'ems_'.$table);
         }*/
     }
+    private function insert($table_name,$data)
+    {
+        $this->db->insert($table_name,$data);
+        $id=$this->db->insert_id();
+        if($id>0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public function users()
+    {
+        $source_tables=array(
+            'setup_user'=>'arm_login.setup_user',
+            'setup_user_info'=>'arm_login.setup_user_info',
+            'setup_user_area'=>'arm_ems.ems_system_assigned_area'
+        );
+        $destination_tables=array(
+            'setup_user'=>$this->config->item('table_login_setup_user'),
+            'setup_user_info'=>$this->config->item('table_login_setup_user_info'),
+            'setup_user_area'=>$this->config->item('table_login_system_assigned_area')
+        );
+
+        $users=Query_helper::get_info($source_tables['setup_user'],'*',array());
+
+        $results=Query_helper::get_info($source_tables['setup_user_info'],'*',array('revision=1'));
+        $user_infos=array();
+        foreach($results as $result)
+        {
+            $user_infos[$result['user_id']]=$result;
+        }
+
+        $results=array();
+        $results=Query_helper::get_info($source_tables['setup_user_area'],'*',array('revision=1'));
+        $user_areas=array();
+        foreach($results as $result)
+        {
+            $user_areas[$result['user_id']]=$result;
+        }
+        $results=array();
+
+        $this->db->trans_start();  //DB Transaction Handle START
+        
+        foreach($users as $user)
+        {
+            if(!($this->insert($destination_tables['setup_user'],$user)))
+            {
+                $this->db->trans_complete();
+                echo 'Failed';
+                exit();
+            }
+            else
+            {
+                $data_user_info=array();
+                if(isset($user_infos[$user['id']]))
+                {
+                    $data_user_info=$user_infos[$user['id']];
+                    unset($data_user_info['id']);
+                }
+                else
+                {
+                    $data_user_info['user_id']=$user['id'];
+                    $data_user_info['revision']=1;
+                }
+                if(!($this->insert($destination_tables['setup_user_info'],$data_user_info)))
+                {
+                    $this->db->trans_complete();
+                    echo 'Failed';
+                    exit();
+                }
+
+                $data_user_area=array();
+                if(isset($user_areas[$user['id']]))
+                {
+                    $data_user_area=$user_areas[$user['id']];
+                    unset($data_user_area['id']);
+                }
+                else
+                {
+                    $data_user_area['user_id']=$user['id'];
+                    $data_user_area['revision']=1;
+                }
+                if(!($this->insert($destination_tables['setup_user_area'],$data_user_area)))
+                {
+                    $this->db->trans_complete();
+                    echo 'Failed';
+                    exit();
+                }
+            }
+        }
+
+        $this->db->trans_complete();   //DB Transaction Handle END
+        if ($this->db->trans_status() === TRUE)
+        {
+            echo 'Success';
+        }
+        else
+        {
+            echo 'Failed';
+        }
+    }
     public function divisions()
     {
         $divisions=$this->db->get('ait_division_info')->result_array();
