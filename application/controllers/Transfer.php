@@ -564,7 +564,7 @@ class Transfer extends CI_Controller {
     }
     public function customers()
     {
-        $results=Query_helper::get_info($this->config->item('table_old_csetup_customer'),'*',array());
+        $results=Query_helper::get_info('arm_ems.ems_csetup_customers','*',array());
 
         $this->db->trans_start();  //DB Transaction Handle START
         foreach($results as $result)
