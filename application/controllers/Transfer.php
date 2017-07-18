@@ -565,7 +565,6 @@ class Transfer extends CI_Controller {
     public function customers()
     {
         $results=Query_helper::get_info('arm_ems.ems_csetup_customers','*',array());
-
         $this->db->trans_start();  //DB Transaction Handle START
         foreach($results as $result)
         {
@@ -733,7 +732,7 @@ class Transfer extends CI_Controller {
 
     public function variety()
     {
-        $results=Query_helper::get_info($this->config->item('table_old_crop_setup_variety'),'*',array());
+        $results=Query_helper::get_info('shaiful_arm_ems.ems_varieties','*',array());  // source table
         $this->db->trans_start();  //DB Transaction Handle START
         foreach($results as $result)
         {
@@ -759,7 +758,7 @@ class Transfer extends CI_Controller {
             {
                 $data['user_updated']=$result['user_updated'];
             }
-            $this->db->insert($this->config->item('table_login_setup_classification_varieties'),$data);
+            $this->db->insert($this->config->item('table_login_setup_classification_varieties'),$data);   // destination table
             $result_id = $this->db->insert_id();
 
             if(!$result_id)
@@ -790,7 +789,7 @@ class Transfer extends CI_Controller {
                 {
                     $data['user_updated']=$result['user_updated'];
                 }
-                $this->db->insert($this->config->item('table_login_setup_variety_principals'),$data);
+                $this->db->insert($this->config->item('table_login_setup_variety_principals'),$data);   // destination table
             }
         }
         $this->db->trans_complete();   //DB Transaction Handle END
