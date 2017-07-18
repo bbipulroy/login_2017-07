@@ -43,12 +43,16 @@ class Transfer extends CI_Controller {
         $source_tables=array(
             'setup_user'=>'arm_login.setup_user',
             'setup_user_info'=>'arm_login.setup_user_info',
-            'setup_user_area'=>'arm_ems.ems_system_assigned_area'
+            'setup_user_area'=>'arm_ems.ems_system_assigned_area',
+            'setup_users_other_sites'=>'arm_login.setup_users_other_sites',
+            'setup_users_company'=>'arm_login.login_setup_users_company'
         );
         $destination_tables=array(
             'setup_user'=>$this->config->item('table_login_setup_user'),
             'setup_user_info'=>$this->config->item('table_login_setup_user_info'),
-            'setup_user_area'=>$this->config->item('table_login_system_assigned_area')
+            'setup_user_area'=>$this->config->item('table_login_system_assigned_area'),
+            'setup_users_other_sites'=>$this->config->item('table_login_setup_users_other_sites'),
+            'setup_users_company'=>$this->config->item('table_login_setup_users_company')
         );
 
         $users=Query_helper::get_info($source_tables['setup_user'],'*',array());
@@ -66,6 +70,22 @@ class Transfer extends CI_Controller {
         foreach($results as $result)
         {
             $user_areas[$result['user_id']]=$result;
+        }
+
+        $results=array();
+        $results=Query_helper::get_info($source_tables['setup_users_other_sites'],'*',array('revision=1'));
+        $user_sites=array();
+        foreach($results as $result)
+        {
+            $user_sites[$result['user_id']][]=$result;
+        }
+
+        $results=array();
+        $results=Query_helper::get_info($source_tables['setup_users_company'],'*',array('revision=1'));
+        $user_companies=array();
+        foreach($results as $result)
+        {
+            $user_companies[$result['user_id']][]=$result;
         }
         $results=array();
 
@@ -115,6 +135,38 @@ class Transfer extends CI_Controller {
                     $this->db->trans_complete();
                     echo 'Failed';
                     exit();
+                }
+
+                if(isset($user_sites[$user['id']]))
+                {
+                    $data_user_sites_array=$user_sites[$user['id']];
+
+                    foreach($data_user_sites_array  as $data_user_sites)
+                    {
+                        unset($data_user_sites['id']);
+                        if(!($this->insert($destination_tables['setup_users_other_sites'],$data_user_sites)))
+                        {
+                            $this->db->trans_complete();
+                            echo 'Failed';
+                            exit();
+                        }
+                    }
+                }
+
+                if(isset($user_companies[$user['id']]))
+                {
+                    $data_user_companies_array=$user_companies[$user['id']];
+
+                    foreach($data_user_companies_array  as $data_user_companies)
+                    {
+                        unset($data_user_companies['id']);
+                        if(!($this->insert($destination_tables['setup_users_company'],$data_user_companies)))
+                        {
+                            $this->db->trans_complete();
+                            echo 'Failed';
+                            exit();
+                        }
+                    }
                 }
             }
         }
