@@ -447,7 +447,6 @@ $CI=& get_instance();
         </div>
     </div>
 </div>
-</div>
 <div style="" class="row show-grid">
     <div class="col-xs-4">
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ORDER');?><span style="color:#FF0000">*</span></label>
@@ -455,8 +454,6 @@ $CI=& get_instance();
     <div class="col-sm-4 col-xs-8">
         <label class="control-label"><?php echo $user_info['ordering'];?></label>
     </div>
-</div>
-
 </div>
 
 <div class="clearfix"></div>
