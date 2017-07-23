@@ -106,6 +106,8 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 <script type="text/javascript">
     jQuery(document).ready(function()
     {
+        system_preset({controller:'<?php echo $CI->router->class; ?>'});
+
         $(document).off("click", ".task_action_all");
         $(document).off("click", ".task_header_all");
         $(document).on("click",'.task_action_all',function()
