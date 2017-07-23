@@ -159,6 +159,8 @@ $controller_folder->close();
 <script>
     jQuery(document).ready(function()
     {
+        system_preset({controller:'<?php echo $CI->router->class; ?>'});
+
         var availableTags=<?php echo json_encode($array); ?>;
         $('#controller').autocomplete({source:availableTags});
     });
