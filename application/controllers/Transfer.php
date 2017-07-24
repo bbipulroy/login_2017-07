@@ -41,11 +41,11 @@ class Transfer extends CI_Controller {
     public function users()
     {
         $source_tables=array(
-            'setup_user'=>'arm_login.setup_user',
-            'setup_user_info'=>'arm_login.setup_user_info',
-            'setup_user_area'=>'arm_ems.ems_system_assigned_area',
-            'setup_users_other_sites'=>'arm_login.setup_users_other_sites',
-            'setup_users_company'=>'arm_login.login_setup_users_company'
+            'setup_user'=>'arm_demo_login.setup_user',
+            'setup_user_info'=>'arm_demo_login.setup_user_info',
+            'setup_user_area'=>'arm_demo_ems.ems_system_assigned_area',
+            'setup_users_other_sites'=>'arm_demo_login.setup_users_other_sites',
+            'setup_users_company'=>'arm_demo_login.login_setup_users_company'
         );
         $destination_tables=array(
             'setup_user'=>$this->config->item('table_login_setup_user'),
@@ -90,7 +90,7 @@ class Transfer extends CI_Controller {
         $results=array();
 
         $this->db->trans_start();  //DB Transaction Handle START
-        
+
         foreach($users as $user)
         {
             if(!($this->insert($destination_tables['setup_user'],$user)))
@@ -616,7 +616,7 @@ class Transfer extends CI_Controller {
     }
     public function customers()
     {
-        $results=Query_helper::get_info('arm_ems.ems_csetup_customers','*',array());
+        $results=Query_helper::get_info('arm_demo_ems.ems_csetup_customers','*',array());
         $this->db->trans_start();  //DB Transaction Handle START
         foreach($results as $result)
         {
@@ -652,13 +652,20 @@ class Transfer extends CI_Controller {
                 {
                     $data['type']=null;
                 }
-                if($result['incharge']=='ARM')
+                if(isset($result['incharge']))
                 {
-                    $data['incharge']=1;
-                }
-                else if($result['incharge']=='Distributor')
-                {
-                    $data['incharge']=2;
+                    if($result['incharge']=='ARM')
+                    {
+                        $data['incharge']=1;
+                    }
+                    else if($result['incharge']=='Distributor')
+                    {
+                        $data['incharge']=2;
+                    }
+                    else
+                    {
+                        $data['incharge']=null;
+                    }
                 }
                 else
                 {
@@ -784,7 +791,7 @@ class Transfer extends CI_Controller {
 
     public function variety()
     {
-        $results=Query_helper::get_info('arm_ems.ems_varieties','*',array());  // source table
+        $results=Query_helper::get_info('arm_demo_ems.ems_varieties','*',array());  // source table
         $this->db->trans_start();  //DB Transaction Handle START
         foreach($results as $result)
         {
