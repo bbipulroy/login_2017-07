@@ -1,21 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Transfer extends CI_Controller {
-    /**
-     * Index Page for this controller.
-     *
-     * Maps to the following URL
-     * 		http://example.com/index.php/welcome
-     *	- or -
-     * 		http://example.com/index.php/welcome/index
-     *	- or -
-     * Since this controller is set as the default controller in
-     * config/routes.php, it's displayed at http://example.com/
-     *
-     * So any other public methods not prefixed with an underscore will
-     * map to /index.php/welcome/<method_name>
-     * @see https://codeigniter.com/user_guide/general/urls.html
-     */
+class Transfer extends CI_Controller
+{
     public function index()
     {
         /*$this->load->dbforge();
@@ -204,7 +190,6 @@ class Transfer extends CI_Controller {
             else
             {
                 $data=array();
-                $data['id']=$result['id'];
                 $data['customer_id']=$result['id'];
                 $data['name']=$result['name'];
                 if($result['type']=='Outlet')
@@ -334,14 +319,7 @@ class Transfer extends CI_Controller {
                 }
                 $data['date_created']=$result['date_created'];
                 $data['user_created']=$result['user_created'];
-                if(isset($result['date_updated']))
-                {
-                    $data['date_updated']=$result['date_updated'];
-                }
-                if(isset($result['user_updated']))
-                {
-                    $data['user_updated']=$result['user_updated'];
-                }
+
                 $this->db->insert($this->config->item('table_login_setup_variety_principals'),$data);   // destination table
             }
         }
