@@ -185,6 +185,8 @@ if(isset($assigned_area['user_id']))
 <script type="text/javascript">
     jQuery(document).ready(function()
     {
+        system_preset({controller:'<?php echo $CI->router->class; ?>'});
+        
         $(document).off('change','#division_id');
         $(document).off('change','#zone_id');
         $(document).off('change','#territory_id');

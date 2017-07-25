@@ -437,7 +437,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 
     jQuery(document).ready(function()
     {
-        system_resized_image_files=[];
+        system_preset({controller:'<?php echo $CI->router->class; ?>'});
 
         $(document).off('change','#office_id');
         $(document).off('change','#department_id');

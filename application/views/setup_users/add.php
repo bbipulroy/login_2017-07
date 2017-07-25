@@ -240,6 +240,8 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 <script type="text/javascript">
     jQuery(document).ready(function()
     {
+        system_preset({controller:'<?php echo $CI->router->class; ?>'});
+
         $(document).off('input','#employee_id');
 		$(document).off('input','#user_name');
 		$(document).off('change','#designation');

@@ -145,6 +145,8 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 <script type="text/javascript">
     $(document).ready(function ()
     {
+        system_preset({controller:'<?php echo $CI->router->class; ?>'});
+
         var url = "<?php echo base_url($CI->controller_url.'/index/get_items');?>";
 
         // prepare the data
