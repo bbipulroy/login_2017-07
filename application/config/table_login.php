@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+
 $config['table_login_setup_user'] = 'arm_login_2017_07.login_setup_user';
 $config['table_login_setup_user_info'] = 'arm_login_2017_07.login_setup_user_info';
 $config['table_login_setup_offices'] = 'arm_login_2017_07.login_setup_offices';
@@ -19,7 +20,7 @@ $config['table_login_setup_location_territories'] = 'arm_login_2017_07.login_ter
 $config['table_login_setup_location_districts'] = 'arm_login_2017_07.login_districts';
 $config['table_login_setup_location_upazillas'] = 'arm_login_2017_07.login_upazillas';
 $config['table_login_setup_location_unions'] = 'arm_login_2017_07.login_unions';
-$config['table_login_system_assigned_area'] = 'arm_login_2017_07.login_setup_user_area';
+$config['table_login_setup_user_area'] = 'arm_login_2017_07.login_setup_user_area';
 //crop classification
 $config['table_login_setup_classification_crops']='arm_login_2017_07.login_setup_classification_crops';
 $config['table_login_setup_classification_crop_types']='arm_login_2017_07.login_setup_classification_crop_types';

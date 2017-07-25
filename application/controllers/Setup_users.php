@@ -432,7 +432,7 @@ class Setup_users extends Root_Controller
                 $data['assigned_companies'][]=$row['company_id'];
             }
 
-            $this->db->from($this->config->item('table_login_system_assigned_area').' aa');
+            $this->db->from($this->config->item('table_login_setup_user_area').' aa');
             $this->db->select('aa.*');
             $this->db->select('union.name union_name');
             $this->db->select('u.name upazilla_name');
@@ -451,7 +451,7 @@ class Setup_users extends Root_Controller
             $data['assigned_area']=$this->db->get()->row_array();
             if($data['assigned_area'])
             {
-                $this->db->from($this->config->item('table_login_system_assigned_area').' aa');
+                $this->db->from($this->config->item('table_login_setup_user_area').' aa');
                 if($data['assigned_area']['division_id']>0)
                 {
                     $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = aa.division_id','INNER');
@@ -662,7 +662,7 @@ class Setup_users extends Root_Controller
                 $data_area['user_created'] = $user->user_id;
                 $data_area['date_created'] = $time;
                 $data_area['revision'] = 1;
-                Query_helper::add($this->config->item('table_login_system_assigned_area'),$data_area);
+                Query_helper::add($this->config->item('table_login_setup_user_area'),$data_area);
 
                 $companies=$this->input->post('company');
                 foreach($companies as $company)
@@ -940,7 +940,7 @@ class Setup_users extends Root_Controller
             }
             $data['title']="Assign (".$data['user_info']['name'].') to an Area';
 
-            $this->db->from($this->config->item('table_login_system_assigned_area').' aa');
+            $this->db->from($this->config->item('table_login_setup_user_area').' aa');
             $this->db->select('aa.*');
             $this->db->select('union.name union_name');
             $this->db->select('u.name upazilla_name');
@@ -959,7 +959,7 @@ class Setup_users extends Root_Controller
             $data['assigned_area']=$this->db->get()->row_array();
             if($data['assigned_area'])
             {
-                $this->db->from($this->config->item('table_login_system_assigned_area').' aa');
+                $this->db->from($this->config->item('table_login_setup_user_area').' aa');
                 if($data['assigned_area']['division_id']>0)
                 {
                     $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = aa.division_id','INNER');
@@ -1094,18 +1094,18 @@ class Setup_users extends Root_Controller
             $revision_history_data=array();
             $revision_history_data['date_updated']=$time;
             $revision_history_data['user_updated']=$user->user_id;
-            Query_helper::update($this->config->item('table_login_system_assigned_area'),$revision_history_data,array('revision=1','user_id='.$id));
+            Query_helper::update($this->config->item('table_login_setup_user_area'),$revision_history_data,array('revision=1','user_id='.$id));
 
             $this->db->where('user_id',$id);
             $this->db->set('revision', 'revision+1', FALSE);
-            $this->db->update($this->config->item('table_login_system_assigned_area'));
+            $this->db->update($this->config->item('table_login_setup_user_area'));
 
             $data=$this->input->post('area');
             $data['user_id']=$id;
             $data['user_created'] = $user->user_id;
             $data['date_created'] = $time;
             $data['revision'] = 1;
-            Query_helper::add($this->config->item('table_login_system_assigned_area'),$data);
+            Query_helper::add($this->config->item('table_login_setup_user_area'),$data);
 
             $this->db->trans_complete();   //DB Transaction Handle END
             if ($this->db->trans_status() === TRUE)

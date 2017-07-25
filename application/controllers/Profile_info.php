@@ -79,7 +79,7 @@ class Profile_info extends Root_Controller
             $this->db->order_by('os.ordering');
             $data['assigned_sites']=$this->db->get()->result_array();
 
-            $this->db->from($this->config->item('table_login_system_assigned_area').' aa');
+            $this->db->from($this->config->item('table_login_setup_user_area').' aa');
             $this->db->select('aa.*');
             $this->db->select('union.name union_name');
             $this->db->select('u.name upazilla_name');
@@ -98,7 +98,7 @@ class Profile_info extends Root_Controller
             $data['assigned_area']=$this->db->get()->row_array();
             if($data['assigned_area'])
             {
-                $this->db->from($this->config->item('table_login_system_assigned_area').' aa');
+                $this->db->from($this->config->item('table_login_setup_user_area').' aa');
                 if($data['assigned_area']['division_id']>0)
                 {
                     $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = aa.division_id','INNER');

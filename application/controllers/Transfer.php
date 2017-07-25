@@ -50,7 +50,7 @@ class Transfer extends CI_Controller {
         $destination_tables=array(
             'setup_user'=>$this->config->item('table_login_setup_user'),
             'setup_user_info'=>$this->config->item('table_login_setup_user_info'),
-            'setup_user_area'=>$this->config->item('table_login_system_assigned_area'),
+            'setup_user_area'=>$this->config->item('table_login_setup_user_area'),
             'setup_users_other_sites'=>$this->config->item('table_login_setup_users_other_sites'),
             'setup_users_company'=>$this->config->item('table_login_setup_users_company')
         );
