@@ -457,3 +457,9 @@ $CI=& get_instance();
 </div>
 
 <div class="clearfix"></div>
+<script type="text/javascript">
+    jQuery(document).ready(function()
+    {
+        system_preset({controller:'<?php echo $CI->router->class; ?>'});
+    });
+</script>
