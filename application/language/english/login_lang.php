@@ -24,6 +24,7 @@ $lang['ACTION_DOWNLOAD'] = 'Download';
 $lang['MSG_ROLE_ASSIGN_SUCCESS'] = 'Role Assign Successful.';
 $lang['ACTION_LOAD_MORE'] = 'Load More';
 $lang['ACTION_DOCUMENT'] = 'Documents';
+$lang['ACTION_ASSIGN_GROUP_ROLE'] = 'Assign Group Role';
 
 
 //****MODULE TASK//

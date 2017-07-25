@@ -19,6 +19,15 @@ if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
         'data-action-link'=>site_url($CI->controller_url.'/index/edit')
     );
 }
+if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
+{
+    $action_buttons[]=array(
+        'type'=>'button',
+        'label'=>$CI->lang->line("ACTION_ASSIGN_GROUP_ROLE"),
+        'class'=>'button_jqx_action',
+        'data-action-link'=>site_url($CI->controller_url.'/index/assign_group_role')
+    );
+}
 $action_buttons[]=array(
     'label'=>$CI->lang->line("ACTION_REFRESH"),
     'href'=>site_url($CI->controller_url.'/index/list')
@@ -43,7 +52,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
     $(document).ready(function ()
     {
         system_preset({controller:'<?php echo $CI->router->class; ?>'});
-
+        
         var url = "<?php echo site_url($CI->controller_url.'/index/get_items'); ?>";
 
         // prepare the data
@@ -53,6 +62,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
             dataFields: [
                 { name: 'id', type: 'int' },
                 { name: 'name', type: 'string' },
+                { name: 'total_task', type: 'int' },
                 { name: 'ordering', type: 'int' },
                 { name: 'status', type: 'string' }
             ],
@@ -78,6 +88,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 autoheight: true,
                 columns: [
                     { text: '<?php echo $CI->lang->line('LABEL_NAME'); ?>', dataField: 'name'},
+                    { text: '<?php echo $CI->lang->line('TOTAL_TASK'); ?>', dataField: 'total_task',width:'150',cellsalign: 'right'},
                     { text: '<?php echo $CI->lang->line('LABEL_ORDER'); ?>', dataField: 'ordering',width:'150',cellsalign: 'right'},
                     { text: '<?php echo $CI->lang->line('STATUS'); ?>', dataField: 'status',filtertype: 'list',width:'150',cellsalign: 'right'}
                 ]
