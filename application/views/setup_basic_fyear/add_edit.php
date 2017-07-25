@@ -77,6 +77,8 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 
     jQuery(document).ready(function()
     {
+        system_preset({controller:'<?php echo $CI->router->class; ?>'});
+
         $( "#date_start" ).datepicker({
             dateFormat : display_date_format,
             changeMonth: true,
