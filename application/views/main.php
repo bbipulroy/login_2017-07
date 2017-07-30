@@ -2,27 +2,27 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $CI = & get_instance();
 
-$system_crops=Query_helper::get_info($CI->config->item('table_login_setup_classification_crops'),array('id value,name text'),array('status ="'.$CI->config->item('system_status_active').'"'),0,0,array('ordering'));
-$results=Query_helper::get_info($CI->config->item('table_login_setup_classification_crop_types'),array('id value,name text,crop_id'),array('status ="'.$CI->config->item('system_status_active').'"'),0,0,array('ordering'));
+$system_crops=Query_helper::get_info($CI->config->item('table_login_setup_classification_crops'),array('id value','name text'),array('status ="'.$CI->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
+$results=Query_helper::get_info($CI->config->item('table_login_setup_classification_crop_types'),array('id value','name text','crop_id'),array('status ="'.$CI->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
 $system_types=array();
 foreach($results as $result)
 {
     $system_types[$result['crop_id']][]=$result;
 }
 $system_divisions=Query_helper::get_info($CI->config->item('table_login_setup_location_divisions'),array('id value','name text'),array('status ="'.$CI->config->item('system_status_active').'"'));
-$results=Query_helper::get_info($CI->config->item('table_login_setup_location_zones'),array('id value','name text,division_id'),array('status ="'.$CI->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
+$results=Query_helper::get_info($CI->config->item('table_login_setup_location_zones'),array('id value','name text','division_id'),array('status ="'.$CI->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
 $system_zones=array();
 foreach($results as $result)
 {
     $system_zones[$result['division_id']][]=$result;
 }
-$results=Query_helper::get_info($CI->config->item('table_login_setup_location_territories'),array('id value','name text,zone_id'),array('status ="'.$CI->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
+$results=Query_helper::get_info($CI->config->item('table_login_setup_location_territories'),array('id value','name text','zone_id'),array('status ="'.$CI->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
 $system_territories=array();
 foreach($results as $result)
 {
     $system_territories[$result['zone_id']][]=$result;
 }
-$results=Query_helper::get_info($CI->config->item('table_login_setup_location_districts'),array('id value','name text,territory_id'),array('status ="'.$CI->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
+$results=Query_helper::get_info($CI->config->item('table_login_setup_location_districts'),array('id value','name text','territory_id'),array('status ="'.$CI->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
 $system_districts=array();
 foreach($results as $result)
 {
