@@ -77,6 +77,24 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         </div>
         <div style="" class="row show-grid">
             <div class="col-xs-4">
+                <label for="user_type_id" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_USER_TYPE');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select id="user_type_id" name="user_info[user_type_id]" class="form-control">
+                    <option value=""><?php echo $CI->lang->line('SELECT'); ?></option>
+                    <?php
+                    foreach($user_types as $user_type)
+                    {
+                        ?>
+                        <option value="<?php echo $user_type['value']; ?>" <?php if($user_type['value']==$user_info['user_type_id']){echo 'selected';} ?>><?php echo $user_type['text']; ?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
                 <label for="email" class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EMAIL');?><span style="color:#FF0000">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">

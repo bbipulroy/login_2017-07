@@ -39,6 +39,12 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 <input type="text" name="new_username"  class="form-control" value="<?php echo $user_name;?>" >
             </div>
         </div>
+        <div style="font-size: 12px;margin-top: -10px;font-style: italic;" class="row show-grid">
+            <div class="col-xs-4"></div>
+            <div class="col-sm-4 col-xs-8">
+                Username only support small letters, numbers and _ . Username's first and last character will not be _
+            </div>
+        </div>
 
     </div>
 
