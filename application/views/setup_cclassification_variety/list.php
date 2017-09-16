@@ -38,9 +38,8 @@ if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
     $action_buttons[]=array(
         'type'=>'button',
         'label'=>'Pricing',
-        //'class'=>'button_jqx_action',
-        //'data-action-link'=>site_url($CI->controller_url.'/index/edit')
-        'onclick'=>"alert('This button is under construction.');"
+        'class'=>'button_jqx_action',
+        'data-action-link'=>site_url($CI->controller_url.'/index/pricing')
     );
 }
 if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))

@@ -59,6 +59,7 @@ $lang['MSG_SAVED_SUCCESS'] = 'Successfully Saved';
 $lang['MSG_SAVED_FAIL'] = 'Failed to Save!';
 $lang['MSG_INVALID_INPUT'] = 'Invalid data entry';
 
+$lang['LABEL_SL_NO']='SL#';
 $lang['LABEL_DATE']='Date';
 $lang['LABEL_DATE_CREATED']='Creation date';
 $lang['MSG_FILE_SIZE_ERROR']='File Size Error';
@@ -142,6 +143,9 @@ $lang['LABEL_HYBRID']='Hybrid';
 $lang['LABEL_DATE_RELEASE']='Release Date';
 $lang['LABEL_TRIAL_COMPLETED']='Number of Trials Completed';
 $lang['LABEL_PACK_NAME'] = 'Pack Size(gm)';
+$lang['LABEL_PRICE'] = 'Price';
+$lang['LABEL_PRICE_TRADE'] = 'Trade Price';
+$lang['LABEL_PRICE_NET'] = 'Net Price';
 
 
 //Basic Setup
