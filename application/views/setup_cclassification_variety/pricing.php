@@ -97,6 +97,26 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
             <label class="control-label"><?php echo $item['status'];?></label>
         </div>
     </div>
+    <div style="" class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PRICE_KG');?></label>
+        </div>
+        <div class="col-sm-4 col-xs-8">
+            <label class="control-label">
+                <?php
+                if($item['price_in_kg']==null)
+                {
+                    echo 'Not Assigned';
+                }
+                else
+                {
+                    echo $item['price_in_kg'];
+                }
+                ?>
+            </label>
+            <a href="<?php echo site_url($CI->controller_url.'/index/edit_price_in_kg/'.$item['id']); ?>" class="btn btn-primary btn-sm">Edit</a>
+        </div>
+    </div>
     <?php
         if(isset($CI->permissions['action6']) && ($CI->permissions['action6']==1))
         {

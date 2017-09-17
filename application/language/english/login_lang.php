@@ -146,6 +146,7 @@ $lang['LABEL_PACK_NAME'] = 'Pack Size(gm)';
 $lang['LABEL_PRICE'] = 'Price';
 $lang['LABEL_PRICE_TRADE'] = 'Trade Price';
 $lang['LABEL_PRICE_NET'] = 'Net Price';
+$lang['LABEL_PRICE_KG'] = 'Price in KG';
 
 
 //Basic Setup

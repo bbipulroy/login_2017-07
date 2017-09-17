@@ -56,6 +56,10 @@ class Setup_cclassification_variety extends Root_Controller
         {
             $this->system_edit_price($id,$id1);
         }
+        elseif($action=='edit_price_in_kg')
+        {
+            $this->system_edit_price_in_kg($id);
+        }
         elseif($action=="save")
         {
             $this->system_save();
@@ -67,6 +71,10 @@ class Setup_cclassification_variety extends Root_Controller
         elseif($action=="save_pack_size_price")
         {
             $this->system_save_pack_size_price();
+        }
+        elseif($action=="save_price_in_kg")
+        {
+            $this->system_save_price_in_kg();
         }
         else
         {
@@ -468,6 +476,51 @@ class Setup_cclassification_variety extends Root_Controller
             $this->json_return($ajax);
         }
     }
+    private function system_edit_price_in_kg($id)
+    {
+        if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
+        {
+            if($id>0)
+            {
+                $item_id=$id;
+            }
+            else
+            {
+                $item_id=$this->input->post('id');
+            }
+
+            $this->db->select('v.*');
+            $this->db->select('type.name crop_type_name,type.id crop_type_id');
+            $this->db->select('crop.name crop_name,crop.id crop_id');
+            $this->db->from($this->config->item('table_login_setup_classification_varieties').' v');
+            $this->db->join($this->config->item('table_login_setup_classification_crop_types').' type','type.id = v.crop_type_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_classification_crops').' crop','crop.id = type.crop_id','INNER');
+            $this->db->where('v.id',$item_id);
+            $data['item']=$this->db->get()->row_array();
+            if(!$data['item'])
+            {
+                $ajax['status']=false;
+                $ajax['system_message']='Invalid Variety.';
+                $this->json_return($ajax);
+            }
+
+            $data['title']='Edit Price in KG of Variety ('.$data['item']['name'].')';
+            $ajax['status']=true;
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/edit_price_in_kg",$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit_price_in_kg/'.$item_id);
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
 
     private function system_save()
     {
@@ -668,6 +721,16 @@ class Setup_cclassification_variety extends Root_Controller
 
                 $this->db->update($this->config->item('table_login_setup_classification_variety_price'));
             }
+            else
+            {
+                $result=Query_helper::get_info($this->config->item('table_login_setup_classification_variety_price'),'*',array('variety_id='.$data['variety_id'],'pack_size_id='.$data['pack_size_id'],'revision=1'),1);
+                if($result)
+                {
+                    $ajax['status']=false;
+                    $ajax['system_message']="Before this time someone set price to this Variety's Pack Size.";
+                    $this->json_return($ajax);
+                }
+            }
             $data['user_created']=$user->user_id;
             $data['date_created']=$time;
             $data['revision']=1;
@@ -686,6 +749,53 @@ class Setup_cclassification_variety extends Root_Controller
                 {
                     $this->system_pricing($data['variety_id']);
                 }
+            }
+            else
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
+                $this->json_return($ajax);
+            }
+        }
+    }
+    private function system_save_price_in_kg()
+    {
+        $id = $this->input->post("id");
+        $user = User_helper::get_user();
+        $time=time();
+        if(!(isset($this->permissions['action2']) && ($this->permissions['action2']==1)))
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+        if(!$this->check_validation_price_in_kg())
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->message;
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $data=$this->input->post('item');
+
+            $this->db->trans_start();  //DB Transaction Handle START
+            if($id>0)
+            {
+                $this->db->where('id',$id);
+                $this->db->set('price_in_kg',$data['price_in_kg']);
+                $this->db->set('revision_price_in_kg','revision_price_in_kg+1',FALSE);
+                $this->db->set('user_updated',$user->user_id);
+                $this->db->set('date_updated',$time);
+
+                $this->db->update($this->config->item('table_login_setup_classification_varieties'));
+            }
+
+            $this->db->trans_complete();   //DB Transaction Handle END
+            if ($this->db->trans_status() === TRUE)
+            {
+                $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
+                $this->system_pricing($id);
             }
             else
             {
@@ -723,6 +833,17 @@ class Setup_cclassification_variety extends Root_Controller
         }
         $this->form_validation->set_rules('item[price]',$this->lang->line('LABEL_PRICE_TRADE'),'required');
         $this->form_validation->set_rules('item[price_net]',$this->lang->line('LABEL_PRICE_NET'),'required');
+        if($this->form_validation->run() == FALSE)
+        {
+            $this->message=validation_errors();
+            return false;
+        }
+        return true;
+    }
+    private function check_validation_price_in_kg()
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('item[price_in_kg]',$this->lang->line('LABEL_PRICE_KG'),'required');
         if($this->form_validation->run() == FALSE)
         {
             $this->message=validation_errors();
