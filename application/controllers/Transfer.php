@@ -264,73 +264,82 @@ class Transfer extends CI_Controller
 
     public function variety()
     {
-        $results=Query_helper::get_info('arm_demo_ems.ems_varieties','*',array());  // source table
-        $this->db->trans_start();  //DB Transaction Handle START
+        $source_tables=array(
+            'varieties'=>'arm_demo_ems.ems_varieties',
+            'varietiy_price_kg'=>'arm_demo_ems.ems_variety_price_kg'
+        );
+        $destination_tables=array(
+            'varieties'=>$this->config->item('table_login_setup_classification_varieties'),
+            'variety_principals'=>$this->config->item('table_login_setup_variety_principals')
+        );
+
+        $varieties_kg_price=array();
+        $results=Query_helper::get_info($source_tables['varietiy_price_kg'],'*',array());
         foreach($results as $result)
         {
-            $data=array();
-            $data['id']=$result['id'];
-            $data['name']=$result['name'];
-            $data['crop_type_id']=$result['crop_type_id'];
-            $data['whose']=$result['whose'];
-            $data['competitor_id']=$result['competitor_id'];
-            $data['stock_id']=$result['stock_id'];
+            $varieties_kg_price[$result['variety_id']]=$result['price_net'];
+        }
+
+        $results=Query_helper::get_info('arm_demo_ems.ems_varieties','*',array());
+
+        $this->db->trans_start();  //DB Transaction Handle START
+
+        foreach($results as $result)
+        {
+            $principal_id=$result['principal_id'];
+            $name_import=$result['name_import'];
+            unset($result['principal_id']);
+            unset($result['name_import']);
+            
             if($result['hybrid']=='F1 Hybrid')
             {
-                $data['hybrid']=1;
-            }else if($result['hybrid']=='OP')
-            {
-                $data['hybrid']=2;
+                $result['hybrid']=1;
             }
-            $data['description']=$result['description'];
-            $data['status']=$result['status'];
-            $data['ordering']=$result['ordering'];
-            $data['stock_id']=$result['stock_id'];
-            $data['date_created']=$result['date_created'];
-            $data['user_created']=$result['user_created'];
-            if(isset($result['date_updated']))
+            else if($result['hybrid']=='OP')
             {
-                $data['date_updated']=$result['date_updated'];
+                $result['hybrid']=2;
             }
-            if(isset($result['user_updated']))
-            {
-                $data['user_updated']=$result['user_updated'];
-            }
-            $this->db->insert($this->config->item('table_login_setup_classification_varieties'),$data);   // destination table
-            $result_id = $this->db->insert_id();
 
-            if(!$result_id)
+            if(isset($varieties_kg_price[$result['id']]))
+            {
+                $result['price_in_kg']=$varieties_kg_price[$result['id']];
+                $result['revision_price_in_kg']=1;
+            }
+
+            if(!($this->insert($destination_tables['varieties'],$result)))
             {
                 $this->db->trans_complete();
-                echo 'failed';
-                die();
+                echo 'Failed';
+                exit();
             }
             else
             {
-                $data=array();
-                $data['variety_id']=$result['id'];
-                if(isset($result['principal_id']))
+                if($principal_id>0)
                 {
-                    $data['principal_id']=$result['principal_id'];
+                    $data=array();
+                    $data['variety_id']=$result['id'];
+                    $data['principal_id']=$principal_id;
+                    $data['name_import']=$name_import;
+                    $data['date_created']=$result['date_created'];
+                    $data['user_created']=$result['user_created'];
+                    if(!($this->insert($destination_tables['variety_principals'],$data)))
+                    {
+                        $this->db->trans_complete();
+                        echo 'Failed';
+                        exit();
+                    }
                 }
-                if(isset($result['name_import']))
-                {
-                    $data['name_import']=$result['name_import'];
-                }
-                $data['date_created']=$result['date_created'];
-                $data['user_created']=$result['user_created'];
-
-                $this->db->insert($this->config->item('table_login_setup_variety_principals'),$data);   // destination table
             }
         }
+
         $this->db->trans_complete();   //DB Transaction Handle END
         if ($this->db->trans_status() === TRUE)
         {
-            echo 'success';
+            echo 'Success';
         }
         else
         {
-            echo 'failed';
+            echo 'Failed';
         }
     }
 }
