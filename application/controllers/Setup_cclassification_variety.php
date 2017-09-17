@@ -714,11 +714,13 @@ class Setup_cclassification_variety extends Root_Controller
                 $this->db->where('variety_id',$data['variety_id']);
                 $this->db->where('pack_size_id',$id);
                 $this->db->where('revision',1);
-
-                $this->db->set('revision','revision+1',FALSE);
                 $this->db->set('user_updated',$user->user_id);
                 $this->db->set('date_updated',$time);
+                $this->db->update($this->config->item('table_login_setup_classification_variety_price'));
 
+                $this->db->where('variety_id',$data['variety_id']);
+                $this->db->where('pack_size_id',$id);
+                $this->db->set('revision','revision+1',FALSE);
                 $this->db->update($this->config->item('table_login_setup_classification_variety_price'));
             }
             else
