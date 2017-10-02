@@ -27,7 +27,7 @@ $sites=User_helper::get_accessed_sites();
     ?>
     <div class="col-sm-12 text-center">
         <h1><?php echo $user->name;?></h1>
-        <img style="max-width: 250px;" src="<?php echo $user->picture_profile; ?>">
+        <img style="max-width: 250px;" src="<?php echo $CI->config->item('system_base_url_profile_picture').$user->image_location; ?>" alt="<?php echo $user->name; ?>">
     </div>
     <?php
         if(sizeof($sites)>0)

@@ -36,7 +36,7 @@ class Profile_picture extends Root_Controller
             $user=User_helper::get_user();
             $user_id=$user->user_id;
 
-            $data['user_info']=Query_helper::get_info($this->config->item('table_login_setup_user_info'),array('picture_profile'),array('user_id ='.$user_id,'revision =1'),1);
+            $data['user_info']=Query_helper::get_info($this->config->item('table_login_setup_user_info'),array('image_location','name'),array('user_id ='.$user_id,'revision =1'),1);
             $data['title']='Change Profile Picture';
 
             $ajax['status']=true;
@@ -90,7 +90,8 @@ class Profile_picture extends Root_Controller
                     $data_user_info['user_created'] = $user->user_id;
                     $data_user_info['date_created'] = $time;
                     $data_user_info['revision'] = 1;
-                    $data_user_info['picture_profile']=base_url("images/profiles/".$user_id.'/'.$uploaded_image['image_profile']['info']['file_name']);
+                    $data_user_info['image_name']=$uploaded_image['image_profile']['info']['file_name'];
+                    $data_user_info['image_location']="images/profiles/".$user_id.'/'.$uploaded_image['image_profile']['info']['file_name'];
 
                     $revision_history_data=array();
                     $revision_history_data['date_updated']=$time;

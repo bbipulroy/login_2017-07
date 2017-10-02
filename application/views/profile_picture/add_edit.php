@@ -35,7 +35,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 <input type="file" class="browse_button" data-preview-container="#image_profile" name="image_profile">
             </div>
             <div class="col-xs-4" id="image_profile">
-                <img style="max-width: 250px;" src="<?php echo $user_info['picture_profile']; ?>">
+                <img style="max-width: 250px;" src="<?php echo $CI->config->item('system_base_url_profile_picture').$user_info['image_location']; ?>" alt="<?php echo $user_info['name']; ?>">
             </div>
         </div>
 

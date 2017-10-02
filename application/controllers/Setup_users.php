@@ -736,7 +736,8 @@ class Setup_users extends Root_Controller
                     $ajax['system_message']=$uploaded_image['image_profile']['message'];
                     $this->json_return($ajax);
                 }
-                $data_user_info['picture_profile']=base_url('images/profiles/'.$id.'/'.$uploaded_image['image_profile']['info']['file_name']);
+                $data_user_info['image_name']=$uploaded_image['image_profile']['info']['file_name'];
+                $data_user_info['image_location']='images/profiles/'.$id.'/'.$uploaded_image['image_profile']['info']['file_name'];
             }
         }
 
