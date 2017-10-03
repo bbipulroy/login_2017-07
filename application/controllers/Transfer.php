@@ -92,6 +92,12 @@ class Transfer extends CI_Controller
                 {
                     $data_user_info=$user_infos[$user['id']];
                     unset($data_user_info['id']);
+                    if(isset($data_user_info['picture_profile']))
+                    {
+                        $data_user_info['image_name']=basename($data_user_info['picture_profile']);
+                        $data_user_info['image_location']=str_replace('http://50.116.76.180/login/','',$data_user_info['picture_profile']);
+                        unset($data_user_info['picture_profile']);
+                    }
                 }
                 else
                 {
