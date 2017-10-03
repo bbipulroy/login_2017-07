@@ -135,7 +135,8 @@ class Setup_csetup_customer extends Root_Controller {
                 'phone' => '',
                 'nid' => '',
                 'tin' => '',
-                'picture_profile' => '',
+                'image_name' => '',
+                'image_location' => '',
                 'opening_date' => System_helper::display_date(time()),
                 'closing_date' => '',
                 'email' => '',
@@ -298,6 +299,38 @@ class Setup_csetup_customer extends Root_Controller {
                 $data_customer['user_updated'] = $user->user_id;
                 $data_customer['date_updated'] = $time;
                 Query_helper::update($this->config->item('table_login_csetup_customer'),$data_customer,array("id = ".$id));
+
+                $revision_history_data=array();
+                $revision_history_data['date_updated']=$time;
+                $revision_history_data['user_updated']=$user->user_id;
+                Query_helper::update($this->config->item('table_login_csetup_cus_info'),$revision_history_data,array('revision=1','customer_id='.$id));
+
+                $this->db->where('customer_id',$id);
+                $this->db->set('revision', 'revision+1', FALSE);
+                $this->db->update($this->config->item('table_login_csetup_cus_info'));
+
+                $data_customer_info['customer_id']=$id;
+                $data_customer_info['revision']=1;
+                $data_customer_info['user_created'] = $user->user_id;
+                $data_customer_info['date_created'] = $time;
+                $dir=(FCPATH).'images/customer_profiles/'.$id;
+                if(!is_dir($dir))
+                {
+                    mkdir($dir, 0777);
+                }
+                $uploaded_image = System_helper::upload_file('images/customer_profiles/'.$id);
+                if(array_key_exists('image_profile',$uploaded_image))
+                {
+                    if(!$uploaded_image['image_profile']['status'])
+                    {
+                        $ajax['status']=false;
+                        $ajax['system_message']=$uploaded_image['image_profile']['message'];
+                        $this->json_return($ajax);
+                    }
+                    $data_customer_info['image_name']=$uploaded_image['image_profile']['info']['file_name'];
+                    $data_customer_info['image_location']='images/customer_profiles/'.$id.'/'.$uploaded_image['image_profile']['info']['file_name'];
+                }
+                Query_helper::add($this->config->item('table_login_csetup_cus_info'),$data_customer_info);
             }
             else
             {
@@ -332,44 +365,11 @@ class Setup_csetup_customer extends Root_Controller {
                             $ajax['system_message']=$uploaded_image['image_profile']['message'];
                             $this->json_return($ajax);
                         }
-                        $data_customer_info['picture_profile']=base_url('images/customer_profiles/'.$customer_id.'/'.$uploaded_image['image_profile']['info']['file_name']);
+                        $data_customer_info['image_name']=$uploaded_image['image_profile']['info']['file_name'];
+                        $data_customer_info['image_location']='images/customer_profiles/'.$customer_id.'/'.$uploaded_image['image_profile']['info']['file_name'];
                     }
                     Query_helper::add($this->config->item('table_login_csetup_cus_info'),$data_customer_info);
                 }
-            }
-
-            if($id>0)
-            {
-                $revision_history_data=array();
-                $revision_history_data['date_updated']=$time;
-                $revision_history_data['user_updated']=$user->user_id;
-                Query_helper::update($this->config->item('table_login_csetup_cus_info'),$revision_history_data,array('revision=1','customer_id='.$id));
-
-                $this->db->where('customer_id',$id);
-                $this->db->set('revision', 'revision+1', FALSE);
-                $this->db->update($this->config->item('table_login_csetup_cus_info'));
-
-                $data_customer_info['customer_id']=$id;
-                $data_customer_info['revision']=1;
-                $data_customer_info['user_created'] = $user->user_id;
-                $data_customer_info['date_created'] = $time;
-                $dir=(FCPATH).'images/customer_profiles/'.$id;
-                if(!is_dir($dir))
-                {
-                    mkdir($dir, 0777);
-                }
-                $uploaded_image = System_helper::upload_file('images/customer_profiles/'.$id);
-                if(array_key_exists('image_profile',$uploaded_image))
-                {
-                    if(!$uploaded_image['image_profile']['status'])
-                    {
-                        $ajax['status']=false;
-                        $ajax['system_message']=$uploaded_image['image_profile']['message'];
-                        $this->json_return($ajax);
-                    }
-                    $data_customer_info['picture_profile']=base_url('images/customer_profiles/'.$id.'/'.$uploaded_image['image_profile']['info']['file_name']);
-                }
-                Query_helper::add($this->config->item('table_login_csetup_cus_info'),$data_customer_info);
             }
 
             $this->db->trans_complete();   //DB Transaction Handle END

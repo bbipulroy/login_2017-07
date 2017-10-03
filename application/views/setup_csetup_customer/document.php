@@ -45,12 +45,12 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                                         if($is_image)
                                         {
                                             ?>
-                                            <img style="max-width: 250px;" src="<?php echo $CI->config->item('system_image_base_url').$file['file_location']; ?>">
+                                            <img style="max-width: 250px;" src="<?php echo $CI->config->item('system_base_url_customer_document').$file['file_location']; ?>">
                                         <?php
                                         }
                                         else
                                         {
-                                            ?><a class="external" href="<?php echo $CI->config->item('system_image_base_url').$file['file_location'];?>" target="_blank"><?php echo $file['file_name'];?></a><?php
+                                            ?><a class="external" href="<?php echo $CI->config->item('system_base_url_customer_document').$file['file_location'];?>" target="_blank"><?php echo $file['file_name'];?></a><?php
                                         }
                                         ?>
                                     </div>

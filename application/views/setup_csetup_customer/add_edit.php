@@ -203,10 +203,18 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
     </div>
     <div class="col-sm-2">
         <input type="file" class="browse_button" data-preview-container="#image_profile" name="image_profile">
-        <input type="hidden" name="customer_info[picture_profile]" value="<?php echo $customer_info['picture_profile']; ?>">
     </div>
     <div class="col-xs-4" id="image_profile">
-        <img style="max-width: 250px;" src="<?php echo $customer_info['picture_profile']; ?>">
+        <?php
+        if($customer_info['image_location'])
+        {
+            ?>
+            <input type="hidden" name="customer_info[image_name]" value="<?php echo $customer_info['image_name']; ?>">
+            <input type="hidden" name="customer_info[image_location]" value="<?php echo $customer_info['image_location']; ?>">
+            <img style="max-width: 250px;" src="<?php echo $CI->config->item('system_base_url_customer_profile_picture').$customer_info['image_location']; ?>">
+            <?php
+        }
+        ?>
     </div>
     <div class="col-sm-2"></div>
 </div>

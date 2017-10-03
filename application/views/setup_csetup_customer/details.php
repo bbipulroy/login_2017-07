@@ -133,7 +133,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
     </div>
     <div class="col-xs-1"></div>
     <div class="col-xs-4" id="image_profile">
-        <img style="max-width: 250px;" src="<?php echo $customer_info['picture_profile']; ?>">
+        <img style="max-width: 250px;" src="<?php echo $CI->config->item('system_base_url_customer_profile_picture').$customer_info['image_location']; ?>">
     </div>
     <div class="col-xs-3"></div>
 </div>
@@ -256,12 +256,12 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                         if($is_image)
                         {
                             ?>
-                            <img style="max-width: 250px;" src="<?php echo $CI->config->item('system_image_base_url').$file['file_location']; ?>">
+                            <img style="max-width: 250px;" src="<?php echo $CI->config->item('system_base_url_customer_document').$file['file_location']; ?>">
                         <?php
                         }
                         else
                         {
-                            ?><a class="external" href="<?php echo $CI->config->item('system_image_base_url').$file['file_location'];?>" target="_tab"><?php echo $file['file_name'];?></a><?php
+                            ?><a class="external" href="<?php echo $CI->config->item('system_base_url_customer_document').$file['file_location'];?>" target="_tab"><?php echo $file['file_name'];?></a><?php
                         }
                         ?>
                     </div>

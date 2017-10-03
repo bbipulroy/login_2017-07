@@ -8,6 +8,8 @@ $config['system_status_inactive']='In-Active';
 $config['system_status_delete']='Deleted';
 
 $config['system_base_url_profile_picture']='http://50.116.76.180/login/';
+$config['system_base_url_customer_profile_picture']='http://localhost/login_2017_07/';
+$config['system_base_url_customer_document']='http://localhost/login_2017_07/';
 
 $config['USER_TYPE_EMPLOYEE']=1;
 
@@ -16,5 +18,3 @@ $config['system_status_done']='Done';
 
 
 $config['system_save']='save';
-
-$config['num_year_prediction']=0;
