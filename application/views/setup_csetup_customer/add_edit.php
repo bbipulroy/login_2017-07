@@ -206,6 +206,7 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
     </div>
     <div class="col-xs-4" id="image_profile">
         <?php
+        //new customer create time
         if($customer_info['image_location'])
         {
             ?>

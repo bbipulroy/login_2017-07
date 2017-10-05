@@ -607,7 +607,7 @@ class Setup_csetup_customer extends Root_Controller {
                 $data['file_name']=$uploaded_files['file_'.$index]['info']['file_name'];
                 $data['file_type']=$uploaded_files['file_'.$index]['info']['file_type'];
             }
-            else
+            elseif(isset($files['file_'.$index]))
             {
                 $data['file_location']=$file_folder.'/'.$files['file_'.$index];
                 $data['file_name']=$files['file_'.$index];
