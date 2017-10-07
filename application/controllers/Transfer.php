@@ -308,8 +308,8 @@ class Transfer extends CI_Controller
 
             if(isset($varieties_kg_price[$result['id']]))
             {
-                $result['price_in_kg']=$varieties_kg_price[$result['id']];
-                $result['revision_price_in_kg']=1;
+                $result['price_kg']=$varieties_kg_price[$result['id']];
+                $result['revision_price_kg']=1;
             }
 
             if(!($this->insert($destination_tables['varieties'],$result)))
