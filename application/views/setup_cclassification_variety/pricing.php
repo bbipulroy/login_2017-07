@@ -104,17 +104,17 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         <div class="col-sm-4 col-xs-8">
             <label class="control-label">
                 <?php
-                if($item['price_in_kg']==null)
+                if($item['price_kg']==null)
                 {
                     echo 'Not Assigned';
                 }
                 else
                 {
-                    echo $item['price_in_kg'];
+                    echo $item['price_kg'];
                 }
                 ?>
             </label>
-            <a style="line-height: 12px;" href="<?php echo site_url($CI->controller_url.'/index/edit_price_in_kg/'.$item['id']); ?>" class="btn btn-primary btn-sm">Edit</a>
+            <a style="line-height: 12px;" href="<?php echo site_url($CI->controller_url.'/index/edit_price_kg/'.$item['id']); ?>" class="btn btn-primary btn-sm">Edit</a>
         </div>
     </div>
     <?php

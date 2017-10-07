@@ -56,9 +56,9 @@ class Setup_cclassification_variety extends Root_Controller
         {
             $this->system_edit_price($id,$id1);
         }
-        elseif($action=='edit_price_in_kg')
+        elseif($action=='edit_price_kg')
         {
-            $this->system_edit_price_in_kg($id);
+            $this->system_edit_price_kg($id);
         }
         elseif($action=="save")
         {
@@ -72,9 +72,9 @@ class Setup_cclassification_variety extends Root_Controller
         {
             $this->system_save_pack_size_price();
         }
-        elseif($action=="save_price_in_kg")
+        elseif($action=="save_price_kg")
         {
-            $this->system_save_price_in_kg();
+            $this->system_save_price_kg();
         }
         else
         {
@@ -476,7 +476,7 @@ class Setup_cclassification_variety extends Root_Controller
             $this->json_return($ajax);
         }
     }
-    private function system_edit_price_in_kg($id)
+    private function system_edit_price_kg($id)
     {
         if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
         {
@@ -506,12 +506,12 @@ class Setup_cclassification_variety extends Root_Controller
 
             $data['title']='Edit Price in KG of Variety ('.$data['item']['name'].')';
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/edit_price_in_kg",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/edit_price_kg",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
             }
-            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit_price_in_kg/'.$item_id);
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit_price_kg/'.$item_id);
             $this->json_return($ajax);
         }
         else
@@ -760,7 +760,7 @@ class Setup_cclassification_variety extends Root_Controller
             }
         }
     }
-    private function system_save_price_in_kg()
+    private function system_save_price_kg()
     {
         $id = $this->input->post("id");
         $user = User_helper::get_user();
@@ -771,7 +771,7 @@ class Setup_cclassification_variety extends Root_Controller
             $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
             $this->json_return($ajax);
         }
-        if(!$this->check_validation_price_in_kg())
+        if(!$this->check_validation_price_kg())
         {
             $ajax['status']=false;
             $ajax['system_message']=$this->message;
@@ -785,8 +785,8 @@ class Setup_cclassification_variety extends Root_Controller
             if($id>0)
             {
                 $this->db->where('id',$id);
-                $this->db->set('price_in_kg',$data['price_in_kg']);
-                $this->db->set('revision_price_in_kg','revision_price_in_kg+1',FALSE);
+                $this->db->set('price_kg',$data['price_kg']);
+                $this->db->set('revision_price_kg','revision_price_kg+1',FALSE);
                 $this->db->set('user_updated',$user->user_id);
                 $this->db->set('date_updated',$time);
 
@@ -842,10 +842,10 @@ class Setup_cclassification_variety extends Root_Controller
         }
         return true;
     }
-    private function check_validation_price_in_kg()
+    private function check_validation_price_kg()
     {
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('item[price_in_kg]',$this->lang->line('LABEL_PRICE_KG'),'required');
+        $this->form_validation->set_rules('item[price_kg]',$this->lang->line('LABEL_PRICE_KG'),'required');
         if($this->form_validation->run() == FALSE)
         {
             $this->message=validation_errors();
