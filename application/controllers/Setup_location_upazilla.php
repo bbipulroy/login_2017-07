@@ -31,9 +31,25 @@ class Setup_location_upazilla extends Root_Controller
         {
             $this->system_edit($id);
         }
+        elseif($action=="search_crop_type_acres")
+        {
+            $this->system_search_crop_type_acres($id);
+        }
+        elseif($action=="list_crop_type_acres")
+        {
+            $this->system_list_crop_type_acres($id);
+        }
+        elseif($action=='get_crop_type_acres')
+        {
+            $this->system_get_edit_crop_type_acres();
+        }
         elseif($action=="save")
         {
             $this->system_save();
+        }
+        elseif($action=="save_crop_type_acres")
+        {
+            $this->system_save_crop_type_acres();
         }
         else
         {
@@ -164,6 +180,97 @@ class Setup_location_upazilla extends Root_Controller
         }
     }
 
+    private function system_search_crop_type_acres($id)
+    {
+        if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
+        {
+            if($id>0)
+            {
+                $item_id=$id;
+            }
+            else
+            {
+                $item_id=$this->input->post('id');
+            }
+            $data['item']=Query_helper::get_info($this->config->item('table_login_setup_location_upazillas'),'*',array('id ='.$item_id),1);
+            if(!$data['item'])
+            {
+                $ajax['status']=false;
+                $ajax['system_message']='Invalid Upazilla ID';
+                $this->json_return($ajax);
+            }
+
+            $data['title']='Crop Type Acres Search for Upazilla ('.$data['item']['name'].')';
+            $ajax['status']=true;
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/search_crop_type_acres",$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/search_crop_type_acres/'.$item_id);
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
+    private function system_list_crop_type_acres()
+    {
+        $reports=$this->input->post('report');
+
+        $data['options']=$reports;
+        if(!($reports['crop_id']>0))
+        {
+            $ajax['status']=false;
+            $ajax['system_message']='Please Select a Crop';
+            $this->json_return($ajax);
+        }
+
+        $crop_info=Query_helper::get_info($this->config->item('table_login_setup_classification_crops'),'*',array('id ='.$reports['crop_id']),1);
+        if(!$crop_info)
+        {
+            $ajax['status']=false;
+            $ajax['system_message']='Invalid Crop ID';
+            $this->json_return($ajax);
+        }
+
+        $data['title']='Crop Type List of ('.$crop_info['name'].')';
+
+        $ajax['status']=true;
+        $ajax['system_content'][]=array("id"=>"#system_report_container","html"=>$this->load->view($this->controller_url."/list_crop_type_acres",$data,true));
+        if($this->message)
+        {
+            $ajax['system_message']=$this->message;
+        }
+        $this->json_return($ajax);
+    }
+    private function system_get_edit_crop_type_acres()
+    {
+        $upazilla_id=$this->input->post('upazilla_id');
+        $crop_id=$this->input->post('crop_id');
+
+        $this->db->select('crop_type.id,crop_type.name');
+        $this->db->select('ct_acres.acres');
+        $this->db->from($this->config->item('table_login_setup_classification_crop_types').' crop_type');
+        $this->db->join($this->config->item('table_login_setup_crop_type_acres_upazilla').' ct_acres','ct_acres.crop_type_id=crop_type.id AND ct_acres.upazilla_id='.$upazilla_id,'LEFT');
+        $this->db->where('crop_type.crop_id',$crop_id);
+        $this->db->where('crop_type.status',$this->config->item('system_status_active'));
+        $this->db->order_by('crop_type.ordering','ASC');
+        
+        $items=$this->db->get()->result_array();
+        foreach($items as &$item)
+        {
+            if($item['acres']==0)
+            {
+                $item['acres']=0;
+            }
+        }
+        $this->json_return($items);
+    }
+
     private function system_save()
     {
         $id = $this->input->post("id");
@@ -230,6 +337,90 @@ class Setup_location_upazilla extends Root_Controller
                 $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
                 $this->json_return($ajax);
             }
+        }
+    }
+
+    private function system_save_crop_type_acres()
+    {
+        $upazilla_id = $this->input->post("upazilla_id");
+        $crop_id = $this->input->post("crop_id");
+        $user = User_helper::get_user();
+        $time=time();
+
+        if(!(isset($this->permissions['action2'])&&($this->permissions['action2']==1)))
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+        if($upazilla_id<1)
+        {
+            $ajax['status']=false;
+            $ajax['system_message']='Invalid try';
+            $this->json_return($ajax);
+        }
+        $items=$this->input->post('items');
+
+        $this->db->select('ct_acres.*');
+        $this->db->from($this->config->item('table_login_setup_crop_type_acres_upazilla').' ct_acres');
+        $this->db->join($this->config->item('table_login_setup_classification_crop_types').' crop_type','crop_type.id=ct_acres.crop_type_id','INNER');
+        $this->db->where('crop_type.crop_id',$crop_id);
+        $this->db->where('ct_acres.upazilla_id',$upazilla_id);
+        $results=$this->db->get()->result_array();
+
+        $items_current=array();
+        foreach($results as $result)
+        {
+            $items_current[$result['crop_type_id']]=$result['acres'];
+        }
+
+        $data_add=array(
+            'upazilla_id'=>$upazilla_id,
+            'revision_acres'=>1,
+            'date_created'=>$time,
+            'user_created'=>$user->user_id
+        );
+        $this->db->trans_start();  //DB Transaction Handle START
+
+        foreach($items as $crop_type_id=>$acres)
+        {
+            if(isset($items_current[$crop_type_id]))
+            {
+                if($items_current[$crop_type_id]!=$acres)
+                {
+                    $this->db->set('acres',$acres);
+                    $this->db->set('revision_acres','revision_acres+1',false);
+                    $this->db->set('date_updated',$time);
+                    $this->db->set('user_updated',$user->user_id);
+
+                    $this->db->where('crop_type_id',$crop_type_id);
+                    $this->db->where('upazilla_id',$upazilla_id);
+
+                    $this->db->update($this->config->item('table_login_setup_crop_type_acres_upazilla'));
+                }
+            }
+            else
+            {
+                if($acres>0)
+                {
+                    $data_add['crop_type_id']=$crop_type_id;
+                    $data_add['acres']=$acres;
+                    Query_helper::add($this->config->item('table_login_setup_crop_type_acres_upazilla'),$data_add);
+                }
+            }
+        }
+
+        $this->db->trans_complete();   //DB Transaction Handle END
+        if ($this->db->trans_status() === TRUE)
+        {
+            $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
+            $this->system_list();
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
+            $this->json_return($ajax);
         }
     }
 

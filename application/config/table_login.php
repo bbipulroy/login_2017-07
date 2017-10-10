@@ -22,6 +22,7 @@ $config['table_login_setup_location_territories'] = 'arm_login_2017_07.login_ter
 $config['table_login_setup_location_districts'] = 'arm_login_2017_07.login_districts';
 $config['table_login_setup_location_upazillas'] = 'arm_login_2017_07.login_upazillas';
 $config['table_login_setup_location_unions'] = 'arm_login_2017_07.login_unions';
+$config['table_login_setup_crop_type_acres_upazilla'] = 'arm_login_2017_07.login_setup_crop_type_acres_upazilla';
 
 //crop classification
 $config['table_login_setup_classification_crops']='arm_login_2017_07.login_setup_classification_crops';
