@@ -34,6 +34,10 @@ class Setup_csetup_customer extends Root_Controller {
         {
             $this->system_documents($id);
         }
+        elseif($action=="assign_upazilla")
+        {
+            $this->system_assign_upazilla($id);
+        }
         elseif($action=="details")
         {
             $this->system_details($id);
@@ -45,6 +49,10 @@ class Setup_csetup_customer extends Root_Controller {
         elseif($action=="save_document")
         {
             $this->system_document_save();
+        }
+        elseif($action=="save_assign_upazilla")
+        {
+            $this->system_save_assign_upazilla();
         }
         else
         {
@@ -549,6 +557,68 @@ class Setup_csetup_customer extends Root_Controller {
             $this->json_return($ajax);
         }
     }
+    private function system_assign_upazilla($id)
+    {
+        if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
+        {
+            if(($this->input->post('id')))
+            {
+                $customer_id=$this->input->post('id');
+            }
+            else
+            {
+                $customer_id=$id;
+            }
+            $data['customer_info']['id']=$customer_id;
+
+            $this->db->from($this->config->item('table_login_csetup_cus_info').' cus_info');
+            $this->db->select('cus_info.name,cus_info.type');
+            $this->db->select('u.id upazilla_id,u.name upazilla_name');
+            $this->db->join($this->config->item('table_login_setup_location_upazillas').' u','u.district_id = cus_info.district_id AND u.status ="' .$this->config->item('system_status_active').'"','INNER');
+            $this->db->join($this->config->item('table_login_csetup_cus_assign_upazillas').' cau','cau.upazilla_id=u.id AND cau.customer_id !='.$customer_id.' AND cau.revision=1','LEFT');
+            $this->db->where('cus_info.customer_id',$customer_id);
+            $this->db->where('cus_info.revision',1);
+            $this->db->where('cau.upazilla_id',NULL);
+            $results=$this->db->get()->result_array();
+//            print_r($this->db->last_query());exit;
+            foreach($results as $result)
+            {
+                if($result['type']!=1)
+                {
+                    $ajax['status']=false;
+                    $ajax['system_message']='Please select a showroom to assign upazilla.';
+                    $this->json_return($ajax);
+                    die();
+                }
+                $data['customer_info']['name']=$result['name'];
+                $data['upazillas'][]=$result;
+            }
+            $data['assigned_upazillas']=array();
+            $results=Query_helper::get_info($this->config->item('table_login_csetup_cus_assign_upazillas'),'*',array('customer_id ='.$customer_id,'revision=1'));
+            if($results)
+            {
+                foreach($results as $result)
+                {
+                    $data['assigned_upazillas'][]=$result['upazilla_id'];
+                }
+            }
+            $data['title']="Assign upazillas for ".$data['customer_info']['name'];
+            $ajax['status']=true;
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/assign_upazilla",$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/assign_upazilla/'.$customer_id);
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
     private function system_document_save()
     {
         $id = $this->input->post("id");
@@ -633,5 +703,65 @@ class Setup_csetup_customer extends Root_Controller {
             $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
             $this->json_return($ajax);
         }
+    }
+    private function system_save_assign_upazilla()
+    {
+        $customer_id = $this->input->post("id");
+        $user = User_helper::get_user();
+        if(!(isset($this->permissions['action2']) && ($this->permissions['action2']==1)))
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+            die();
+        }
+        if(!$this->check_validation_for_assigned_upazillas())
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->message;
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $time=time();
+            $this->db->trans_start();  //DB Transaction Handle START
+            $revision_history_data=array();
+            $revision_history_data['date_updated']=$time;
+            $revision_history_data['user_updated']=$user->user_id;
+            Query_helper::update($this->config->item('table_login_csetup_cus_assign_upazillas'),$revision_history_data,array('revision=1','customer_id='.$customer_id));
+            $this->db->where('customer_id',$customer_id);
+            $this->db->set('revision', 'revision+1', FALSE);
+            $this->db->update($this->config->item('table_login_csetup_cus_assign_upazillas'));
+            $upazillas=$this->input->post('upazillas');
+            if(is_array($upazillas))
+            {
+                foreach($upazillas as $upazilla)
+                {
+                    $data=array();
+                    $data['customer_id']=$customer_id;
+                    $data['upazilla_id']=$upazilla;
+                    $data['user_created'] = $user->user_id;
+                    $data['date_created'] = $time;
+                    $data['revision'] = 1;
+                    Query_helper::add($this->config->item('table_login_csetup_cus_assign_upazillas'),$data);
+                }
+            }
+            $this->db->trans_complete();   //DB Transaction Handle END
+            if ($this->db->trans_status() === TRUE)
+            {
+                $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
+                $this->system_list();
+            }
+            else
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
+                $this->json_return($ajax);
+            }
+        }
+    }
+    private function check_validation_for_assigned_upazillas()
+    {
+        return true;
     }
 }

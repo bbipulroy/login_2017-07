@@ -26,6 +26,15 @@ if(isset($CI->permissions['action2'])&&($CI->permissions['action2']==1))
         'data-action-link'=>site_url($CI->controller_url.'/index/document')
     );
 }
+if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
+{
+    $action_buttons[]=array(
+        'type'=>'button',
+        'label'=>'Assign Upazilla',
+        'class'=>'button_jqx_action',
+        'data-action-link'=>site_url($CI->controller_url.'/index/assign_upazilla')
+    );
+}
 $action_buttons[]=array(
     'type'=>'button',
     'label'=>$CI->lang->line('ACTION_DETAILS'),
