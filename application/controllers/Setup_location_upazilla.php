@@ -182,7 +182,7 @@ class Setup_location_upazilla extends Root_Controller
 
     private function system_search_crop_type_acres($id)
     {
-        if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
+        if(isset($this->permissions['action0']) && ($this->permissions['action0']==1))
         {
             if($id>0)
             {

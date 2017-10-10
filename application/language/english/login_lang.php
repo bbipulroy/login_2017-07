@@ -5,6 +5,7 @@ $lang['MSG_USERNAME_PASSWORD_INVALID'] = 'Username and Password did not match or
 $lang['MSG_LOGIN_SUCCESS'] = 'Successfully Logged In';
 $lang['MSG_LOGOUT_SUCCESS'] = 'Successfully Logged out';
 $lang['MSG_SITE_OFFLINE'] = 'Site is Currently Offline.Please contact with admin(01777709208).';
+$lang['MSG_CONFIRM_SAVE'] = 'Are You Sure to save?';
 
 //Action buttons
 $lang['ACTION_DASHBOARD'] = 'Dashboard';
