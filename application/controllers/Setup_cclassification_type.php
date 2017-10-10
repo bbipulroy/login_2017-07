@@ -67,13 +67,20 @@ class Setup_cclassification_type extends Root_Controller
     private function system_get_items()
     {
         $this->db->from($this->config->item('table_login_setup_classification_crop_types').' ct');
-        $this->db->select('ct.id,ct.name,ct.status,ct.ordering');
+        $this->db->select('ct.id,ct.name,ct.quantity_kg_acre,ct.status,ct.ordering');
         $this->db->select('crop.name crop_name');
         $this->db->join($this->config->item('table_login_setup_classification_crops').' crop','crop.id = ct.crop_id','INNER');
         $this->db->where('ct.status !=',$this->config->item('system_status_delete'));
         $this->db->order_by('crop.ordering','ASC');
         $this->db->order_by('ct.ordering','ASC');
         $items=$this->db->get()->result_array();
+        foreach($items as &$item)
+        {
+            if($item['quantity_kg_acre']===null)
+            {
+                $item['quantity_kg_acre']='Not Assigned';
+            }
+        }
         $this->json_return($items);
     }
 
@@ -88,6 +95,7 @@ class Setup_cclassification_type extends Root_Controller
                 'crop_id'=>0,
                 'name' => '',
                 'description' => '',
+                'quantity_kg_acre' => '',
                 'ordering' => 99,
                 'status' => $this->config->item('system_status_active')
             );
