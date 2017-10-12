@@ -47,7 +47,7 @@ class Setup_cclassification_hybrid extends Root_Controller
         {
             $data['title']="Hybrid";
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_cclassification_hybrid/list",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/list",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
@@ -85,7 +85,7 @@ class Setup_cclassification_hybrid extends Root_Controller
             $ajax['system_page_url']=site_url($this->controller_url."/index/add");
 
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_cclassification_hybrid/add_edit",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/add_edit",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
@@ -114,7 +114,7 @@ class Setup_cclassification_hybrid extends Root_Controller
             $data['hybrid']=Query_helper::get_info($this->config->item('table_login_setup_classification_hybrid'),'*',array('id ='.$hybrid_id),1);
             $data['title']="Edit Hybrid (".$data['hybrid']['name'].')';
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_cclassification_hybrid/add_edit",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/add_edit",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;

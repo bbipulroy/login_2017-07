@@ -48,7 +48,7 @@ class Setup_basic_competitor extends Root_Controller
         {
             $data['title']="Competitors";
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_basic_competitor/list",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/list",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
@@ -87,7 +87,7 @@ class Setup_basic_competitor extends Root_Controller
             $ajax['system_page_url']=site_url($this->controller_url."/index/add");
 
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_basic_competitor/add_edit",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/add_edit",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
@@ -117,7 +117,7 @@ class Setup_basic_competitor extends Root_Controller
             $data['competitor']=Query_helper::get_info($this->config->item('table_login_basic_setup_competitor'),'*',array('id ='.$competitor_id),1);
             $data['title']="Edit Competitor (".$data['competitor']['name'].')';
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_basic_competitor/add_edit",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/add_edit",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;

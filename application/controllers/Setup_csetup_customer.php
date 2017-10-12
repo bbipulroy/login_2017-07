@@ -65,7 +65,7 @@ class Setup_csetup_customer extends Root_Controller {
         {
             $data['title']="Customers";
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_csetup_customer/list",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/list",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
@@ -161,7 +161,7 @@ class Setup_csetup_customer extends Root_Controller {
 
             $ajax['system_page_url']=site_url($this->controller_url."/index/add");
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_csetup_customer/add_edit",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/add_edit",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
@@ -219,7 +219,7 @@ class Setup_csetup_customer extends Root_Controller {
             $data['districts']=Query_helper::get_info($this->config->item('table_login_setup_location_districts'),array('id value','name text'),array('territory_id ='.$data['customer_info']['territory_id']));
             $data['title']="Edit Customer (".$data['customer_info']['name'].')';
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_csetup_customer/add_edit",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/add_edit",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
@@ -496,7 +496,7 @@ class Setup_csetup_customer extends Root_Controller {
             $data['title']="Customer (".$data['customer_info']['name'].') Details';
             $data['document']='Customer Documents';
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_csetup_customer/details",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/details",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
@@ -542,7 +542,7 @@ class Setup_csetup_customer extends Root_Controller {
 
             $data['title']='Customer ('.$info[0]['name'].') Documents :';
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_csetup_customer/document",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/document",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;

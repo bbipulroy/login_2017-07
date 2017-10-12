@@ -48,7 +48,7 @@ class Setup_cclassification_vpack_size extends Root_Controller
         {
             $data['title']="Pack sizes";
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_cclassification_vpack_size/list",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/list",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
@@ -85,7 +85,7 @@ class Setup_cclassification_vpack_size extends Root_Controller
             );
             $ajax['system_page_url']=site_url($this->controller_url."/index/add");
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_cclassification_vpack_size/add_edit",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/add_edit",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
@@ -115,7 +115,7 @@ class Setup_cclassification_vpack_size extends Root_Controller
             $data['pack']=Query_helper::get_info($this->config->item('table_login_setup_classification_vpack_size'),'*',array('id ='.$pack_id),1);
             $data['title']="Edit Pack (".$data['pack']['name'].')';
             $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view("setup_cclassification_vpack_size/add_edit",$data,true));
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/add_edit",$data,true));
             if($this->message)
             {
                 $ajax['system_message']=$this->message;
