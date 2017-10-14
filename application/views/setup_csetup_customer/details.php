@@ -225,57 +225,90 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
         <label class="control-label"><?php echo $customer_info['remarks']; ?></label>
     </div>
 </div>
-
+<?php if($assign_upazillas){?>
 <div style="overflow-x: auto;" class="row show-grid">
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th style="min-width: 70px;">Serial No.</th>
-            <th style="min-width: 250px;"><?php echo $document;?></th>
-            <th style="max-width: 150px;">Remarks</th>
+            <th style="max-width: 300px;">Assigned Upazilla</th>
+        </tr>
+        <tr>
+            <th style="max-width: 100px;">Serial No.</th>
+            <th style="max-width: 200px;">Upazilla Name</th>
         </tr>
         </thead>
         <tbody>
         <?php
-        foreach($file_details as $index=>$file)
-        {
-            $type=substr($file['file_type'],0,5);
-            $is_image=false;
-            if($type=='image')
+            foreach($assign_upazillas as $index=>$upazillas)
             {
-                $is_image=true;
-            }
-            ?>
+        ?>
             <tr>
-                <td style="max-width: 70px;">
-                    <h4><?php echo $index+1;?></h4>
-                </td>
-                <td>
-                    <div class="preview_container_file" id="preview_container_file_<?php echo $index+1;?>">
-                        <?php
-                        if($is_image)
-                        {
-                            ?>
-                            <img style="max-width: 250px;" src="<?php echo $CI->config->item('system_base_url_customer_document').$file['file_location']; ?>">
-                        <?php
-                        }
-                        else
-                        {
-                            ?><a class="external" href="<?php echo $CI->config->item('system_base_url_customer_document').$file['file_location'];?>" target="_tab"><?php echo $file['file_name'];?></a><?php
-                        }
-                        ?>
-                    </div>
-                </td>
                 <td style="max-width: 100px;">
-                    <label class="control-label"><?php if(isset($file['file_remarks'])){echo $file['file_remarks'];} ?></label>
+                    <h5><?php echo $index+1;?></h5>
+                </td>
+                <td style="max-width: 200px;">
+                    <h5><?php echo $upazillas;?></h5>
                 </td>
             </tr>
-        <?php
-        }
-        ?>
+            <?php
+            }
+            ?>
 
         </tbody>
     </table>
+</div>
+<?php }?>
+
+<div style="overflow-x: auto;" class="row show-grid">
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th style="min-width: 70px;">Serial No.</th>
+        <th style="min-width: 250px;"><?php echo $document;?></th>
+        <th style="max-width: 150px;">Remarks</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    foreach($file_details as $index=>$file)
+    {
+        $type=substr($file['file_type'],0,5);
+        $is_image=false;
+        if($type=='image')
+        {
+            $is_image=true;
+        }
+        ?>
+        <tr>
+            <td style="max-width: 70px;">
+                <h4><?php echo $index+1;?></h4>
+            </td>
+            <td>
+                <div class="preview_container_file" id="preview_container_file_<?php echo $index+1;?>">
+                    <?php
+                    if($is_image)
+                    {
+                        ?>
+                        <img style="max-width: 250px;" src="<?php echo $CI->config->item('system_base_url_customer_document').$file['file_location']; ?>">
+                    <?php
+                    }
+                    else
+                    {
+                        ?><a class="external" href="<?php echo $CI->config->item('system_base_url_customer_document').$file['file_location'];?>" target="_tab"><?php echo $file['file_name'];?></a><?php
+                    }
+                    ?>
+                </div>
+            </td>
+            <td style="max-width: 100px;">
+                <label class="control-label"><?php if(isset($file['file_remarks'])){echo $file['file_remarks'];} ?></label>
+            </td>
+        </tr>
+    <?php
+    }
+    ?>
+
+    </tbody>
+</table>
 </div>
 
 </div>

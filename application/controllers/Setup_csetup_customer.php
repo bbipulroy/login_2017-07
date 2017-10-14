@@ -463,6 +463,7 @@ class Setup_csetup_customer extends Root_Controller {
             $this->db->select('zone.name zone_name');
             $this->db->select('division.name division_name');
             $this->db->select('cus_incharge.name incharge_name');
+            $this->db->select('GROUP_CONCAT(u.name) upazilla_names');
             $this->db->join($this->config->item('table_login_csetup_cus_info').' cus_info','cus_info.customer_id = cus.id','INNER');
             $this->db->join($this->config->item('table_login_csetup_cus_type').' cus_type','cus_type.id = cus_info.type','INNER');
             $this->db->join($this->config->item('table_login_setup_location_districts').' d','d.id = cus_info.district_id','INNER');
@@ -470,8 +471,11 @@ class Setup_csetup_customer extends Root_Controller {
             $this->db->join($this->config->item('table_login_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
             $this->db->join($this->config->item('table_login_setup_location_divisions').' division','division.id = zone.division_id','INNER');
             $this->db->join($this->config->item('table_login_csetup_incharge').' cus_incharge','cus_incharge.id = cus_info.incharge','LEFT');
+            $this->db->join($this->config->item('table_login_csetup_cus_assign_upazillas').' au','au.customer_id = cus.id AND au.revision=1','LEFT');
+            $this->db->join($this->config->item('table_login_setup_location_upazillas').' u','u.id = au.upazilla_id','LEFT');
             $this->db->where('cus.id',$customer_id);
             $this->db->where('cus_info.revision',1);
+            $this->db->group_by('cus.id');
             $data['customer_info']=$this->db->get()->row_array();
             if(!$data['customer_info'])
             {
@@ -482,6 +486,11 @@ class Setup_csetup_customer extends Root_Controller {
             }
             $data['customer']['id']=$data['customer_info']['customer_id'];
             $data['customer']['status']=$data['customer_info']['status'];
+            $data['assign_upazillas']=array();
+            if($data['customer_info']['upazilla_names'])
+            {
+                $data['assign_upazillas']=explode(",",$data['customer_info']['upazilla_names']);
+            }
 
             $data['file_details']=array();
 
