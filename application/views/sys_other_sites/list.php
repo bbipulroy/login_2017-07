@@ -109,6 +109,8 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
                 pagesize:50,
                 pagesizeoptions: ['20', '50', '100', '200','300','500'],
                 selectionmode: 'singlerow',
+                enablebrowserselection: true,
+                columnsreorder: true,
                 altrows: true,
                 autoheight: true,
                 columns: [
