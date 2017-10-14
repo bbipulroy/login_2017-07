@@ -74,13 +74,6 @@ class Setup_cclassification_type extends Root_Controller
         $this->db->order_by('crop.ordering','ASC');
         $this->db->order_by('ct.ordering','ASC');
         $items=$this->db->get()->result_array();
-        foreach($items as &$item)
-        {
-            if($item['quantity_kg_acre']===null)
-            {
-                $item['quantity_kg_acre']='Not Assigned';
-            }
-        }
         $this->json_return($items);
     }
 
