@@ -263,8 +263,11 @@ $CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 <table class="table table-bordered">
     <thead>
     <tr>
+        <th style="min-width: 150px;">Customer Documents</th>
+    </tr>
+    <tr>
         <th style="min-width: 70px;">Serial No.</th>
-        <th style="min-width: 250px;"><?php echo $document;?></th>
+        <th style="min-width: 250px;">Files</th>
         <th style="max-width: 150px;">Remarks</th>
     </tr>
     </thead>

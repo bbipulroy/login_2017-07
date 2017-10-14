@@ -503,7 +503,6 @@ class Setup_csetup_customer extends Root_Controller {
                 }
             }
             $data['title']="Customer (".$data['customer_info']['name'].') Details';
-            $data['document']='Customer Documents';
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/details",$data,true));
             if($this->message)
