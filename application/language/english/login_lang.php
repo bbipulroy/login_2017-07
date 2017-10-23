@@ -153,6 +153,7 @@ $lang['LABEL_PRICE_KG'] = 'Price KG';
 //Basic Setup
 $lang['LABEL_DATE_START'] = 'Starting Date';
 $lang['LABEL_DATE_END'] = 'End Date';
+$lang['LABEL_CAPACITY'] = 'Capacity (KG)';
 
 //customer
 $lang['LABEL_CUSTOMER_CODE'] = 'Customer Code';

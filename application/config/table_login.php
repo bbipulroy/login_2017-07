@@ -46,3 +46,4 @@ $config['table_login_csetup_cus_assign_upazillas'] = 'arm_login_2017_07.login_cs
 $config['table_login_basic_setup_fiscal_year'] = 'arm_login_2017_07.login_basic_setup_fiscal_year';
 $config['table_login_basic_setup_competitor'] = 'arm_login_2017_07.login_basic_setup_competitor';
 $config['table_login_basic_setup_principal'] = 'arm_login_2017_07.login_basic_setup_principal';
+$config['table_login_basic_setup_warehouse'] = 'arm_login_2017_07.login_basic_setup_warehouse';
