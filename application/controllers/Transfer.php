@@ -348,4 +348,45 @@ class Transfer extends CI_Controller
             echo 'Failed';
         }
     }
+    public function clean_user_images()
+    {
+        $folder=FCPATH.'images/profiles/';
+        $counter_deleted=0;
+        if(file_exists($folder))
+        {
+            $results=Query_helper::get_info($this->config->item('table_login_setup_user_info'),array('user_id','image_location'),array('revision=1'));
+            foreach($results as $result)
+            {
+                if(file_exists($folder.$result['user_id']))
+                {
+                    $folder_contents=scandir($folder.$result['user_id']);
+                    foreach($folder_contents as $content)
+                    {
+                        if($folder.$result['user_id'].'/'.$content=='.')
+                        {
+                            continue;
+                        }
+                        if($folder.$result['user_id'].'/'.$content=='..')
+                        {
+                            continue;
+                        }
+                        if(is_dir($folder.$result['user_id'].'/'.$content))
+                        {
+                            continue;
+                        }
+                        if($folder.$result['user_id'].'/'.$content!=FCPATH.$result['image_location'])
+                        {
+                            unlink($folder.$result['user_id'].'/'.$content);
+                            $counter_deleted++;
+                        }
+                    }
+                }
+            }
+            echo $counter_deleted.' files has been deleted.';
+        }
+        else
+        {
+            echo 'Expected folder is not exists.';
+        }
+    }
 }
