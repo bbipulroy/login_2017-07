@@ -148,6 +148,9 @@ $lang['LABEL_PRICE'] = 'Price';
 $lang['LABEL_PRICE_TRADE'] = 'Trade Price';
 $lang['LABEL_PRICE_NET'] = 'Net Price';
 $lang['LABEL_PRICE_KG'] = 'Price KG';
+$lang['LABEL_MASTERFOIL'] = 'MasterFoil';
+$lang['LABEL_FOIL'] = 'Foil';
+$lang['LABEL_STICKER'] = 'Sticker';
 
 
 //Basic Setup

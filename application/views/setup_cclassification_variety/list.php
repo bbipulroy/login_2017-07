@@ -46,6 +46,15 @@ if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
 {
     $action_buttons[]=array(
         'type'=>'button',
+        'label'=>'Packing Setup',
+        'class'=>'button_jqx_action',
+        'data-action-link'=>site_url($CI->controller_url.'/index/packing_setup')
+    );
+}
+if(isset($CI->permissions['action2']) && ($CI->permissions['action2']==1))
+{
+    $action_buttons[]=array(
+        'type'=>'button',
         'label'=>'Pricing in KG',
         //'class'=>'button_jqx_action',
         //'data-action-link'=>site_url($CI->controller_url.'/index/edit')

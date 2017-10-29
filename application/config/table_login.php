@@ -33,6 +33,7 @@ $config['table_login_setup_classification_variety_category'] = 'arm_login_2017_0
 $config['table_login_setup_classification_hybrid'] = 'arm_login_2017_07.login_setup_classification_hybrid';
 $config['table_login_setup_variety_principals'] = 'arm_login_2017_07.login_setup_variety_principals';
 $config['table_login_setup_classification_variety_price'] = 'arm_login_2017_07.login_setup_classification_variety_price';
+$config['table_login_setup_classification_vpack_item'] = 'arm_login_2017_07.login_setup_classification_variety_pack_item';
 
 //customer setup
 $config['table_login_csetup_cus_type'] = 'arm_login_2017_07.login_csetup_customer_type';

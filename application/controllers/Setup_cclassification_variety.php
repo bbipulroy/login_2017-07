@@ -44,17 +44,33 @@ class Setup_cclassification_variety extends Root_Controller
         {
             $this->system_pricing($id);
         }
+        elseif($action=="packing_setup")
+        {
+            $this->system_packing_setup($id);
+        }
         elseif($action=='get_pricing_items')
         {
             $this->system_get_pricing_items();
+        }
+        elseif($action=='get_pack_items')
+        {
+            $this->system_get_pack_items();
         }
         elseif($action=='assign_price')
         {
             $this->system_assign_price($id);
         }
+        elseif($action=='add_pack_item')
+        {
+            $this->system_add_pack_item($id);
+        }
         elseif($action=='edit_price')
         {
             $this->system_edit_price($id,$id1);
+        }
+        elseif($action=='edit_pack_item')
+        {
+            $this->system_edit_pack_item($id,$id1);
         }
         elseif($action=='edit_price_kg')
         {
@@ -71,6 +87,10 @@ class Setup_cclassification_variety extends Root_Controller
         elseif($action=="save_pack_size_price")
         {
             $this->system_save_pack_size_price();
+        }
+        elseif($action=="save_pack_item")
+        {
+            $this->system_save_pack_item();
         }
         elseif($action=="save_price_kg")
         {
@@ -344,6 +364,51 @@ class Setup_cclassification_variety extends Root_Controller
             $this->json_return($ajax);
         }
     }
+    private function system_packing_setup($id)
+    {
+        if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
+        {
+            if($id>0)
+            {
+                $item_id=$id;
+            }
+            else
+            {
+                $item_id=$this->input->post('id');
+            }
+
+            $this->db->select('v.*');
+            $this->db->select('type.name crop_type_name,type.id crop_type_id');
+            $this->db->select('crop.name crop_name,crop.id crop_id');
+            $this->db->from($this->config->item('table_login_setup_classification_varieties').' v');
+            $this->db->join($this->config->item('table_login_setup_classification_crop_types').' type','type.id = v.crop_type_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_classification_crops').' crop','crop.id = type.crop_id','INNER');
+            $this->db->where('v.id',$item_id);
+            $data['item']=$this->db->get()->row_array();
+            if(!$data['item'])
+            {
+                $ajax['status']=false;
+                $ajax['system_message']='Invalid Variety.';
+                $this->json_return($ajax);
+            }
+
+            $data['title']="Pack Item List of Variety (".$data['item']['name'].')';
+            $ajax['status']=true;
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/pack_item_list",$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/packing_setup/'.$item_id);
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
     private function system_get_pricing_items()
     {
         $id=$this->input->post('id');
@@ -355,6 +420,20 @@ class Setup_cclassification_variety extends Root_Controller
         $this->db->where('price.variety_id',$id);
         $this->db->where('price.revision',1);
         $this->db->order_by('price.pack_size_id','ASC');
+        $results=$this->db->get()->result_array();
+        $this->json_return($results);
+    }
+    private function system_get_pack_items()
+    {
+        $id=$this->input->post('id');
+
+        $this->db->select('ps.name,ps.id');
+        $this->db->select('p_item.masterfoil,p_item.foil,p_item.sticker');
+        $this->db->from($this->config->item('table_login_setup_classification_vpack_item').' p_item');
+        $this->db->join($this->config->item('table_login_setup_classification_vpack_size').' ps','ps.id=p_item.pack_size_id','INNER');
+        $this->db->where('p_item.variety_id',$id);
+        $this->db->where('p_item.revision',1);
+        $this->db->order_by('p_item.pack_size_id','ASC');
         $results=$this->db->get()->result_array();
         $this->json_return($results);
     }
@@ -416,6 +495,65 @@ class Setup_cclassification_variety extends Root_Controller
             $this->json_return($ajax);
         }
     }
+    private function system_add_pack_item($id)
+    {
+        if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
+        {
+            if($id>0)
+            {
+                $item_id=$id;
+            }
+            else
+            {
+                $item_id=$this->input->post('id');
+            }
+
+            $this->db->select('v.*');
+            $this->db->select('type.name crop_type_name,type.id crop_type_id');
+            $this->db->select('crop.name crop_name,crop.id crop_id');
+            $this->db->from($this->config->item('table_login_setup_classification_varieties').' v');
+            $this->db->join($this->config->item('table_login_setup_classification_crop_types').' type','type.id = v.crop_type_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_classification_crops').' crop','crop.id = type.crop_id','INNER');
+            $this->db->where('v.id',$item_id);
+            $data['info']=$this->db->get()->row_array();
+            if(!$data['info'])
+            {
+                $ajax['status']=false;
+                $ajax['system_message']='Invalid Variety.';
+                $this->json_return($ajax);
+            }
+
+            $this->db->select('ps.id value,ps.name text');
+            $this->db->from($this->config->item('table_login_setup_classification_vpack_size').' ps');
+            $this->db->join($this->config->item('table_login_setup_classification_vpack_item').' p_item','p_item.pack_size_id=ps.id AND p_item.variety_id='.$item_id.' AND p_item.revision=1','LEFT');
+            $this->db->where('p_item.id IS NULL',null,false);
+            $data['pack_sizes']=$this->db->get()->result_array();
+
+            $data['item']=array(
+                'id'=>'',
+                'pack_size_id'=>'',
+                'masterfoil'=>'',
+                'foil'=>'',
+                'sticker'=>''
+            );
+
+            $data['title']="Assign Packing Item to Pack Size of Variety (".$data['info']['name'].')';
+            $ajax['status']=true;
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/assign_pack_item",$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/add_pack_item/'.$item_id);
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
     private function system_edit_price($variety_id,$id)
     {
         if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
@@ -467,6 +605,66 @@ class Setup_cclassification_variety extends Root_Controller
                 $ajax['system_message']=$this->message;
             }
             $ajax['system_page_url']=site_url($this->controller_url.'/index/edit_price/'.$variety_id.'/'.$pack_size_id);
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->json_return($ajax);
+        }
+    }
+    private function system_edit_pack_item($variety_id,$id)
+    {
+        if(isset($this->permissions['action2']) && ($this->permissions['action2']==1))
+        {
+            if($id>0)
+            {
+                $pack_size_id=$id;
+            }
+            else
+            {
+                $pack_size_id=$this->input->post('id');
+            }
+
+            $this->db->select('v.*');
+            $this->db->select('type.name crop_type_name,type.id crop_type_id');
+            $this->db->select('crop.name crop_name,crop.id crop_id');
+            $this->db->from($this->config->item('table_login_setup_classification_varieties').' v');
+            $this->db->join($this->config->item('table_login_setup_classification_crop_types').' type','type.id = v.crop_type_id','INNER');
+            $this->db->join($this->config->item('table_login_setup_classification_crops').' crop','crop.id = type.crop_id','INNER');
+            $this->db->where('v.id',$variety_id);
+            $data['info']=$this->db->get()->row_array();
+            if(!$data['info'])
+            {
+                $ajax['status']=false;
+                $ajax['system_message']='Invalid Variety.';
+                $this->json_return($ajax);
+            }
+
+            $this->db->select('ps.name');
+            $this->db->select('p_item.*');
+            $this->db->from($this->config->item('table_login_setup_classification_vpack_size').' ps');
+            $this->db->join($this->config->item('table_login_setup_classification_vpack_item').' p_item','p_item.pack_size_id=ps.id','INNER');
+            $this->db->where('p_item.variety_id',$variety_id);
+            $this->db->where('p_item.pack_size_id',$pack_size_id);
+            $this->db->where('p_item.revision',1);
+            $data['item']=$this->db->get()->row_array();
+            if(!$data['info'])
+            {
+                $ajax['status']=false;
+                $ajax['system_message']='Invalid Pack Size.';
+                $this->json_return($ajax);
+            }
+
+            $data['title']='Change Pack Item Quantity to Pack Size ('.$data['item']['name'].') of Variety ('.$data['info']['name'].')';
+            $ajax['status']=true;
+            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/assign_pack_item",$data,true));
+            if($this->message)
+            {
+                $ajax['system_message']=$this->message;
+            }
+            $ajax['system_page_url']=site_url($this->controller_url.'/index/edit_pack_item/'.$variety_id.'/'.$pack_size_id);
             $this->json_return($ajax);
         }
         else
@@ -760,6 +958,93 @@ class Setup_cclassification_variety extends Root_Controller
             }
         }
     }
+    private function system_save_pack_item()
+    {
+        $id = $this->input->post("id");
+        $user = User_helper::get_user();
+        $time=time();
+        if($id>0)
+        {
+            if(!(isset($this->permissions['action2']) && ($this->permissions['action2']==1)))
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->json_return($ajax);
+            }
+        }
+        else
+        {
+            if(!(isset($this->permissions['action1']) && ($this->permissions['action1']==1)))
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->json_return($ajax);
+            }
+        }
+        if(!$this->check_validation_pack_item())
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->message;
+            $this->json_return($ajax);
+        }
+        else
+        {
+            $data=$this->input->post('item');
+
+            $this->db->trans_start();  //DB Transaction Handle START
+            if($id>0)
+            {
+                $data['pack_size_id']=$id;
+
+                $this->db->where('variety_id',$data['variety_id']);
+                $this->db->where('pack_size_id',$id);
+                $this->db->where('revision',1);
+                $this->db->set('user_updated',$user->user_id);
+                $this->db->set('date_updated',$time);
+                $this->db->update($this->config->item('table_login_setup_classification_vpack_item'));
+
+                $this->db->where('variety_id',$data['variety_id']);
+                $this->db->where('pack_size_id',$id);
+                $this->db->set('revision','revision+1',FALSE);
+                $this->db->update($this->config->item('table_login_setup_classification_vpack_item'));
+            }
+            else
+            {
+                $result=Query_helper::get_info($this->config->item('table_login_setup_classification_vpack_item'),'*',array('variety_id='.$data['variety_id'],'pack_size_id='.$data['pack_size_id'],'revision=1'),1);
+                if($result)
+                {
+                    $ajax['status']=false;
+                    $ajax['system_message']="Before this time someone set price to this Variety's Pack Size.";
+                    $this->json_return($ajax);
+                }
+            }
+            $data['user_created']=$user->user_id;
+            $data['date_created']=$time;
+            $data['revision']=1;
+            Query_helper::add($this->config->item('table_login_setup_classification_vpack_item'),$data,false);
+
+            $this->db->trans_complete();   //DB Transaction Handle END
+            if ($this->db->trans_status() === TRUE)
+            {
+                $save_and_new=$this->input->post('system_save_new_status');
+                $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
+                if($save_and_new==1)
+                {
+                    $this->system_add_pack_item($data['variety_id']);
+                }
+                else
+                {
+                    $this->system_packing_setup($data['variety_id']);
+                }
+            }
+            else
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
+                $this->json_return($ajax);
+            }
+        }
+    }
     private function system_save_price_kg()
     {
         $id = $this->input->post("id");
@@ -851,6 +1136,10 @@ class Setup_cclassification_variety extends Root_Controller
             $this->message=validation_errors();
             return false;
         }
+        return true;
+    }
+    private function check_validation_pack_item()
+    {
         return true;
     }
 }
